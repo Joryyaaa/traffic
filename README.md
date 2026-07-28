@@ -152,7 +152,7 @@ sanity check: greedy > random > naive rules, so the reward is not degenerate.
 The real case study needs a network where closures can genuinely help
 (pedestrianization, redirecting flow away from arterials, safety).
 
-## Open questions for the mentor
+## Open questions 
 
 1. **What makes a closure *good*?** Right now the reward rewards concentrating
    flow (lower entropy). Should we instead target *specific* corridors — a bike
