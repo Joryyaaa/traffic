@@ -1,0 +1,26 @@
+# --- core ---
+numpy>=1.24
+pandas>=2.0
+pyyaml>=6.0
+networkx>=3.1
+
+# --- geospatial (install geopandas via conda first, see README) ---
+geopandas>=0.14
+shapely>=2.0
+pyogrio>=0.7
+osmnx>=1.9          # optional: pulling street networks from OpenStreetMap
+
+# --- RL ---
+gymnasium>=0.29
+stable-baselines3>=2.3
+torch>=2.1
+tensorboard>=2.15
+
+# --- dev ---
+pytest>=8.0
+black>=24.0
+ruff>=0.4
+
+# --- flow simulation backend ---
+# Madina is on TestPyPI:
+#   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple madina

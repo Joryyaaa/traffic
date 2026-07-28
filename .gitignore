@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# Data & outputs (keep small samples only, use DVC/LFS for big files)
+data/raw/
+data/interim/
+data/processed/
+Cities/
+runs/
+logs/
+outputs/
+*.zip
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.tif
+
+# RL artifacts
+models/
+checkpoints/
+tensorboard/
+wandb/
+*.pth
+*.zip.sb3
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

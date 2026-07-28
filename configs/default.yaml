@@ -1,0 +1,35 @@
+# Default config — runs out of the box on the synthetic stub network.
+seed: 42
+
+network:
+  backend: stub          # switch to "madina" once the city data is ready
+  stub_grid_size: 6
+  stub_seed: 0
+
+simulation:
+  search_radius: 800     # meters
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: true
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: rebuild
+  max_closures: 6
+  episode_length: 20
+  allow_reopen: true
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  reward_mode: delta

@@ -1,0 +1,110 @@
+"""Configuration objects for the street-network RL environment."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field, asdict
+from pathlib import Path
+from typing import Any, Literal
+
+import yaml
+
+
+@dataclass
+class NetworkConfig:
+    """Where the street network and the origin/destination layers come from."""
+
+    # Backend used to simulate flows: "madina" (real) or "stub" (synthetic grid, no deps)
+    backend: Literal["madina", "stub"] = "stub"
+
+    # --- madina backend ---
+    streets_path: str | None = None        # .geojson / .shp of street centerlines
+    origins_path: str | None = None        # e.g. residential buildings
+    destinations_path: str | None = None   # e.g. shops, schools, transit stops
+    origin_weight: str | None = None       # column name, e.g. "residents"
+    destination_weight: str | None = None  # column name, e.g. "jobs"
+    weight_attribute: str | None = None    # perceived cost column; None -> geometric length
+    crs: str = "EPSG:3857"                 # projected CRS, units = meters
+    node_snapping_tolerance: float = 0.0
+
+    # --- stub backend (for smoke tests / CI, no geopandas needed) ---
+    stub_grid_size: int = 6                # 6x6 lattice -> 60 segments
+    stub_seed: int = 0
+
+
+@dataclass
+class SimulationConfig:
+    """Parameters passed to Madina's UNA betweenness / accessibility tools."""
+
+    search_radius: float = 800.0     # meters
+    detour_ratio: float = 1.0        # 1.0 = shortest path only
+    decay: bool = True
+    decay_method: Literal["exponent", "power"] = "exponent"
+    beta: float = 0.003              # walking-distance sensitivity
+    closest_destination: bool = True
+    turn_penalty: bool = False
+    turn_threshold_degree: float = 45.0
+    turn_penalty_amount: float = 30.0
+    num_cores: int = 1
+
+    # Simulation is expensive -> cache results keyed by the set of closed segments
+    cache_size: int = 4096
+
+
+@dataclass
+class ActionConfig:
+    """How the agent is allowed to modify the network."""
+
+    # "toggle": one segment per step; "multi": a binary vector over all segments
+    action_type: Literal["toggle", "multi"] = "toggle"
+
+    # How a "closed" segment is represented in the flow model:
+    #   "rebuild"  -> drop the segment and rebuild the routable network (true closure)
+    #   "penalize" -> multiply its perceived cost by `closure_penalty` (soft closure)
+    closure_mode: Literal["rebuild", "penalize"] = "rebuild"
+    closure_penalty: float = 1000.0
+
+    max_closures: int = 10           # budget: max simultaneously closed segments
+    episode_length: int = 20         # steps per episode
+    allow_reopen: bool = True        # agent may re-open a segment it closed
+    allow_noop: bool = True          # include an explicit "do nothing" action
+    forbid_disconnection: bool = True  # mask actions that would disconnect the network
+
+
+@dataclass
+class RewardConfig:
+    """Weights of the multi-objective reward. All terms are computed on
+    normalized (baseline-relative) quantities so the weights are comparable."""
+
+    w_accessibility: float = 1.0     # + mean gravity/reach access across origins
+    w_flow_concentration: float = 0.5  # + concentrate flow on designated corridors
+    w_equity: float = 0.3            # - inequality (Gini) of access across origins
+    w_detour: float = 0.2            # - added travel distance from closures
+    w_intervention: float = 0.05     # - cost per closed segment (parsimony)
+    disconnection_penalty: float = 5.0  # - if the closure fragments the network
+
+    # "delta" -> reward = change vs. previous step; "absolute" -> vs. baseline
+    reward_mode: Literal["delta", "absolute"] = "delta"
+
+
+@dataclass
+class EnvConfig:
+    network: NetworkConfig = field(default_factory=NetworkConfig)
+    simulation: SimulationConfig = field(default_factory=SimulationConfig)
+    action: ActionConfig = field(default_factory=ActionConfig)
+    reward: RewardConfig = field(default_factory=RewardConfig)
+    seed: int = 42
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+def load_config(path: str | Path) -> EnvConfig:
+    """Load an EnvConfig from a YAML file."""
+    raw = yaml.safe_load(Path(path).read_text()) or {}
+    return EnvConfig(
+        network=NetworkConfig(**raw.get("network", {})),
+        simulation=SimulationConfig(**raw.get("simulation", {})),
+        action=ActionConfig(**raw.get("action", {})),
+        reward=RewardConfig(**raw.get("reward", {})),
+        seed=raw.get("seed", 42),
+    )

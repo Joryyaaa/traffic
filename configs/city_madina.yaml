@@ -1,0 +1,41 @@
+# Real case-study config. Fill in the paths, then:  python scripts/train.py --config configs/city_madina.yaml
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/<city>/streets.geojson
+  origins_path: data/raw/<city>/residential.geojson
+  destinations_path: data/raw/<city>/amenities.geojson
+  origin_weight: residents          # column in origins layer
+  destination_weight: floor_area    # column in destinations layer
+  weight_attribute: null            # null -> geometric length as network cost
+  crs: "EPSG:32638"                 # UTM zone for the study area (meters)
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.15
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false        # destinations compete (Huff model)
+  turn_penalty: true
+  turn_threshold_degree: 45
+  turn_penalty_amount: 30
+  num_cores: 4
+
+action:
+  action_type: toggle
+  closure_mode: rebuild
+  max_closures: 15
+  episode_length: 40
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.5
+  w_detour: 0.3
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  reward_mode: delta
