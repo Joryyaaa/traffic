@@ -57,5 +57,13 @@ class FlowBackend(ABC):
     def is_connected(self, closed_mask: np.ndarray) -> bool:
         """True if the open network is still one connected component."""
 
+    def reseed(self, seed: int) -> bool:
+        """Redraw any stochastic demand for a new episode.
+
+        Returns True if anything changed, so the caller knows the baseline has
+        to be recomputed. Deterministic backends return False.
+        """
+        return False
+
     def close(self) -> None:  # pragma: no cover - optional cleanup hook
         pass

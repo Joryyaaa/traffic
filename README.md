@@ -22,7 +22,8 @@ network. Flows are simulated with [**Madina**](https://github.com/City-Form-Lab/
 - [x] **Harder environment where planning is required** (`configs/hard.yaml`)
 - [x] **PPO training + baseline comparison** (on the stub network)
 - [x] **Non-uniform demand** (`configs/hard_demand.yaml`)
-- [ ] Larger networks, stochastic demand across times of day
+- [x] **Larger networks** (`configs/hard_large.yaml`) — greedy becomes unaffordable
+- [x] **Stochastic demand** (`configs/hard_stochastic.yaml`)
 - [ ] Real city data pipeline (OSM → streets / origins / destinations layers)
 - [ ] Madina backend validated against a hand-checked simulation
 - [ ] Ablations & case-study writeup
@@ -252,6 +253,55 @@ the environment has, the more there is to trade off.
 python scripts/train.py --config configs/hard_demand.yaml --timesteps 60000 --run-name ppo_demand
 python scripts/evaluate.py --config configs/hard_demand.yaml --model runs/ppo_demand/model
 ```
+
+### Stochastic demand (`configs/hard_stochastic.yaml`)
+
+Origin and destination weights are redrawn every episode — each episode is a
+different day. A closure plan tuned to one demand pattern stops scoring.
+
+| policy | mean return | std |
+|---|---|---|
+| random | −0.134 | 0.075 |
+| greedy | +0.398 | **0.483** |
+| highest_flow | +0.015 | 0.044 |
+| lowest_flow | −0.005 | 0.015 |
+| zone_builder | +0.475 | 0.105 |
+| **MaskablePPO** (60k) | **+0.941** | **0.023** |
+
+Greedy recovers here, and that is worth being honest about: the zone trap
+depends on the first closure being net-negative, which holds under fixed demand
+but not for every random draw. On a lucky day the first closure pays and greedy
+starts a zone by accident. Its standard deviation is 4.6× the planner's — it is
+gambling, not planning. Mean return still favours planning, but the margin
+between the two *heuristics* is much narrower than under deterministic demand.
+
+The trained agent separates cleanly on both axes: it roughly doubles the
+planner's return (+98%) while cutting variance to 0.023 — **21× more consistent
+than greedy**. That combination is the result to take forward. Under demand it
+cannot observe, greedy's occasional good day comes with an equally likely bad
+one, whereas the agent has learned closures that hold up across draws. Robust
+performance under uncertain demand is also the property a planning department
+would actually need: an intervention has to work on a normal Tuesday, not only
+on the day it was designed for.
+
+### Larger networks (`configs/hard_large.yaml`)
+
+A 10×10 lattice — 180 segments instead of 60, budget 12, episodes of 30 steps.
+The point is not that the task gets harder to learn; it is that greedy stops
+being affordable:
+
+| | simulations per episode | wall-clock (stub) |
+|---|---|---|
+| greedy | 5,400 | ~132 s |
+| trained policy | 30 | ~0.7 s |
+
+Greedy costs `n_segments × episode_length` simulations because it re-evaluates
+every candidate at every step; a trained policy costs `episode_length`. That is
+190× here, and the ratio grows linearly with network size. On a real city
+network — thousands of segments, with each Madina betweenness run taking
+seconds rather than 24 ms — one-step lookahead is not merely worse, it is
+not runnable. The amortisation argument for RL is this: training is paid once,
+inference is paid per decision.
 
 Returns are small in absolute terms because a uniform lattice with uniformly
 distributed origins and destinations offers little to improve. Non-uniform

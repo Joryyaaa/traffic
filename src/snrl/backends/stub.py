@@ -55,10 +55,25 @@ class StubBackend(FlowBackend):
             self._origin_weights = np.ones(len(self._origins))
             self._dest_weights = np.ones(len(self._destinations))
 
+        self._sigma = np.log(max(cfg.network.stub_demand_skew, 1.01)) / 2.0
+
     @staticmethod
     def _normalized(w: np.ndarray) -> np.ndarray:
         """Scale weights to mean 1 so results stay comparable across patterns."""
         return w / (w.mean() or 1.0)
+
+    def reseed(self, seed: int) -> bool:
+        """Draw a new day's demand: same locations, different weights."""
+        if not self.cfg.network.stub_demand_stochastic:
+            return False
+        rng = np.random.default_rng(seed)
+        self._origin_weights = self._normalized(
+            rng.lognormal(0.0, self._sigma, len(self._origins))
+        )
+        self._dest_weights = self._normalized(
+            rng.lognormal(0.0, self._sigma, len(self._destinations))
+        )
+        return True
 
     # --- static properties --------------------------------------------------
     @property

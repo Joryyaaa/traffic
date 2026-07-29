@@ -81,7 +81,20 @@ class StreetNetworkEnv(gym.Env):
     # Gymnasium API
     # ==================================================================
     def reset(self, *, seed: int | None = None, options: dict | None = None):
-        super().reset(seed=seed if seed is not None else self.cfg.seed)
+        episode_seed = seed if seed is not None else self.cfg.seed
+        super().reset(seed=episode_seed)
+
+        # Stochastic demand: this episode is a different day, so the fully-open
+        # network scores differently too and the baseline must be redrawn with
+        # it. Without this the reward would measure the weather, not the policy.
+        if self.backend.reseed(episode_seed):
+            self._baseline_sim = self.backend.simulate(
+                np.zeros(self.n_segments, dtype=bool)
+            )
+            self._baseline_stats = simulation_stats(self._baseline_sim)
+            self._flow_scale = float(np.max(self._baseline_sim.segment_flow)) or 1.0
+            self.reward_fn.baseline = self._baseline_stats
+
         self.closed_mask = np.zeros(self.n_segments, dtype=bool)
         # TODO: support randomized starts (a few random pre-existing closures)
         # to improve generalization — controlled via `options`.

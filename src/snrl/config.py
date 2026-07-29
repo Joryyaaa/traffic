@@ -41,6 +41,13 @@ class NetworkConfig:
     stub_demand: Literal["uniform", "clustered"] = "uniform"
     stub_demand_skew: float = 4.0          # spread of origin/destination weights
 
+    # If True, origin/destination weights are redrawn at every reset, so each
+    # episode is a different day. A closure plan that only works for one demand
+    # pattern stops scoring; the agent has to find something robust. This is
+    # also the setting where a hand-coded planner has no advantage left, since
+    # it cannot see the draw either.
+    stub_demand_stochastic: bool = False
+
 
 @dataclass
 class SimulationConfig:

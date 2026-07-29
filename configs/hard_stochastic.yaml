@@ -1,0 +1,48 @@
+# hard_demand.yaml, but demand is redrawn every episode.
+#
+# Origins and destinations stay put; their weights change. Each episode is a
+# different day. A closure plan tuned to one demand pattern stops scoring, so
+# the agent has to find something that holds up across draws.
+#
+# This is also where the hand-coded planner loses its remaining advantage: it
+# cannot see the draw either, and its one fixed rule cannot hedge.
+seed: 42
+
+network:
+  backend: stub
+  stub_grid_size: 6
+  stub_seed: 0
+  stub_demand: clustered
+  stub_demand_skew: 4.0
+  stub_demand_stochastic: true
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: true
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: rebuild
+  max_closures: 6
+  episode_length: 20
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+  reward_mode: delta
