@@ -49,10 +49,32 @@ def greedy_policy(env_unused=None):
             if a < env.n_segments:
                 trial[a] = not trial[a]
             sim = env.backend.simulate(trial)
-            r = env.reward_fn(sim, prev_stats, int(trial.sum())).total
+            r = env.reward_fn(sim, prev_stats, trial).total
             if r > best_r:
                 best_a, best_r = int(a), r
         return best_a
+    return choose
+
+
+def zone_builder_policy(env):
+    """Hand-coded planner: pick a seed, then always extend the same cluster.
+
+    This baseline is *told* that contiguity matters. It exists to measure the
+    headroom greedy leaves on the table — the return a policy can reach if it
+    plans several moves ahead. The research claim is that an RL agent should
+    discover this structure on its own, without being told.
+    """
+    def choose(env, obs):
+        mask = env.action_masks()
+        closed = np.flatnonzero(env.closed_mask)
+        valid = np.flatnonzero(mask[: env.n_segments])
+        if valid.size == 0:
+            return env.n_segments
+        if closed.size == 0:
+            # seed on the best-connected segment we are allowed to close
+            return int(valid[np.argmax(env._seg_degree[valid])])
+        touching = [a for a in valid if env._adjacency[a][closed].any()]
+        return int(touching[0]) if touching else env.n_segments
     return choose
 
 
@@ -89,6 +111,7 @@ def main() -> None:
         "greedy": greedy_policy(),
         "highest_flow": flow_ranked_policy(env, descending=True),
         "lowest_flow": flow_ranked_policy(env, descending=False),
+        "zone_builder": zone_builder_policy(env),
     }
 
     if args.model:

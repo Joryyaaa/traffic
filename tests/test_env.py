@@ -65,6 +65,47 @@ def test_network_stays_connected(env):
         assert env.backend.is_connected(env.closed_mask)
 
 
+def test_zone_score_rewards_contiguity():
+    """Four connected closures must beat four scattered ones."""
+    from snrl.metrics import zone_score
+
+    # path graph over 5 segments: 0-1-2-3-4
+    adj = np.zeros((5, 5), dtype=bool)
+    for i in range(4):
+        adj[i, i + 1] = adj[i + 1, i] = True
+
+    lone = np.array([1, 0, 0, 0, 0], dtype=bool)
+    pair = np.array([1, 1, 0, 0, 0], dtype=bool)
+    trio = np.array([1, 1, 1, 0, 0], dtype=bool)
+    split = np.array([1, 1, 0, 1, 1], dtype=bool)
+
+    # below min_size a group is worth nothing — this is what stalls greedy
+    assert zone_score(lone, adj, min_size=3) == 0.0
+    assert zone_score(pair, adj, min_size=3) == 0.0
+    assert zone_score(trio, adj, min_size=3) == 9.0
+    # superlinear: one group of 3 beats two groups of 2
+    assert zone_score(trio, adj, min_size=3) > zone_score(split, adj, min_size=3)
+
+
+def test_hard_config_gives_greedy_no_first_move():
+    """On the hard config the first closure must be net-negative, otherwise the
+    environment has no long-horizon structure and RL has nothing to learn."""
+    from snrl import load_config
+
+    cfg = load_config("configs/hard.yaml")
+    cfg.network.stub_grid_size = 4
+    e = StreetNetworkEnv(cfg)
+    try:
+        e.reset()
+        first = np.zeros(e.n_segments, dtype=bool)
+        first[0] = True
+        r = e.reward_fn(e.backend.simulate(first), e._prev_stats, first)
+        assert r.pedestrian_zone == 0.0
+        assert r.total < 0.0
+    finally:
+        e.close()
+
+
 def test_baseline_is_deterministic(env):
     a = env.backend.simulate(np.zeros(env.n_segments, dtype=bool))
     b = env.backend.simulate(np.zeros(env.n_segments, dtype=bool))

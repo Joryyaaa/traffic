@@ -1,0 +1,54 @@
+# Harder environment — designed so that a one-step-lookahead agent fails.
+#
+# Two changes vs. default.yaml:
+#
+#   1. w_pedestrian_zone > 0. Closures only pay off once at least
+#      `min_zone_size` of them form a connected group (a walkable plaza).
+#      The first two closures of a zone earn nothing while already costing
+#      accessibility, so greedy refuses to ever start one.
+#
+#   2. allow_reopen: false. Closures are irreversible, so a wasted move is
+#      permanently wasted. The agent has to commit to a plan.
+#
+# Expected outcome: greedy stalls at ~0 return; a planning agent should be able
+# to build a zone and score positively. That gap is the evidence that this
+# problem needs RL rather than a heuristic.
+seed: 42
+
+network:
+  backend: stub
+  stub_grid_size: 6
+  stub_seed: 0
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: true
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: rebuild
+  max_closures: 6
+  episode_length: 20
+  allow_reopen: false        # irreversible: every closure is a commitment
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3           # a plaza needs 3+ connected closed segments
+  zone_exponent: 2.0         # one group of 6 beats two groups of 3
+
+  reward_mode: delta

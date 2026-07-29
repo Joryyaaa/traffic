@@ -30,7 +30,7 @@ from gymnasium import spaces
 
 from .backends import build_backend
 from .config import EnvConfig
-from .rewards import RewardFunction
+from .rewards import RewardFunction, simulation_stats
 
 N_FEATURES = 5
 
@@ -47,13 +47,14 @@ class StreetNetworkEnv(gym.Env):
         self.n_segments = self.backend.n_segments
 
         # --- baseline: the fully-open network, our reference point ---------
+        self._adjacency = self.backend.segment_adjacency()
         self._baseline_sim = self.backend.simulate(np.zeros(self.n_segments, dtype=bool))
-        self._baseline_stats = RewardFunction.stats_from(self._baseline_sim)
+        self._baseline_stats = simulation_stats(self._baseline_sim)
         self._flow_scale = float(np.max(self._baseline_sim.segment_flow)) or 1.0
         self._length_scale = float(np.max(self.backend.segment_lengths)) or 1.0
         self._seg_degree = self._segment_degree()
 
-        self.reward_fn = RewardFunction(self.cfg, self._baseline_stats)
+        self.reward_fn = RewardFunction(self.cfg, self._baseline_stats, self._adjacency)
 
         # --- spaces ---------------------------------------------------------
         if self.cfg.action.action_type == "toggle":
@@ -95,11 +96,9 @@ class StreetNetworkEnv(gym.Env):
         self._step_count += 1
 
         self._last_sim = self.backend.simulate(self.closed_mask)
-        breakdown = self.reward_fn(
-            self._last_sim, self._prev_stats, int(self.closed_mask.sum())
-        )
+        breakdown = self.reward_fn(self._last_sim, self._prev_stats, self.closed_mask)
         self._last_breakdown = breakdown
-        self._prev_stats = RewardFunction.stats_from(self._last_sim)
+        self._prev_stats = self.reward_fn.stats(self._last_sim, self.closed_mask)
 
         terminated = bool(self._last_sim.n_components > self._baseline_sim.n_components) \
             and self.cfg.action.forbid_disconnection
@@ -169,8 +168,7 @@ class StreetNetworkEnv(gym.Env):
         return mask
 
     def _segment_degree(self) -> np.ndarray:
-        adj = self.backend.segment_adjacency()
-        deg = adj.sum(axis=1).astype(float)
+        deg = self._adjacency.sum(axis=1).astype(float)
         return deg / (deg.max() or 1.0)
 
     def _observation(self) -> np.ndarray:

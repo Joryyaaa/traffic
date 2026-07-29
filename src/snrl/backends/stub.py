@@ -60,10 +60,22 @@ class StubBackend(FlowBackend):
         g.remove_edges_from([e for e, closed in zip(self._edges, closed_mask) if closed])
         return g
 
+    @staticmethod
+    def _count_components(g: nx.Graph) -> int:
+        """Components of the *served* network.
+
+        Isolated nodes (every incident street closed) are dropped first. Losing
+        a node is already penalised through accessibility; the disconnection
+        penalty is reserved for the network splitting into separate pieces.
+        `is_connected` and `simulate` must apply the same rule, or an action the
+        mask calls legal can still trigger the penalty.
+        """
+        h = g.copy()
+        h.remove_nodes_from(list(nx.isolates(h)))
+        return nx.number_connected_components(h) if h.number_of_nodes() else 0
+
     def is_connected(self, closed_mask: np.ndarray) -> bool:
-        g = self._open_graph(closed_mask)
-        g.remove_nodes_from(list(nx.isolates(g)))
-        return g.number_of_nodes() > 0 and nx.is_connected(g)
+        return self._count_components(self._open_graph(closed_mask)) == 1
 
     def simulate(self, closed_mask: np.ndarray) -> SimulationResult:
         g = self._open_graph(closed_mask)
@@ -97,6 +109,6 @@ class StubBackend(FlowBackend):
             segment_flow=flow,
             origin_access=access_arr,
             mean_trip_distance=float(np.mean(trip_lengths)) if trip_lengths else 0.0,
-            n_components=nx.number_connected_components(g) if g.number_of_nodes() else 0,
+            n_components=self._count_components(g),
             unreachable_fraction=float(np.mean(access_arr <= 0.0)),
         )

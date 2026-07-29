@@ -82,6 +82,15 @@ class RewardConfig:
     w_intervention: float = 0.05     # - cost per closed segment (parsimony)
     disconnection_penalty: float = 5.0  # - if the closure fragments the network
 
+    # --- pedestrian-zone bonus (see metrics.zone_score) --------------------
+    # Rewards *contiguous* closures that form a walkable plaza. Setting
+    # w_pedestrian_zone > 0 gives the problem long-horizon structure: the first
+    # closures of a zone earn nothing while already costing accessibility, so a
+    # one-step-lookahead (greedy) agent never starts one.
+    w_pedestrian_zone: float = 0.0
+    min_zone_size: int = 3           # segments needed before a zone counts at all
+    zone_exponent: float = 2.0       # >1 makes one big zone beat several small ones
+
     # "delta" -> reward = change vs. previous step; "absolute" -> vs. baseline
     reward_mode: Literal["delta", "absolute"] = "delta"
 

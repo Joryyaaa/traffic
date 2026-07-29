@@ -35,6 +35,56 @@ def normalized_entropy(x: np.ndarray) -> float:
     return float(-(p * np.log(p)).sum() / np.log(x.size))
 
 
+def zone_score(
+    closed_mask: np.ndarray,
+    adjacency: np.ndarray,
+    min_size: int = 3,
+    exponent: float = 2.0,
+) -> float:
+    """Reward for closures that form a coherent *pedestrian zone*.
+
+    Scattered closures create dead ends and help nobody. A contiguous group of
+    closed segments creates a walkable plaza. So the bonus is:
+
+        sum over connected groups of closed segments, of  size ** exponent
+        — but only for groups of at least `min_size` segments.
+
+    Two properties make this the interesting case for RL:
+
+    * **Superlinear** (`exponent > 1`): one group of four beats four scattered
+      singles, so the agent must commit to a location rather than hedge.
+    * **Threshold** (`min_size`): the first closures of a plaza earn *nothing*
+      while already costing accessibility. A one-step-lookahead (greedy) agent
+      therefore refuses to ever start one, while an agent that plans ahead can
+      absorb the early loss to reach the payoff.
+    """
+    closed_mask = np.asarray(closed_mask, dtype=bool)
+    closed = np.flatnonzero(closed_mask)
+    if closed.size == 0:
+        return 0.0
+
+    seen: set[int] = set()
+    total = 0.0
+    for start in closed:
+        start = int(start)
+        if start in seen:
+            continue
+        seen.add(start)
+        stack, group = [start], [start]
+        while stack:
+            u = stack.pop()
+            for v in np.flatnonzero(adjacency[u]):
+                v = int(v)
+                if v in seen or not closed_mask[v]:
+                    continue
+                seen.add(v)
+                stack.append(v)
+                group.append(v)
+        if len(group) >= min_size:
+            total += float(len(group)) ** exponent
+    return total
+
+
 def safe_normalize(x: np.ndarray, ref: float | None = None) -> np.ndarray:
     """Scale an array by a reference value (defaults to its own max)."""
     x = np.asarray(x, dtype=float)
