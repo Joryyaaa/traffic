@@ -20,10 +20,11 @@ network. Flows are simulated with [**Madina**](https://github.com/City-Form-Lab/
 
 - [x] **Skeleton code — environment**
 - [x] **Harder environment where planning is required** (`configs/hard.yaml`)
+- [x] **PPO training + baseline comparison** (on the stub network)
+- [x] **Non-uniform demand** (`configs/hard_demand.yaml`)
+- [ ] Larger networks, stochastic demand across times of day
 - [ ] Real city data pipeline (OSM → streets / origins / destinations layers)
 - [ ] Madina backend validated against a hand-checked simulation
-- [ ] PPO training + baseline comparison
-- [ ] Non-uniform demand, larger networks, stochastic demand
 - [ ] Ablations & case-study writeup
 
 ## Repository layout
@@ -209,6 +210,47 @@ Reproduce:
 ```bash
 python scripts/train.py --config configs/hard.yaml --timesteps 30000 --run-name ppo_hard
 python scripts/evaluate.py --config configs/hard.yaml --model runs/ppo_hard/model
+```
+
+### Non-uniform demand (`configs/hard_demand.yaml`)
+
+Uniform demand is the other way the stub was still theoretical: with origins and
+destinations scattered evenly and weighted equally, every part of the network is
+interchangeable. The agent only has to decide *how many* segments to close and
+whether they touch — never *where*.
+
+`hard_demand.yaml` puts housing on the west side of the grid and amenities on
+the east, with heterogeneous weights on both. Trips now have a direction, a few
+crossing corridors carry most of the flow, and location starts to matter:
+closing a main corridor is expensive, while closing a quiet edge is nearly free
+but creates a plaza that serves nobody.
+
+| policy | uniform demand | clustered demand |
+|---|---|---|
+| random | −0.184 | −0.148 |
+| greedy | +0.006 | +0.000 |
+| highest_flow | +0.301 | **+0.083** |
+| lowest_flow | +0.067 | **−0.017** |
+| zone_builder | +0.619 | +0.636 |
+| **MaskablePPO** | **+0.872** (30k) | **+0.941** (60k) |
+
+The two flow-ranked heuristics are the interesting column. Under uniform demand
+they scored respectably almost by accident — with no spatial structure, ranking
+segments by flow is as good as anything. Once demand has a direction they
+collapse, because they optimise a single quantity while the actual problem is a
+trade-off between where flow is, where people live, and where a plaza can go.
+Planning (`zone_builder`) is unaffected. The environment now discriminates
+between policies that reason about location and policies that do not.
+
+The margin RL holds over the hand-coded planner *widens* as the environment gets
+more realistic — +41% under uniform demand, +48% under clustered demand. The
+planner encodes one fixed rule (extend the cluster); the agent can trade that
+rule off against where flow and residents actually are, and the more structure
+the environment has, the more there is to trade off.
+
+```bash
+python scripts/train.py --config configs/hard_demand.yaml --timesteps 60000 --run-name ppo_demand
+python scripts/evaluate.py --config configs/hard_demand.yaml --model runs/ppo_demand/model
 ```
 
 Returns are small in absolute terms because a uniform lattice with uniformly

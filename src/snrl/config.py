@@ -30,6 +30,17 @@ class NetworkConfig:
     stub_grid_size: int = 6                # 6x6 lattice -> 60 segments
     stub_seed: int = 0
 
+    # Demand pattern.
+    #   "uniform"   - origins and destinations scattered evenly, equal weights.
+    #                 Every part of the network matters equally, so there is no
+    #                 reason to prefer one location over another.
+    #   "clustered" - origins on one side, destinations on the other, with
+    #                 heterogeneous weights. Trips acquire a direction, some
+    #                 corridors carry most of the flow, and *where* a closure
+    #                 goes starts to matter as much as how many there are.
+    stub_demand: Literal["uniform", "clustered"] = "uniform"
+    stub_demand_skew: float = 4.0          # spread of origin/destination weights
+
 
 @dataclass
 class SimulationConfig:

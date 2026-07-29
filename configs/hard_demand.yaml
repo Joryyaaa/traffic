@@ -1,0 +1,53 @@
+# hard.yaml + realistic demand.
+#
+# Everything in hard.yaml (pedestrian zones, irreversible closures) plus a
+# demand pattern that is no longer uniform: housing on the west side of the
+# grid, amenities on the east, and heterogeneous weights on both.
+#
+# Why this matters: under uniform demand every part of the network is
+# interchangeable, so the agent only has to decide *how many* segments to close
+# and whether they touch. Once trips have a direction, a few crossing corridors
+# carry most of the flow, and the agent also has to decide *where* — closing a
+# main corridor is expensive, closing a quiet edge is nearly free but the plaza
+# it creates serves nobody.
+seed: 42
+
+network:
+  backend: stub
+  stub_grid_size: 6
+  stub_seed: 0
+  stub_demand: clustered
+  stub_demand_skew: 4.0      # spread of origin/destination weights
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: true
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: rebuild
+  max_closures: 6
+  episode_length: 20
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+
+  reward_mode: delta

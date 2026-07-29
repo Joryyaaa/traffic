@@ -33,8 +33,32 @@ class StubBackend(FlowBackend):
 
         nodes = list(self._graph.nodes())
         n_od = max(2, len(nodes) // 6)
-        self._origins = list(rng.choice(nodes, size=n_od, replace=False))
-        self._destinations = list(rng.choice(nodes, size=n_od, replace=False))
+
+        if cfg.network.stub_demand == "clustered":
+            # Housing on the west side, amenities on the east. Trips now have a
+            # direction, so a handful of crossing corridors carry most of the
+            # flow and closures are no longer interchangeable.
+            west = [v for v in nodes if (v % n) < n / 2]
+            east = [v for v in nodes if (v % n) >= n / 2]
+            self._origins = list(rng.choice(west, size=min(n_od, len(west)), replace=False))
+            self._destinations = list(
+                rng.choice(east, size=min(n_od, len(east)), replace=False)
+            )
+            sigma = np.log(max(cfg.network.stub_demand_skew, 1.01)) / 2.0
+            self._origin_weights = self._normalized(rng.lognormal(0.0, sigma, len(self._origins)))
+            self._dest_weights = self._normalized(
+                rng.lognormal(0.0, sigma, len(self._destinations))
+            )
+        else:
+            self._origins = list(rng.choice(nodes, size=n_od, replace=False))
+            self._destinations = list(rng.choice(nodes, size=n_od, replace=False))
+            self._origin_weights = np.ones(len(self._origins))
+            self._dest_weights = np.ones(len(self._destinations))
+
+    @staticmethod
+    def _normalized(w: np.ndarray) -> np.ndarray:
+        """Scale weights to mean 1 so results stay comparable across patterns."""
+        return w / (w.mean() or 1.0)
 
     # --- static properties --------------------------------------------------
     @property
@@ -86,22 +110,25 @@ class StubBackend(FlowBackend):
         edge_index = {frozenset(e): i for i, e in enumerate(self._edges)}
 
         access, trip_lengths = [], []
-        for o in self._origins:
+        for oi, o in enumerate(self._origins):
             if o not in g:
                 access.append(0.0)
                 continue
+            origin_weight = float(self._origin_weights[oi])
             dist, paths = nx.single_source_dijkstra(g, o, cutoff=radius, weight="length")
             score = 0.0
-            for d in self._destinations:
+            for di, d in enumerate(self._destinations):
                 if d == o or d not in dist:
                     continue
-                # gravity-style decay, mirroring Madina's exponential decay
-                w = float(np.exp(-beta * dist[d]))
+                # gravity-style decay, mirroring Madina's exponential decay,
+                # scaled by how attractive the destination is
+                w = float(self._dest_weights[di]) * float(np.exp(-beta * dist[d]))
                 score += w
                 trip_lengths.append(dist[d])
+                # trips generated scale with the origin's weight (residents)
                 path = paths[d]
                 for u, v in zip(path[:-1], path[1:]):
-                    flow[edge_index[frozenset((u, v))]] += w
+                    flow[edge_index[frozenset((u, v))]] += w * origin_weight
             access.append(score)
 
         access_arr = np.asarray(access, dtype=float)
