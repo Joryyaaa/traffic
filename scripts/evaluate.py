@@ -115,10 +115,30 @@ def main() -> None:
     }
 
     if args.model:
-        from stable_baselines3 import PPO
+        # train.py prefers MaskablePPO; fall back to plain PPO if that's what
+        # was saved. The masked agent must also receive the mask at predict
+        # time, otherwise it can propose actions it was never trained to use.
+        # SB3 appends ".zip" itself, so "model.zip" becomes "model.zip.zip".
+        model_path = args.model[:-4] if args.model.endswith(".zip") else args.model
+        try:
+            from sb3_contrib import MaskablePPO
 
-        model = PPO.load(args.model)
-        policies["rl_agent"] = lambda env, obs: int(model.predict(obs, deterministic=True)[0])
+            model = MaskablePPO.load(model_path)
+
+            def rl_policy(env, obs):
+                a, _ = model.predict(
+                    obs, action_masks=env.action_masks(), deterministic=True
+                )
+                return int(a)
+        except (ImportError, ValueError):
+            from stable_baselines3 import PPO
+
+            model = PPO.load(args.model)
+
+            def rl_policy(env, obs):
+                return int(model.predict(obs, deterministic=True)[0])
+
+        policies["rl_agent"] = rl_policy
 
     print(f"{'policy':<14} {'mean return':>12} {'std':>8}")
     for name, choose in policies.items():

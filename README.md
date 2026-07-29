@@ -167,7 +167,8 @@ by trial and error within the episode.
 | **greedy** (1-step lookahead) | **+0.006** | +0.006 |
 | highest_flow | −0.032 | +0.301 |
 | lowest_flow | −0.017 | +0.067 |
-| zone_builder (plans contiguity) | −0.132 | **+0.619** |
+| zone_builder (told to plan contiguity) | −0.132 | +0.619 |
+| **MaskablePPO** (30k steps) | — | **+0.872** |
 
 Read the two columns together:
 
@@ -179,9 +180,36 @@ Read the two columns together:
 
 `zone_builder` is a hand-coded planner that is *told* contiguity matters. It is
 included as a headroom measure, not as a competitor: it marks the return that is
-reachable when you plan ahead. **The research claim is that an RL agent should
-discover this structure on its own, from the reward alone.** That is the next
-experiment.
+reachable when you plan ahead.
+
+### The agent learns the structure on its own
+
+MaskablePPO trained for 30k steps on `hard.yaml` reaches **+0.872** — it beats
+the hand-coded planner by 41%, and greedy by two orders of magnitude. Nothing in
+the observation or the network architecture mentions contiguity; the agent
+recovers it from the reward alone.
+
+Episode return during training:
+
+| timesteps | 2k | 8k | 14k | 18k | 22k | 26k | 30k |
+|---|---|---|---|---|---|---|---|
+| `ep_rew_mean` | −0.060 | −0.044 | −0.009 | +0.078 | +0.152 | +0.335 | +0.617 |
+
+Two things worth noting in the curve:
+
+- The first ~14k steps sit near zero. The agent is paying the cost of the first
+  closures without any zone bonus yet — exactly the trap greedy never escapes.
+  It has to explore through that flat region before the payoff appears.
+- Return was **still rising at the end** (+0.487 → +0.617 over the last 2k
+  steps) and policy entropy was still falling, so 30k steps is undertrained.
+  A longer run should improve on +0.872.
+
+Reproduce:
+
+```bash
+python scripts/train.py --config configs/hard.yaml --timesteps 30000 --run-name ppo_hard
+python scripts/evaluate.py --config configs/hard.yaml --model runs/ppo_hard/model
+```
 
 Returns are small in absolute terms because a uniform lattice with uniformly
 distributed origins and destinations offers little to improve. Non-uniform

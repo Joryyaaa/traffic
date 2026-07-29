@@ -36,19 +36,28 @@ def main() -> None:
     out_dir = Path(args.out) / args.run_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    # tensorboard is optional — training must not die because a logging
+    # dependency is missing on someone else's machine.
+    try:
+        import tensorboard  # noqa: F401
+
+        tb_log = str(out_dir)
+    except ImportError:
+        print("tensorboard not installed — training without curve logging.")
+        tb_log = None
+
+    kwargs = dict(verbose=1, seed=cfg.seed, tensorboard_log=tb_log)
     try:
         from sb3_contrib import MaskablePPO
         from sb3_contrib.common.wrappers import ActionMasker
 
         env = ActionMasker(env, lambda e: e.unwrapped.action_masks())
-        model = MaskablePPO(
-            "MlpPolicy", env, verbose=1, seed=cfg.seed, tensorboard_log=str(out_dir)
-        )
+        model = MaskablePPO("MlpPolicy", env, **kwargs)
     except ImportError:
         from stable_baselines3 import PPO
 
         print("sb3-contrib not installed — falling back to unmasked PPO.")
-        model = PPO("MlpPolicy", env, verbose=1, seed=cfg.seed, tensorboard_log=str(out_dir))
+        model = PPO("MlpPolicy", env, **kwargs)
 
     model.learn(total_timesteps=args.timesteps, progress_bar=True)
     model.save(out_dir / "model")
