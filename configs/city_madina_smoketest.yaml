@@ -19,12 +19,12 @@ network:
 
 simulation:
   search_radius: 800
-  detour_ratio: 1.15
+  detour_ratio: 1.0    # temporarily disabled (was 1.15) -- suspected cause of the hang, testing in isolation
   decay: true
   decay_method: exponent
   beta: 0.003
   closest_destination: false
-  turn_penalty: true
+  turn_penalty: false  # temporarily disabled (was true) -- suspected cause of the hang, testing in isolation
   turn_threshold_degree: 45
   turn_penalty_amount: 30
   num_cores: 1   # avoid Windows multiprocessing spawn/pickling overhead for a quick check
