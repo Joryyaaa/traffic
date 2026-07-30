@@ -1,0 +1,57 @@
+# Real-data case study: Al Nakheel, a genuinely residential north-Riyadh
+# neighborhood (villas, not the Al Olaya commercial core used by
+# city_madina.yaml). Mirrors configs/hard.yaml's pedestrian-zone story
+# (w_pedestrian_zone > 0, irreversible closures) so the same greedy-fails /
+# planning-wins finding can be checked against real OSM data, not just the
+# synthetic lattice.
+#
+#   python scripts/fetch_osm_data.py --radius 250 --out data/raw/riyadh_ablation --lat 24.7412 --lon 46.6335
+#   python scripts/evaluate.py --config configs/city_madina_ablation.yaml --episodes 2
+#   python scripts/train.py --config configs/city_madina_ablation.yaml --timesteps 3000 --run-name ablation_riyadh
+#   python scripts/evaluate.py --config configs/city_madina_ablation.yaml --model runs/ablation_riyadh/model.zip --episodes 2
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_ablation/streets.geojson
+  origins_path: data/raw/riyadh_ablation/residential.geojson
+  destinations_path: data/raw/riyadh_ablation/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0     # kept off (see city_madina_smoketest.yaml) -- known-fast, known-correct
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false    # kept off, same reason
+  num_cores: 1            # ignored by MadinaBackend now (always forced to 1 in-process)
+
+action:
+  action_type: toggle
+  closure_mode: penalize   # mentor's call for the real backend
+  closure_penalty: 1000.0
+  max_closures: 6          # ~50 streets total -> a meaningful fraction, small enough for greedy to stay affordable
+  episode_length: 15
+  allow_reopen: false       # irreversible: matches hard.yaml's commitment story
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0    # same story as hard.yaml: greedy shouldn't start a zone
+  min_zone_size: 3
+  zone_exponent: 2.0
+
+  reward_mode: delta
