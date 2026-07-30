@@ -193,6 +193,14 @@ class MadinaBackend(FlowBackend):
         self._debug(f"_build_zonal total [{time.time()-t0:.1f}s]")
 
         with self._force_single_process_betweenness():
+            if self._debug_enabled:
+                import faulthandler
+                import sys
+
+                # If this call hangs, dump every thread's exact stack trace
+                # after 20s instead of leaving us guessing -- cancelled below
+                # once it returns (normally or via exception).
+                faulthandler.dump_traceback_later(20, exit=False, file=sys.stderr)
             try:
                 self._debug("calling betweenness() (in-process)...")
                 betweenness(
@@ -236,6 +244,9 @@ class MadinaBackend(FlowBackend):
                 # the code below already falls back to all-zero flow/access
                 # when FLOW_COL/ACCESS_COL are missing from the layers.
                 self._debug(f"betweenness() hit the zero-reachability KeyError [{time.time()-t0:.1f}s]")
+            finally:
+                if self._debug_enabled:
+                    faulthandler.cancel_dump_traceback_later()
 
         street_gdf = zonal[self.STREETS].gdf
         origin_gdf = zonal[self.ORIGINS].gdf
