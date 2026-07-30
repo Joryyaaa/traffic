@@ -166,41 +166,65 @@ class MadinaBackend(FlowBackend):
         zonal = self._build_zonal(closed_mask)
 
         with self._force_single_process_betweenness():
-            betweenness(
-                zonal,
-                search_radius=sc.search_radius,
-                detour_ratio=sc.detour_ratio,
-                decay=sc.decay,
-                decay_method=sc.decay_method,
-                beta=sc.beta,
-                # Madina's betweenness() always wraps its per-origin loop in a
-                # concurrent.futures.ProcessPoolExecutor, regardless of
-                # num_cores -- there's no genuine serial code path in the
-                # public API. On Windows this can hang indefinitely (every
-                # spawned worker has to re-import the whole scientific stack,
-                # and on at least one dev machine that re-import never
-                # completes). _force_single_process_betweenness() patches the
-                # executor to run in-process instead, so num_cores is pinned
-                # to 1 here on purpose -- sc.num_cores is intentionally
-                # ignored for now. Revisit if/when this moves to a Linux/HPC
-                # box for the full-scale run, where real multiprocessing may
-                # be safe and worth the speedup.
-                num_cores=1,
-                closest_destination=sc.closest_destination,
-                turn_penalty=sc.turn_penalty,
-                save_betweenness_as=self.FLOW_COL,
-                save_gravity_as=self.ACCESS_COL,
-            )
+            try:
+                betweenness(
+                    zonal,
+                    search_radius=sc.search_radius,
+                    detour_ratio=sc.detour_ratio,
+                    decay=sc.decay,
+                    decay_method=sc.decay_method,
+                    beta=sc.beta,
+                    # Madina's betweenness() always wraps its per-origin loop in a
+                    # concurrent.futures.ProcessPoolExecutor, regardless of
+                    # num_cores -- there's no genuine serial code path in the
+                    # public API. On Windows this can hang indefinitely (every
+                    # spawned worker has to re-import the whole scientific stack,
+                    # and on at least one dev machine that re-import never
+                    # completes). _force_single_process_betweenness() patches the
+                    # executor to run in-process instead, so num_cores is pinned
+                    # to 1 here on purpose -- sc.num_cores is intentionally
+                    # ignored for now. Revisit if/when this moves to a Linux/HPC
+                    # box for the full-scale run, where real multiprocessing may
+                    # be safe and worth the speedup.
+                    num_cores=1,
+                    closest_destination=sc.closest_destination,
+                    turn_penalty=sc.turn_penalty,
+                    save_betweenness_as=self.FLOW_COL,
+                    save_gravity_as=self.ACCESS_COL,
+                )
+            except KeyError:
+                # Madina bug, confirmed with a hand-built test case: if *zero*
+                # origins can reach *any* destination within search_radius (a
+                # closure -- or in "penalize" mode, a cost high enough to price
+                # everyone out of the search radius -- isolates the whole
+                # network), the internal per-origin result frame never gets a
+                # betweenness/gravity column created at all, and the library
+                # raises a KeyError trying to fillna() a column that doesn't
+                # exist, instead of just writing zeros like it does for a
+                # *partially* unreachable network. "Nobody can get anywhere" is
+                # a real state the RL agent can produce (especially on small
+                # networks / early random exploration), so treat it as such:
+                # the code below already falls back to all-zero flow/access
+                # when FLOW_COL/ACCESS_COL are missing from the layers.
+                pass
 
         street_gdf = zonal[self.STREETS].gdf
         origin_gdf = zonal[self.ORIGINS].gdf
 
-        # Re-align flows onto the *full* segment index: closed segments carry 0.
+        # If every origin is priced/routed out of every destination (e.g. a
+        # "penalize" closure that pushes the whole search radius over budget,
+        # or a set of closures that isolates a district), Madina's betweenness()
+        # never creates these columns at all rather than filling them with
+        # zeros -- so we can't just index them, we have to check first.
         flow = np.zeros(self.n_segments, dtype=float)
-        sim_flow = street_gdf[self.FLOW_COL].fillna(0.0).to_numpy(dtype=float)
-        flow[street_gdf["segment_id"].to_numpy(dtype=int)] = sim_flow
+        if self.FLOW_COL in street_gdf.columns:
+            sim_flow = street_gdf[self.FLOW_COL].fillna(0.0).to_numpy(dtype=float)
+            flow[street_gdf["segment_id"].to_numpy(dtype=int)] = sim_flow
 
-        access = origin_gdf[self.ACCESS_COL].fillna(0.0).to_numpy(dtype=float)
+        if self.ACCESS_COL in origin_gdf.columns:
+            access = origin_gdf[self.ACCESS_COL].fillna(0.0).to_numpy(dtype=float)
+        else:
+            access = np.zeros(len(origin_gdf), dtype=float)
 
         result = SimulationResult(
             segment_flow=flow,
