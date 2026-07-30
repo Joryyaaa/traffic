@@ -11,12 +11,18 @@ dependencies:
   - pandas<3   # madina's internals still use pandas' removed `fastpath` kwarg (gone in pandas 3.0)
   - pyyaml
   - pytorch
+  # stable-baselines3 / sb3-contrib pull in their own pip-wheel torch if
+  # installed via pip, which conflicts with the conda-forge pytorch above
+  # (mismatched Python/C-extension builds -> `torch._C.TensorBase` errors at
+  # import time). Installing them via conda-forge too makes them reuse the
+  # same pytorch instead.
+  - gymnasium>=0.29
+  - stable-baselines3>=2.3
+  - sb3-contrib
+  - tensorboard
+  - pytest
   - pip
   - pip:
-      - gymnasium>=0.29
-      - stable-baselines3>=2.3
-      - tensorboard
-      - pytest
       - -i https://test.pypi.org/simple/
       - --extra-index-url https://pypi.org/simple
       - madina
