@@ -17,6 +17,7 @@ Reference API (City-Form-Lab/madina):
 
 from __future__ import annotations
 
+import contextlib
 from functools import lru_cache
 from pathlib import Path
 
@@ -164,19 +165,32 @@ class MadinaBackend(FlowBackend):
         sc = self.cfg.simulation
         zonal = self._build_zonal(closed_mask)
 
-        betweenness(
-            zonal,
-            search_radius=sc.search_radius,
-            detour_ratio=sc.detour_ratio,
-            decay=sc.decay,
-            decay_method=sc.decay_method,
-            beta=sc.beta,
-            num_cores=sc.num_cores,
-            closest_destination=sc.closest_destination,
-            turn_penalty=sc.turn_penalty,
-            save_betweenness_as=self.FLOW_COL,
-            save_gravity_as=self.ACCESS_COL,
-        )
+        with self._force_single_process_betweenness():
+            betweenness(
+                zonal,
+                search_radius=sc.search_radius,
+                detour_ratio=sc.detour_ratio,
+                decay=sc.decay,
+                decay_method=sc.decay_method,
+                beta=sc.beta,
+                # Madina's betweenness() always wraps its per-origin loop in a
+                # concurrent.futures.ProcessPoolExecutor, regardless of
+                # num_cores -- there's no genuine serial code path in the
+                # public API. On Windows this can hang indefinitely (every
+                # spawned worker has to re-import the whole scientific stack,
+                # and on at least one dev machine that re-import never
+                # completes). _force_single_process_betweenness() patches the
+                # executor to run in-process instead, so num_cores is pinned
+                # to 1 here on purpose -- sc.num_cores is intentionally
+                # ignored for now. Revisit if/when this moves to a Linux/HPC
+                # box for the full-scale run, where real multiprocessing may
+                # be safe and worth the speedup.
+                num_cores=1,
+                closest_destination=sc.closest_destination,
+                turn_penalty=sc.turn_penalty,
+                save_betweenness_as=self.FLOW_COL,
+                save_gravity_as=self.ACCESS_COL,
+            )
 
         street_gdf = zonal[self.STREETS].gdf
         origin_gdf = zonal[self.ORIGINS].gdf
@@ -247,6 +261,46 @@ class MadinaBackend(FlowBackend):
             distances.extend(d_idxs.values())
 
         return float(np.mean(distances)) if distances else float("nan")
+
+    @staticmethod
+    @contextlib.contextmanager
+    def _force_single_process_betweenness():
+        """Patch madina.una.betweenness's ProcessPoolExecutor to execute
+        submitted work immediately, in this process, instead of spawning a
+        worker. See the comment at the call site in `simulate()` for why.
+        """
+        import concurrent.futures
+        from madina.una import betweenness as _betweenness_module
+
+        import concurrent.futures as _cf
+
+        class _ImmediateFuture(_cf.Future):
+            def __init__(self, fn, /, *args, **kwargs):
+                super().__init__()
+                try:
+                    self.set_result(fn(*args, **kwargs))
+                except Exception as exc:  # noqa: BLE001 - surfaced via Future.result()/.exception()
+                    self.set_exception(exc)
+
+        class _ImmediateExecutor:
+            def __init__(self, *args, **kwargs):
+                pass
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc_info):
+                return False
+
+            def submit(self, fn, /, *args, **kwargs):
+                return _ImmediateFuture(fn, *args, **kwargs)
+
+        original = _betweenness_module.concurrent.futures.ProcessPoolExecutor
+        _betweenness_module.concurrent.futures.ProcessPoolExecutor = _ImmediateExecutor
+        try:
+            yield
+        finally:
+            _betweenness_module.concurrent.futures.ProcessPoolExecutor = original
 
     @staticmethod
     def _count_components(zonal) -> int:
