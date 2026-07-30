@@ -1,0 +1,47 @@
+# Fast sanity-check config: small radius + single core, so a smoke test finishes
+# in seconds instead of minutes. NOT for real training/results -- use
+# city_madina.yaml (the full 3km area) for that once this passes.
+#
+#   python scripts/fetch_osm_data.py --radius 400 --out data/raw/riyadh_smoketest
+#   python scripts/smoke_test.py --config configs/city_madina_smoketest.yaml --episodes 1
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_smoketest/streets.geojson
+  origins_path: data/raw/riyadh_smoketest/residential.geojson
+  destinations_path: data/raw/riyadh_smoketest/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.15
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: true
+  turn_threshold_degree: 45
+  turn_penalty_amount: 30
+  num_cores: 1   # avoid Windows multiprocessing spawn/pickling overhead for a quick check
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 15
+  episode_length: 40
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.5
+  w_detour: 0.3
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  reward_mode: delta
