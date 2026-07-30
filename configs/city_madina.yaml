@@ -3,13 +3,13 @@ seed: 42
 
 network:
   backend: madina
-  streets_path: data/raw/<city>/streets.geojson
-  origins_path: data/raw/<city>/residential.geojson
-  destinations_path: data/raw/<city>/amenities.geojson
+  streets_path: data/raw/riyadh/streets.geojson
+  origins_path: data/raw/riyadh/residential.geojson
+  destinations_path: data/raw/riyadh/amenities.geojson
   origin_weight: residents          # column in origins layer
   destination_weight: floor_area    # column in destinations layer
   weight_attribute: null            # null -> geometric length as network cost
-  crs: "EPSG:32638"                 # UTM zone for the study area (meters)
+  crs: "EPSG:32638"                 # UTM 38N: correct zone for Riyadh (~46.7E)
   node_snapping_tolerance: 0.5
 
 simulation:
@@ -26,7 +26,8 @@ simulation:
 
 action:
   action_type: toggle
-  closure_mode: rebuild
+  closure_mode: penalize   # mentor call: more realistic than rebuild, and much cheaper per step
+  closure_penalty: 1000.0
   max_closures: 15
   episode_length: 40
   forbid_disconnection: true

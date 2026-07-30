@@ -178,11 +178,7 @@ class MadinaBackend(FlowBackend):
         result = SimulationResult(
             segment_flow=flow,
             origin_access=access,
-            # TODO: Madina does not return mean trip distance directly.
-            # Options: (a) keep_diagnostics=True and read the path record,
-            # (b) derive from reach/gravity, (c) compute with networkx on
-            # zonal.network.d_graph. Decide with the mentor.
-            mean_trip_distance=float("nan"),
+            mean_trip_distance=self._mean_trip_distance(zonal),
             n_components=self._count_components(zonal),
             unreachable_fraction=float(np.mean(access <= 0.0)),
             extra={"zonal": zonal},
@@ -192,6 +188,52 @@ class MadinaBackend(FlowBackend):
             self._cache.clear()
         self._cache[key] = result
         return result
+
+    def _mean_trip_distance(self, zonal) -> float:
+        """Average network distance over every reachable origin-destination pair.
+
+        Madina's `betweenness()` never returns this directly — it computes it
+        internally (see `una.betweenness.one_access` / `turn_o_scope`) and
+        throws it away once flow is written to the layers. Rather than turn on
+        `keep_diagnostics` (extra memory, and it's a path record, not a
+        distance) or approximate it from the gravity/reach score (loses the
+        raw distance under the exponential decay), we replay the *same* walk
+        Madina does per origin: temporarily insert the origin into `d_graph`,
+        scope out to every destination within `search_radius` respecting
+        `detour_ratio` and `turn_penalty`, then remove it again. This keeps the
+        number consistent with whatever `simulation.*` settings produced the
+        flow/access numbers above, at the cost of one extra graph walk per
+        origin (cheap next to the betweenness computation itself).
+
+        Unweighted mean across O-D pairs, mirroring `StubBackend.simulate`.
+        """
+        from madina.una.paths import turn_o_scope
+
+        network = zonal.network
+        node_gdf = network.nodes
+        origins = node_gdf[node_gdf["type"] == "origin"].index
+        if len(origins) == 0:
+            return float("nan")
+
+        sc = self.cfg.simulation
+        o_graph = network.d_graph
+
+        distances: list[float] = []
+        for o_idx in origins:
+            network.add_node_to_graph(o_graph, o_idx)
+            d_idxs, _, _ = turn_o_scope(
+                network=network,
+                o_idx=o_idx,
+                search_radius=sc.search_radius,
+                detour_ratio=sc.detour_ratio,
+                turn_penalty=sc.turn_penalty,
+                o_graph=o_graph,
+                return_paths=False,
+            )
+            network.remove_node_to_graph(o_graph, o_idx)
+            distances.extend(d_idxs.values())
+
+        return float(np.mean(distances)) if distances else float("nan")
 
     @staticmethod
     def _count_components(zonal) -> int:
