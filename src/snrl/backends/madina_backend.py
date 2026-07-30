@@ -335,9 +335,17 @@ class MadinaBackend(FlowBackend):
     @staticmethod
     @contextlib.contextmanager
     def _force_single_process_betweenness():
-        """Patch madina.una.betweenness's ProcessPoolExecutor to execute
-        submitted work immediately, in this process, instead of spawning a
-        worker. See the comment at the call site in `simulate()` for why.
+        """Two Windows-hang workarounds for Madina's betweenness(), scoped to
+        just this call via monkeypatching:
+
+        1. ProcessPoolExecutor -> runs submitted work immediately, in this
+           process, instead of spawning a worker (see the comment at the
+           call site in `simulate()` for why).
+        2. psutil.virtual_memory() -> reports abundant free memory, so the
+           per-chunk `while low_memory: time.sleep(30)` throttle in
+           betweenness_exposure() never triggers (see the comment further
+           down where it's patched, for why that guard no longer applies
+           once we're single-process).
         """
         import concurrent.futures
         from madina.una import betweenness as _betweenness_module
@@ -365,12 +373,34 @@ class MadinaBackend(FlowBackend):
             def submit(self, fn, /, *args, **kwargs):
                 return _ImmediateFuture(fn, *args, **kwargs)
 
-        original = _betweenness_module.concurrent.futures.ProcessPoolExecutor
+        original_executor = _betweenness_module.concurrent.futures.ProcessPoolExecutor
         _betweenness_module.concurrent.futures.ProcessPoolExecutor = _ImmediateExecutor
+
+        # Madina's per-origin worker loop also throttles itself: before each
+        # destination chunk it checks psutil.virtual_memory() and sleeps in a
+        # loop (no output at all -- looks exactly like a hang) until at least
+        # 2.4GB and 15% of system RAM are free. That guard exists so several
+        # parallel worker *processes* on a shared machine don't all pile up
+        # and OOM it at once. We no longer have parallel workers (see above),
+        # so it's just extra, unnecessary latency here -- confirmed via
+        # faulthandler that this exact wait loop (betweenness.py's
+        # `while ... time.sleep(30)`) was where a real run sat stuck on a
+        # modest laptop. Report abundant memory so it never triggers.
+        import collections
+
+        _FakeVirtualMemory = collections.namedtuple(
+            "_FakeVirtualMemory", ["total", "available", "percent", "used", "free"]
+        )
+        original_virtual_memory = _betweenness_module.psutil.virtual_memory
+        _betweenness_module.psutil.virtual_memory = lambda: _FakeVirtualMemory(
+            total=32 * 1024**3, available=32 * 1024**3, percent=1.0, used=0, free=32 * 1024**3
+        )
+
         try:
             yield
         finally:
-            _betweenness_module.concurrent.futures.ProcessPoolExecutor = original
+            _betweenness_module.concurrent.futures.ProcessPoolExecutor = original_executor
+            _betweenness_module.psutil.virtual_memory = original_virtual_memory
 
     @staticmethod
     def _count_components(zonal) -> int:
