@@ -33,11 +33,10 @@ RESIDENTIAL_BUILDING_TYPES = {
 }
 
 
-def fetch_streets(radius_m: float) -> gpd.GeoDataFrame:
-    print(f"[1/3] Downloading '{NETWORK_TYPE}' street network within {radius_m}m of "
-          f"({CENTER_LAT}, {CENTER_LON}) ...")
+def fetch_streets(radius_m: float, center=(CENTER_LAT, CENTER_LON)) -> gpd.GeoDataFrame:
+    print(f"[1/3] Downloading '{NETWORK_TYPE}' street network within {radius_m}m of {center} ...")
     G = ox.graph_from_point(
-        (CENTER_LAT, CENTER_LON), dist=radius_m, network_type=NETWORK_TYPE, simplify=True
+        center, dist=radius_m, network_type=NETWORK_TYPE, simplify=True
     )
     _, edges = ox.graph_to_gdfs(G)
     edges = edges.reset_index(drop=True)[["geometry"]].copy()
@@ -45,10 +44,10 @@ def fetch_streets(radius_m: float) -> gpd.GeoDataFrame:
     return edges
 
 
-def fetch_residential(radius_m: float) -> gpd.GeoDataFrame:
+def fetch_residential(radius_m: float, center=(CENTER_LAT, CENTER_LON)) -> gpd.GeoDataFrame:
     print("[2/3] Downloading residential buildings (origins) ...")
     buildings = ox.features_from_point(
-        (CENTER_LAT, CENTER_LON), tags={"building": True}, dist=radius_m
+        center, tags={"building": True}, dist=radius_m
     )
     buildings = buildings[buildings["building"].isin(RESIDENTIAL_BUILDING_TYPES)].copy()
 
@@ -66,10 +65,10 @@ def fetch_residential(radius_m: float) -> gpd.GeoDataFrame:
     return buildings
 
 
-def fetch_amenities(radius_m: float) -> gpd.GeoDataFrame:
+def fetch_amenities(radius_m: float, center=(CENTER_LAT, CENTER_LON)) -> gpd.GeoDataFrame:
     print("[3/3] Downloading amenities (destinations) ...")
     amenities = ox.features_from_point(
-        (CENTER_LAT, CENTER_LON), tags={"amenity": True, "shop": True}, dist=radius_m
+        center, tags={"amenity": True, "shop": True}, dist=radius_m
     )
 
     metric = amenities.to_crs(METRIC_CRS)
@@ -89,14 +88,17 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--radius", type=float, default=3000, help="Radius in meters (default: 3000)")
     ap.add_argument("--out", default="data/raw/riyadh", help="Output folder")
+    ap.add_argument("--lat", type=float, default=CENTER_LAT, help="Center latitude (default: Al Olaya)")
+    ap.add_argument("--lon", type=float, default=CENTER_LON, help="Center longitude (default: Al Olaya)")
     args = ap.parse_args()
+    center = (args.lat, args.lon)
 
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    streets = fetch_streets(args.radius)
-    residential = fetch_residential(args.radius)
-    amenities = fetch_amenities(args.radius)
+    streets = fetch_streets(args.radius, center)
+    residential = fetch_residential(args.radius, center)
+    amenities = fetch_amenities(args.radius, center)
 
     streets.to_file(out_dir / "streets.geojson", driver="GeoJSON")
     residential.to_file(out_dir / "residential.geojson", driver="GeoJSON")
