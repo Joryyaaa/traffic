@@ -8,7 +8,7 @@ dependencies:
   - pyogrio
   - networkx
   - numpy
-  - pandas
+  - pandas<3   # madina's internals still use pandas' removed `fastpath` kwarg (gone in pandas 3.0)
   - pyyaml
   - pytorch
   - pip

@@ -1,6 +1,6 @@
 # --- core ---
 numpy>=1.24
-pandas>=2.0
+pandas>=2.0,<3      # madina's internals use pandas' removed `fastpath` kwarg (gone in pandas 3.0)
 pyyaml>=6.0
 networkx>=3.1
 
