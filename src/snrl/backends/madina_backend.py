@@ -58,6 +58,19 @@ class MadinaBackend(FlowBackend):
         self._zonal = None            # rebuilt lazily per network state
         self._cache: dict[bytes, SimulationResult] = {}
 
+        import os
+
+        self._debug_enabled = os.environ.get("SNRL_DEBUG_MADINA") == "1"
+
+    def _debug(self, msg: str) -> None:
+        """Stage-by-stage progress print, off by default (noisy at RL-training
+        scale, one simulate() call per env step). Turn on temporarily with:
+            set SNRL_DEBUG_MADINA=1        (Windows)
+            export SNRL_DEBUG_MADINA=1     (macOS/Linux)
+        """
+        if self._debug_enabled:
+            print(f"[madina_backend] {msg}", flush=True)
+
     # --- setup --------------------------------------------------------------
     def _check_paths(self) -> None:
         nc = self.cfg.network
@@ -95,10 +108,14 @@ class MadinaBackend(FlowBackend):
 
     def _build_zonal(self, closed_mask: np.ndarray):
         """Construct a Zonal object for the given network state."""
+        import time
+
         from madina.zonal import Zonal
 
         nc, sc = self.cfg.network, self.cfg.simulation
         streets = self._base_streets
+        t0 = time.time()
+        self._debug(f"_build_zonal: start ({len(streets)} streets before closure)")
 
         weight_attribute = nc.weight_attribute
         if self.cfg.action.closure_mode == "rebuild":
@@ -115,6 +132,7 @@ class MadinaBackend(FlowBackend):
 
         zonal = Zonal()
         zonal.load_layer(name=self.STREETS, source=streets)
+        self._debug(f"  loaded streets layer [{time.time()-t0:.1f}s]")
         zonal.create_street_network(
             source_layer=self.STREETS,
             weight_attribute=weight_attribute,
@@ -122,12 +140,17 @@ class MadinaBackend(FlowBackend):
             turn_threshold_degree=sc.turn_threshold_degree,
             turn_penalty_amount=sc.turn_penalty_amount,
         )
+        self._debug(f"  create_street_network done [{time.time()-t0:.1f}s]")
         zonal.load_layer(name=self.ORIGINS, source=self._read_points(nc.origins_path))
+        self._debug(f"  loaded origins layer [{time.time()-t0:.1f}s]")
         zonal.insert_node(self.ORIGINS, label="origin", weight_attribute=nc.origin_weight)
+        self._debug(f"  inserted origins [{time.time()-t0:.1f}s]")
         zonal.load_layer(name=self.DESTINATIONS, source=self._read_points(nc.destinations_path))
+        self._debug(f"  loaded destinations layer [{time.time()-t0:.1f}s]")
         zonal.insert_node(
             self.DESTINATIONS, label="destination", weight_attribute=nc.destination_weight
         )
+        self._debug(f"  inserted destinations [{time.time()-t0:.1f}s]")
         zonal.create_graph()
         return zonal
 
@@ -156,6 +179,8 @@ class MadinaBackend(FlowBackend):
 
     # --- simulation ---------------------------------------------------------
     def simulate(self, closed_mask: np.ndarray) -> SimulationResult:
+        import time
+
         key = np.packbits(closed_mask.astype(bool)).tobytes()
         if key in self._cache:
             return self._cache[key]
@@ -163,10 +188,13 @@ class MadinaBackend(FlowBackend):
         from madina.una.tools import betweenness
 
         sc = self.cfg.simulation
+        t0 = time.time()
         zonal = self._build_zonal(closed_mask)
+        self._debug(f"_build_zonal total [{time.time()-t0:.1f}s]")
 
         with self._force_single_process_betweenness():
             try:
+                self._debug("calling betweenness() (in-process)...")
                 betweenness(
                     zonal,
                     search_radius=sc.search_radius,
@@ -192,6 +220,7 @@ class MadinaBackend(FlowBackend):
                     save_betweenness_as=self.FLOW_COL,
                     save_gravity_as=self.ACCESS_COL,
                 )
+                self._debug(f"betweenness() done [{time.time()-t0:.1f}s]")
             except KeyError:
                 # Madina bug, confirmed with a hand-built test case: if *zero*
                 # origins can reach *any* destination within search_radius (a
@@ -206,7 +235,7 @@ class MadinaBackend(FlowBackend):
                 # networks / early random exploration), so treat it as such:
                 # the code below already falls back to all-zero flow/access
                 # when FLOW_COL/ACCESS_COL are missing from the layers.
-                pass
+                self._debug(f"betweenness() hit the zero-reachability KeyError [{time.time()-t0:.1f}s]")
 
         street_gdf = zonal[self.STREETS].gdf
         origin_gdf = zonal[self.ORIGINS].gdf
@@ -226,11 +255,17 @@ class MadinaBackend(FlowBackend):
         else:
             access = np.zeros(len(origin_gdf), dtype=float)
 
+        self._debug(f"flow/access extracted [{time.time()-t0:.1f}s]")
+        mean_dist = self._mean_trip_distance(zonal)
+        self._debug(f"_mean_trip_distance done [{time.time()-t0:.1f}s]")
+        n_comp = self._count_components(zonal)
+        self._debug(f"_count_components done [{time.time()-t0:.1f}s]")
+
         result = SimulationResult(
             segment_flow=flow,
             origin_access=access,
-            mean_trip_distance=self._mean_trip_distance(zonal),
-            n_components=self._count_components(zonal),
+            mean_trip_distance=mean_dist,
+            n_components=n_comp,
             unreachable_fraction=float(np.mean(access <= 0.0)),
             extra={"zonal": zonal},
         )
