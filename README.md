@@ -24,8 +24,8 @@ network. Flows are simulated with [**Madina**](https://github.com/City-Form-Lab/
 - [x] **Non-uniform demand** (`configs/hard_demand.yaml`)
 - [x] **Larger networks** (`configs/hard_large.yaml`) — greedy becomes unaffordable
 - [x] **Stochastic demand** (`configs/hard_stochastic.yaml`)
-- [ ] Real city data pipeline (OSM → streets / origins / destinations layers)
-- [ ] Madina backend validated against a hand-checked simulation
+- [x] Real city data pipeline (OSM → streets / origins / destinations layers)
+- [x] Madina backend validated against a hand-checked simulation
 - [ ] Ablations & case-study writeup
 
 ## Repository layout
