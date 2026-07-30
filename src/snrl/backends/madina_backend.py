@@ -79,6 +79,19 @@ class MadinaBackend(FlowBackend):
         gdf["segment_id"] = np.arange(len(gdf))
         return gdf
 
+    def _read_points(self, path):
+        """Read an origins/destinations layer and reproject it to match the
+        street network's CRS -- required for node snapping to work correctly.
+        Without this, insert_node() compares projected street coordinates
+        (meters) against whatever CRS the source file happens to be in
+        (typically WGS84 degrees), which silently produces nonsense nearest-edge
+        snaps instead of an error.
+        """
+        import geopandas as gpd
+
+        gdf = gpd.read_file(path)
+        return gdf.to_crs(self.cfg.network.crs)
+
     def _build_zonal(self, closed_mask: np.ndarray):
         """Construct a Zonal object for the given network state."""
         from madina.zonal import Zonal
@@ -108,9 +121,9 @@ class MadinaBackend(FlowBackend):
             turn_threshold_degree=sc.turn_threshold_degree,
             turn_penalty_amount=sc.turn_penalty_amount,
         )
-        zonal.load_layer(name=self.ORIGINS, source=nc.origins_path)
+        zonal.load_layer(name=self.ORIGINS, source=self._read_points(nc.origins_path))
         zonal.insert_node(self.ORIGINS, label="origin", weight_attribute=nc.origin_weight)
-        zonal.load_layer(name=self.DESTINATIONS, source=nc.destinations_path)
+        zonal.load_layer(name=self.DESTINATIONS, source=self._read_points(nc.destinations_path))
         zonal.insert_node(
             self.DESTINATIONS, label="destination", weight_attribute=nc.destination_weight
         )

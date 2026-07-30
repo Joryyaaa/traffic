@@ -52,10 +52,11 @@ def fetch_residential() -> gpd.GeoDataFrame:
     )
     buildings = buildings[buildings["building"].isin(RESIDENTIAL_BUILDING_TYPES)].copy()
 
-    # centroid: madina snaps origin *points* onto the nearest street edge
+    # Project first: centroid/area must be computed in meters, not degrees.
     metric = buildings.to_crs(METRIC_CRS)
     footprint_area = metric.geometry.area
-    buildings = buildings.set_geometry(buildings.geometry.centroid)
+    centroids = metric.geometry.centroid.to_crs(buildings.crs)
+    buildings = buildings.set_geometry(centroids)
 
     # PLACEHOLDER proxy: no real census data yet, so estimate occupants from
     # footprint area (~30 m^2 per resident). Flag with mentor before the real run.
@@ -73,7 +74,8 @@ def fetch_amenities() -> gpd.GeoDataFrame:
 
     metric = amenities.to_crs(METRIC_CRS)
     footprint_area = metric.geometry.area
-    amenities = amenities.set_geometry(amenities.geometry.centroid)
+    centroids = metric.geometry.centroid.to_crs(amenities.crs)
+    amenities = amenities.set_geometry(centroids)
 
     # PLACEHOLDER proxy: real floor_area only exists for polygon features;
     # point-only amenities (most shops/mosques in OSM) get a flat nominal value.
