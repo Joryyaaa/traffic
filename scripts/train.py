@@ -29,9 +29,12 @@ def main() -> None:
     ap.add_argument("--timesteps", type=int, default=20_000)
     ap.add_argument("--run-name", default="ppo_baseline")
     ap.add_argument("--out", default="runs")
+    ap.add_argument("--seed", type=int, default=None, help="Override cfg.seed (training is fully deterministic per-seed, so re-running with the same seed just retraces the same trajectory -- use this to try a different one)")
     args = ap.parse_args()
 
     cfg = load_config(args.config)
+    if args.seed is not None:
+        cfg.seed = args.seed
     env = make_env(cfg)
     out_dir = Path(args.out) / args.run_name
     out_dir.mkdir(parents=True, exist_ok=True)
