@@ -26,7 +26,7 @@ network. Flows are simulated with [**Madina**](https://github.com/City-Form-Lab/
 - [x] **Stochastic demand** (`configs/hard_stochastic.yaml`)
 - [x] Real city data pipeline (OSM → streets / origins / destinations layers)
 - [x] Madina backend validated against a hand-checked simulation
-- [ ] Ablations & case-study writeup
+- [x] Ablations & case-study writeup
 
 ## Repository layout
 
