@@ -32,6 +32,7 @@ network. Flows are simulated with [**Madina**](https://github.com/City-Form-Lab/
 - [x] Simulation flow visual (`scripts/plot_flow.py`)
 - [x] Reward function breakdown, per step (`scripts/reward_breakdown.py`) -- found accessibility/equity/detour are all exactly 0 for the trained agent's episode; the closed corridor doesn't sit on any O-D shortest path, so the zone bonus was earned "for free". Worth discussing with mentor -- may mean Al Nakheel's small network doesn't test a real accessibility/zone tradeoff.
 - [x] Episode recording / video of the trained agent (`scripts/record_episode.py`)
+- [ ] Abha scenario: fetch real data + confirm residential buildings (`configs/city_madina_abha.yaml`) -- 3rd city, different terrain (mountains vs plateau/coast)
 - [ ] NEOM data request follow-up — unblocks `configs/city_madina_neom.yaml` (currently a placeholder, no usable OSM data exists yet)
 - [ ] **[needs APEX]** Large seed sweep (~100 seeds) on Al Nakheel for a real mean ± std (`scripts/seed_sweep.py`)
 - [ ] **[needs APEX]** Seed sweep repeated on Jeddah — does greedy-fails/planning-wins hold in a 2nd city?

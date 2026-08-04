@@ -1,0 +1,59 @@
+# Third real-city scenario: Abha (Asir region, southwestern mountains) --
+# geographically and topographically distinct from Riyadh (central plateau)
+# and Jeddah (Red Sea coast), so if greedy-fails/planning-wins holds here
+# too, that's a much stronger "this is a general pattern" claim than 2
+# central/western cities alone.
+#
+#   python scripts/fetch_osm_data.py --radius 250 --out data/raw/abha --lat 18.2164 --lon 42.5044
+#   (city-center point -- Al Olaya and Al-Kharj city centers both came back
+#   with 0 residential buildings, so check the printed count before training;
+#   try a bigger radius, or a named residential district like Al Rawdah /
+#   Al Marooj / As-Sadd if the center itself is too commercial/administrative)
+#   python scripts/evaluate.py --config configs/city_madina_abha.yaml --episodes 3
+#   python scripts/train.py --config configs/city_madina_abha.yaml --timesteps 30000 --run-name abha_seed1 --seed 1
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/abha/streets.geojson
+  origins_path: data/raw/abha/residential.geojson
+  destinations_path: data/raw/abha/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"   # UTM 38N -- Abha's ~42.5E longitude is right inside this zone
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+
+  reward_mode: delta
