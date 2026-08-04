@@ -27,6 +27,17 @@ network. Flows are simulated with [**Madina**](https://github.com/City-Form-Lab/
 - [x] Real city data pipeline (OSM → streets / origins / destinations layers)
 - [x] Madina backend validated against a hand-checked simulation
 - [x] Ablations & case-study writeup
+- [ ] Al-Kharj scenario: fetch real data + confirm it has residential buildings (`configs/city_madina_alkharj.yaml`)
+- [ ] Baseline scenario report across all real-data scenarios (`scripts/baseline_report.py`)
+- [ ] Simulation flow visual (`scripts/plot_flow.py`)
+- [ ] Reward function breakdown, per step (`scripts/reward_breakdown.py`)
+- [ ] Episode recording / video of the trained agent (`scripts/record_episode.py`)
+- [ ] NEOM data request follow-up — unblocks `configs/city_madina_neom.yaml` (currently a placeholder, no usable OSM data exists yet)
+- [ ] **[needs APEX]** Large seed sweep (~100 seeds) on Al Nakheel for a real mean ± std (`scripts/seed_sweep.py`)
+- [ ] **[needs APEX]** Seed sweep repeated on Al-Kharj — does greedy-fails/planning-wins hold in a 2nd neighborhood?
+- [ ] **[needs APEX]** Seed sweep repeated on NEOM, once real data exists
+- [ ] **[needs APEX]** Larger network size (bigger radius, hundreds of segments) — note greedy itself becomes the bottleneck at this scale
+- [ ] **[needs APEX]** Longer training per seed (100,000+ steps) — do stuck seeds (like 42) eventually escape the local optimum, or is it seed-dependent regardless of budget?
 
 ## Repository layout
 
