@@ -1,0 +1,56 @@
+# Second real-city scenario: Al-Kharj (~80km south of Riyadh), used to check
+# whether the greedy-fails / planning-wins pattern found in Al Nakheel
+# repeats in a different real neighborhood, not just one lucky location.
+#
+#   python scripts/fetch_osm_data.py --radius 250 --out data/raw/alkharj --lat 24.1483 --lon 47.3050
+#   (check the printed segment/residential/amenity counts -- if residential
+#   comes back 0 like Al Olaya did, try a bigger radius or a different
+#   sub-neighborhood before training)
+#   python scripts/evaluate.py --config configs/city_madina_alkharj.yaml --episodes 3
+#   python scripts/train.py --config configs/city_madina_alkharj.yaml --timesteps 30000 --run-name alkharj_seed1 --seed 1
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/alkharj/streets.geojson
+  origins_path: data/raw/alkharj/residential.geojson
+  destinations_path: data/raw/alkharj/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"   # UTM 38N -- same zone as Riyadh, Al-Kharj is ~80km south but still in it
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+
+  reward_mode: delta

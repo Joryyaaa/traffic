@@ -13,6 +13,7 @@ osmnx>=1.9          # optional: pulling street networks from OpenStreetMap
 # --- RL ---
 gymnasium>=0.29
 stable-baselines3>=2.3
+sb3-contrib>=2.3    # MaskablePPO -- used by every train.py/evaluate.py/seed_sweep.py run
 torch>=2.1
 tensorboard>=2.15
 
@@ -20,6 +21,7 @@ tensorboard>=2.15
 pytest>=8.0
 black>=24.0
 ruff>=0.4
+matplotlib>=3.8    # scripts/plot_closures.py, plot_flow.py, record_episode.py, reward_breakdown.py
 
 # --- flow simulation backend ---
 # Madina is on TestPyPI:

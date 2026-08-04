@@ -1,0 +1,66 @@
+# NEOM scenario -- PLACEHOLDER, not runnable yet.
+#
+# We already tried fetching real NEOM data from OpenStreetMap and got back
+# essentially nothing (no street grid, no residential buildings) because
+# NEOM/THE LINE is still under construction and not documented in OSM the
+# way an existing city is. This config exists so the *pipeline* is ready the
+# moment real data becomes available (from NEOM's own GIS team, a masterplan
+# export, etc.) -- see the message asking for streets/residential/amenities
+# data sent to the mentor.
+#
+# To activate this once real data exists:
+#   1. Get streets/residential/amenities as GeoJSON (or shapefile -> convert
+#      with geopandas: gpd.read_file("x.shp").to_file("x.geojson", driver="GeoJSON"))
+#   2. Put them at data/raw/neom/{streets,residential,amenities}.geojson
+#   3. Fix `crs:` below -- NEOM spans multiple UTM zones (THE LINE runs from
+#      the Gulf of Aqaba inland), so check the actual longitude of whatever
+#      sub-area the data covers: EPSG:32636 (UTM 36N) for the coastal/western
+#      end, EPSG:32637 (UTM 37N) further inland. Do NOT reuse Riyadh's
+#      EPSG:32638 -- wrong zone entirely.
+#   4. Everything else (simulation/action/reward) can stay as-is to start.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/neom/streets.geojson             # DOES NOT EXIST YET
+  origins_path: data/raw/neom/residential.geojson          # DOES NOT EXIST YET
+  destinations_path: data/raw/neom/amenities.geojson        # DOES NOT EXIST YET
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32637"   # placeholder -- verify against actual data's longitude, see note above
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+
+  reward_mode: delta
