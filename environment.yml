@@ -21,6 +21,7 @@ dependencies:
   - sb3-contrib
   - tensorboard
   - pytest
+  - matplotlib
   - pip
   - pip:
       - -i https://test.pypi.org/simple/
