@@ -1,0 +1,61 @@
+# Second real-city scenario: Al Salamah district, Jeddah (mixed
+# residential/commercial neighborhood) -- used to check whether the
+# greedy-fails / planning-wins pattern found in Al Nakheel (Riyadh) repeats
+# in a different real city, not just one lucky location.
+#
+# NOTE on CRS: Jeddah is on the Red Sea coast, ~39.15E longitude -- that's
+# UTM ZONE 37N (EPSG:32637), NOT Riyadh's zone 38N. Always check the
+# longitude before reusing a CRS from another scenario.
+#
+#   python scripts/fetch_osm_data.py --radius 250 --out data/raw/jeddah --lat 21.583186 --lon 39.153762
+#   (check the printed residential count -- Al Olaya and Al-Kharj city
+#   centers both came back with 0 residential buildings at this radius, so
+#   verify before training; try a bigger radius or a different sub-area if so)
+#   python scripts/evaluate.py --config configs/city_madina_jeddah.yaml --episodes 3
+#   python scripts/train.py --config configs/city_madina_jeddah.yaml --timesteps 30000 --run-name jeddah_seed1 --seed 1
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/jeddah/streets.geojson
+  origins_path: data/raw/jeddah/residential.geojson
+  destinations_path: data/raw/jeddah/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32637"   # UTM 37N -- Jeddah, NOT Riyadh's 32638
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+
+  reward_mode: delta
