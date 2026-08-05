@@ -40,6 +40,7 @@ def zone_score(
     adjacency: np.ndarray,
     min_size: int = 3,
     exponent: float = 2.0,
+    qualifying_mask: np.ndarray | None = None,
 ) -> float:
     """Reward for closures that form a coherent *pedestrian zone*.
 
@@ -57,11 +58,25 @@ def zone_score(
       while already costing accessibility. A one-step-lookahead (greedy) agent
       therefore refuses to ever start one, while an agent that plans ahead can
       absorb the early loss to reach the payoff.
+
+    `qualifying_mask` (optional): marks which segments carry enough baseline
+    flow to count toward a group's *size*. A segment outside this mask can
+    still sit inside a contiguous closed group (e.g. a quiet connector alley
+    linking two busy streets), but doesn't contribute to the size used for
+    `min_size`/`exponent`. Without this, the agent can farm the full bonus by
+    closing a zone made entirely of already-unused streets -- a real finding
+    from a trained run (see reward_breakdown.py output + the mentor's
+    question: shouldn't the agent only close streets that see real
+    congestion?). Defaults to everything qualifying (old behavior).
     """
     closed_mask = np.asarray(closed_mask, dtype=bool)
     closed = np.flatnonzero(closed_mask)
     if closed.size == 0:
         return 0.0
+    if qualifying_mask is None:
+        qualifying_mask = np.ones_like(closed_mask, dtype=bool)
+    else:
+        qualifying_mask = np.asarray(qualifying_mask, dtype=bool)
 
     seen: set[int] = set()
     total = 0.0
@@ -80,8 +95,9 @@ def zone_score(
                 seen.add(v)
                 stack.append(v)
                 group.append(v)
-        if len(group) >= min_size:
-            total += float(len(group)) ** exponent
+        effective_size = sum(1 for seg in group if qualifying_mask[seg])
+        if effective_size >= min_size:
+            total += float(effective_size) ** exponent
     return total
 
 

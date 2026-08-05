@@ -29,6 +29,7 @@ from shapely.geometry import LineString, Point  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from snrl.backends.madina_backend import MadinaBackend  # noqa: E402
+from snrl.env import StreetNetworkEnv  # noqa: E402
 from snrl.config import (  # noqa: E402
     ActionConfig,
     EnvConfig,
@@ -119,3 +120,76 @@ def test_closing_the_only_path_makes_destination_unreachable(backend):
     result = backend.simulate(closed)
     assert not np.isfinite(result.mean_trip_distance) or result.mean_trip_distance == 0
     assert (result.origin_access <= 0).all()
+
+
+def test_zone_bonus_ignores_segments_with_no_baseline_flow(tmp_path):
+    """Regression test for the mentor's question ("shouldn't the agent only
+    close streets that see real congestion?") -- add a zero-flow dead-end
+    branch off the main path, and confirm closing *that* segment earns zero
+    pedestrian_zone reward, while closing a real-flow segment on the main
+    path still earns it. Without zone_min_flow_fraction, both would score
+    identically (zone_score only looked at contiguity, never at flow)."""
+    from snrl.config import ActionConfig, EnvConfig, NetworkConfig, RewardConfig, SimulationConfig
+
+    streets = gpd.GeoDataFrame(
+        {
+            "geometry": [
+                LineString([(0, 0), (100, 0)]),
+                LineString([(100, 0), (200, 0)]),
+                LineString([(200, 0), (300, 0)]),
+                LineString([(200, 0), (200, 100)]),  # dead-end branch, on nobody's route
+            ]
+        },
+        crs="EPSG:32638",
+    )
+    origins = gpd.GeoDataFrame(
+        {"geometry": [Point(10, 0)], "residents": [50.0]}, crs="EPSG:32638"
+    )
+    destinations = gpd.GeoDataFrame(
+        {"geometry": [Point(290, 0)], "floor_area": [100.0]}, crs="EPSG:32638"
+    )
+    streets_path = tmp_path / "streets.geojson"
+    origins_path = tmp_path / "origins.geojson"
+    destinations_path = tmp_path / "destinations.geojson"
+    streets.to_file(streets_path, driver="GeoJSON")
+    origins.to_file(origins_path, driver="GeoJSON")
+    destinations.to_file(destinations_path, driver="GeoJSON")
+
+    cfg = EnvConfig(
+        network=NetworkConfig(
+            backend="madina",
+            streets_path=str(streets_path),
+            origins_path=str(origins_path),
+            destinations_path=str(destinations_path),
+            origin_weight="residents",
+            destination_weight="floor_area",
+            weight_attribute=None,
+            crs="EPSG:32638",
+            node_snapping_tolerance=0.5,
+        ),
+        simulation=SimulationConfig(
+            search_radius=1000, detour_ratio=1.0, decay=False,
+            closest_destination=False, turn_penalty=False, num_cores=1,
+        ),
+        action=ActionConfig(
+            closure_mode="penalize", max_closures=1, episode_length=1, forbid_disconnection=False,
+        ),
+        reward=RewardConfig(
+            w_accessibility=0.0, w_flow_concentration=0.0, w_equity=0.0,
+            w_detour=0.0, w_intervention=0.0, disconnection_penalty=0.0,
+            w_pedestrian_zone=1.0, min_zone_size=1, zone_exponent=2.0,
+            zone_min_flow_fraction=0.1, reward_mode="absolute",
+        ),
+    )
+    env = StreetNetworkEnv(cfg)
+
+    assert list(env._baseline_sim.segment_flow) == [50.0, 50.0, 50.0, 0.0]
+    assert list(env.reward_fn._qualifying_mask) == [True, True, True, False]
+
+    env.reset()
+    _, _, _, _, info = env.step(3)  # close the zero-flow dead-end branch
+    assert info["reward/pedestrian_zone"] == 0.0
+
+    env.reset()
+    _, _, _, _, info = env.step(0)  # close a real-flow segment on the main path
+    assert info["reward/pedestrian_zone"] == 1.0

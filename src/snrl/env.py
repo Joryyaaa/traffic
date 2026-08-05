@@ -54,7 +54,9 @@ class StreetNetworkEnv(gym.Env):
         self._length_scale = float(np.max(self.backend.segment_lengths)) or 1.0
         self._seg_degree = self._segment_degree()
 
-        self.reward_fn = RewardFunction(self.cfg, self._baseline_stats, self._adjacency)
+        self.reward_fn = RewardFunction(
+            self.cfg, self._baseline_stats, self._adjacency, self._baseline_sim.segment_flow
+        )
 
         # --- spaces ---------------------------------------------------------
         if self.cfg.action.action_type == "toggle":
@@ -94,6 +96,7 @@ class StreetNetworkEnv(gym.Env):
             self._baseline_stats = simulation_stats(self._baseline_sim)
             self._flow_scale = float(np.max(self._baseline_sim.segment_flow)) or 1.0
             self.reward_fn.baseline = self._baseline_stats
+            self.reward_fn.set_baseline_flow(self._baseline_sim.segment_flow)
 
         self.closed_mask = np.zeros(self.n_segments, dtype=bool)
         # TODO: support randomized starts (a few random pre-existing closures)

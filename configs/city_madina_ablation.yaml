@@ -53,5 +53,6 @@ reward:
   w_pedestrian_zone: 1.0    # same story as hard.yaml: greedy shouldn't start a zone
   min_zone_size: 3
   zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1   # mentor's fix: a segment needs >=10% of mean baseline flow to count toward a zone's size -- closes the "free zero-flow lunch" found via reward_breakdown.py
 
   reward_mode: delta

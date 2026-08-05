@@ -72,13 +72,32 @@ def simulation_stats(sim) -> dict[str, float]:
 
 
 class RewardFunction:
-    def __init__(self, cfg, baseline_stats: dict[str, float], adjacency: np.ndarray):
+    def __init__(
+        self,
+        cfg,
+        baseline_stats: dict[str, float],
+        adjacency: np.ndarray,
+        baseline_flow: np.ndarray | None = None,
+    ):
         self.cfg = cfg.reward
         self.action_cfg = cfg.action
         self.baseline = baseline_stats
         self.adjacency = adjacency
         # A single zone spending the whole budget — the natural normalizer.
         self._zone_scale = float(max(self.action_cfg.max_closures, 1)) ** self.cfg.zone_exponent
+        self.set_baseline_flow(baseline_flow)
+
+    def set_baseline_flow(self, baseline_flow: np.ndarray | None) -> None:
+        """(Re)compute which segments count toward zone_score's size, based on
+        the current baseline (fully-open) flow. Call this again if the
+        baseline changes (e.g. on env.reset() with a new network)."""
+        if baseline_flow is None or self.cfg.zone_min_flow_fraction <= 0:
+            self._qualifying_mask = None  # zone_score treats this as "everything qualifies"
+            return
+        baseline_flow = np.asarray(baseline_flow, dtype=float)
+        mean_flow = float(np.mean(baseline_flow)) if baseline_flow.size else 0.0
+        threshold = self.cfg.zone_min_flow_fraction * mean_flow
+        self._qualifying_mask = baseline_flow >= threshold
 
     # ------------------------------------------------------------------
     def stats(self, sim, closed_mask: np.ndarray) -> dict[str, float]:
@@ -94,6 +113,7 @@ class RewardFunction:
                     self.adjacency,
                     min_size=self.cfg.min_zone_size,
                     exponent=self.cfg.zone_exponent,
+                    qualifying_mask=self._qualifying_mask,
                 )
                 / self._zone_scale
             )

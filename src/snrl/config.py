@@ -108,6 +108,15 @@ class RewardConfig:
     w_pedestrian_zone: float = 0.0
     min_zone_size: int = 3           # segments needed before a zone counts at all
     zone_exponent: float = 2.0       # >1 makes one big zone beat several small ones
+    zone_min_flow_fraction: float = 0.0
+    # A segment must carry at least this fraction of the network's mean
+    # *baseline* flow to count toward a zone's size. 0.0 = disabled (any
+    # segment counts, including ones nobody ever walks on -- the original
+    # behavior). Without this, the agent can farm the full pedestrian_zone
+    # bonus by closing a corridor that already carried zero flow, since
+    # zone_score only ever looked at contiguity, never at whether closing
+    # the segment costs (or helps) anyone. Try e.g. 0.1 so a segment needs
+    # >=10% of mean baseline flow to count.
 
     # "delta" -> reward = change vs. previous step; "absolute" -> vs. baseline
     reward_mode: Literal["delta", "absolute"] = "delta"
