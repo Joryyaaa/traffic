@@ -48,9 +48,19 @@ def zone_builder_choose(env):
     valid = np.flatnonzero(mask[: env.n_segments])
     if valid.size == 0:
         return env.n_segments
+    qualifying_mask = env.reward_fn._qualifying_mask
     if closed.size == 0:
-        return int(valid[np.argmax(env._seg_degree[valid])])
+        candidates = valid
+        if qualifying_mask is not None:
+            qualifying_valid = valid[qualifying_mask[valid]]
+            if qualifying_valid.size > 0:
+                candidates = qualifying_valid
+        return int(candidates[np.argmax(env._seg_degree[candidates])])
     touching = [a for a in valid if env._adjacency[a][closed].any()]
+    if qualifying_mask is not None:
+        qualifying_touching = [a for a in touching if qualifying_mask[a]]
+        if qualifying_touching:
+            touching = qualifying_touching
     return int(touching[0]) if touching else env.n_segments
 
 

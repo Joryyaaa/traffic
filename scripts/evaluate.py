@@ -63,6 +63,14 @@ def zone_builder_policy(env):
     headroom greedy leaves on the table — the return a policy can reach if it
     plans several moves ahead. The research claim is that an RL agent should
     discover this structure on its own, without being told.
+
+    Also told about zone_min_flow_fraction (see rewards.py) when it's active:
+    prefers flow-qualifying segments both when seeding and when extending,
+    falling back to the old degree-only behavior if none qualify or the
+    constraint isn't enabled. Without this, zone_builder stops being a fair
+    "best hand-coded effort" once the reward requires real usage -- it would
+    just keep building on the same unused corridor it always did and score
+    worse than doing nothing, which measures a stale baseline, not headroom.
     """
     def choose(env, obs):
         mask = env.action_masks()
@@ -70,10 +78,22 @@ def zone_builder_policy(env):
         valid = np.flatnonzero(mask[: env.n_segments])
         if valid.size == 0:
             return env.n_segments
+        qualifying_mask = env.reward_fn._qualifying_mask
         if closed.size == 0:
-            # seed on the best-connected segment we are allowed to close
-            return int(valid[np.argmax(env._seg_degree[valid])])
+            # seed on the best-connected segment we are allowed to close,
+            # preferring one that qualifies for the zone bonus if that
+            # constraint is active.
+            candidates = valid
+            if qualifying_mask is not None:
+                qualifying_valid = valid[qualifying_mask[valid]]
+                if qualifying_valid.size > 0:
+                    candidates = qualifying_valid
+            return int(candidates[np.argmax(env._seg_degree[candidates])])
         touching = [a for a in valid if env._adjacency[a][closed].any()]
+        if qualifying_mask is not None:
+            qualifying_touching = [a for a in touching if qualifying_mask[a]]
+            if qualifying_touching:
+                touching = qualifying_touching
         return int(touching[0]) if touching else env.n_segments
     return choose
 
