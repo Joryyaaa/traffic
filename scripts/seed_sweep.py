@@ -74,7 +74,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", required=True)
     ap.add_argument("--timesteps", type=int, default=30_000)
-    ap.add_argument("--seeds", default="1,3,7,42", help="Comma-separated list of seeds to try")
+    ap.add_argument(
+        "--seeds",
+        default="1,3,7,42",
+        help="Comma-separated list (1,3,7,42) and/or ranges (1-100) -- mix freely, e.g. '1-50,777,1000-1010'",
+    )
     ap.add_argument("--episodes", type=int, default=5, help="Eval episodes per seed")
     ap.add_argument("--out", default="runs/sweep")
     ap.add_argument(
@@ -86,7 +90,14 @@ def main():
     )
     args = ap.parse_args()
 
-    seeds = [int(s) for s in args.seeds.split(",")]
+    seeds = []
+    for part in args.seeds.split(","):
+        part = part.strip()
+        if "-" in part:
+            lo, hi = part.split("-")
+            seeds.extend(range(int(lo), int(hi) + 1))
+        else:
+            seeds.append(int(part))
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     results_path = out_dir / "results.csv"
