@@ -1,0 +1,80 @@
+# Larger-network scenario: the SAME neighborhood as city_madina_ablation.yaml
+# (Al Nakheel, north Riyadh) at a 700m radius instead of 250m -- 772 street
+# segments instead of 52.
+#
+# Why the same neighborhood rather than a new city: this experiment is about
+# *scale*, so everything except network size should be held fixed. Comparing
+# against city_madina_ablation.yaml then isolates the effect of size, instead of
+# confounding it with a different city's demand pattern and street morphology.
+#
+# The point of this scenario is not that the task is harder to learn -- it is
+# that one-step-lookahead greedy stops being affordable. Greedy costs
+# (n_segments + 1) x episode_length simulations per episode; a trained policy
+# costs episode_length. At 52 segments / 15 steps that is 795 vs 15 (53x).
+# At 772 segments / 30 steps it is 23,190 vs 30 (773x), and each simulation is
+# itself slower because there are more origins to route from. See
+# configs/hard_large.yaml for the same argument on the synthetic lattice.
+#
+#   python scripts/fetch_osm_data.py --radius 700 --out data/raw/riyadh_large --lat 24.7412 --lon 46.6335
+#   python scripts/check_zone_feasibility.py --config configs/city_madina_ablation_large.yaml
+#   python scripts/baseline_report.py --config configs/city_madina_ablation_large.yaml
+#
+# Budget and episode length are set from the *real* centerline count, not the
+# row count -- see notes/2026-08-06-street-duplication.md. The 700m fetch returns
+# 772 directed rows, which is 386 actual streets; max_closures is 10% of that.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_large/streets.geojson
+  origins_path: data/raw/riyadh_large/residential.geojson
+  destinations_path: data/raw/riyadh_large/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"   # UTM 38N -- Riyadh, same as city_madina_ablation.yaml
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  # 10% of the 386 real centerlines (see notes/2026-08-06-street-duplication.md
+  # section 6). A fixed absolute budget meant a 7x different physical
+  # intervention across scenarios -- 6 closures is 23% of Al Nakheel's 26
+  # streets but 1.6% of these 386 -- so returns were not comparable between
+  # cities even though the reward normalizes them onto the same 0-0.95 scale.
+  # NOTE: 39 raises the zone_score normalizer to 39^2 = 1521 and makes greedy
+  # (n_segments+1) x episode_length simulations much more expensive. Re-check
+  # the cost before running.
+  max_closures: 39
+  # Must exceed max_closures, or the budget is unreachable: one closure per step.
+  episode_length: 60
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 20        # half the budget, matching Jeddah's 3-of-6 ratio
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1   # same as the 26-street scenario (see 15d2fa2)
+
+  reward_mode: delta

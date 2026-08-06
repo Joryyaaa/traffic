@@ -35,3 +35,5 @@ wandb/
 Thumbs.db
 .vscode/
 .idea/
+cache/          # osmnx HTTP response cache, created by scripts/fetch_osm_data.py
+data/raw
