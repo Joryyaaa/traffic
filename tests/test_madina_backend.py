@@ -197,3 +197,81 @@ def test_zone_bonus_ignores_segments_with_no_baseline_flow(tmp_path):
     env.reset()
     _, _, _, _, info = env.step(0)  # close a real-flow segment on the main path
     assert info["reward/pedestrian_zone"] == 1.0
+
+
+def test_closing_a_duplicated_street_row_has_no_effect(tmp_path):
+    """Regression test for the mentor's finding: osmnx represents a
+    bidirectional walk network as TWO directed edges per physical street. If
+    fetch_osm_data.py didn't dedupe them (fixed in scripts/fetch_osm_data.py
+    via ox.convert.to_undirected), the same street appears twice in
+    streets.geojson with identical geometry -- and in "penalize" mode,
+    closing one copy leaves its untouched twin sitting right there as a
+    bypass, so the closure does *nothing* (access/flow come back identical
+    to full precision). This test builds that exact scenario directly (no
+    osmnx/network access needed) and confirms: with the duplicate present,
+    closing the "middle" segment changes nothing; without it, the same
+    closure correctly cuts off access."""
+    def build_backend(duplicate_middle_segment: bool, out_dir):
+        lines = [
+            LineString([(0, 0), (100, 0)]),
+            LineString([(100, 0), (200, 0)]),  # the "middle" segment we'll close
+            LineString([(200, 0), (300, 0)]),
+        ]
+        if duplicate_middle_segment:
+            lines.append(LineString([(100, 0), (200, 0)]))  # exact duplicate, the bug
+
+        streets = gpd.GeoDataFrame({"geometry": lines}, crs="EPSG:32638")
+        origins = gpd.GeoDataFrame(
+            {"geometry": [Point(10, 0)], "residents": [50.0]}, crs="EPSG:32638"
+        )
+        destinations = gpd.GeoDataFrame(
+            {"geometry": [Point(290, 0)], "floor_area": [100.0]}, crs="EPSG:32638"
+        )
+        streets.to_file(out_dir / "streets.geojson", driver="GeoJSON")
+        origins.to_file(out_dir / "origins.geojson", driver="GeoJSON")
+        destinations.to_file(out_dir / "destinations.geojson", driver="GeoJSON")
+
+        cfg = EnvConfig(
+            network=NetworkConfig(
+                backend="madina",
+                streets_path=str(out_dir / "streets.geojson"),
+                origins_path=str(out_dir / "origins.geojson"),
+                destinations_path=str(out_dir / "destinations.geojson"),
+                origin_weight="residents", destination_weight="floor_area",
+                weight_attribute=None, crs="EPSG:32638", node_snapping_tolerance=0.5,
+            ),
+            simulation=SimulationConfig(
+                search_radius=1000, detour_ratio=1.0, decay=False,
+                closest_destination=False, turn_penalty=False, num_cores=1,
+            ),
+            action=ActionConfig(
+                closure_mode="penalize", max_closures=1, episode_length=1,
+                forbid_disconnection=False,
+            ),
+            reward=RewardConfig(),
+        )
+        return MadinaBackend(cfg), len(lines)
+
+    buggy_dir = tmp_path / "buggy"
+    fixed_dir = tmp_path / "fixed"
+    buggy_dir.mkdir()
+    fixed_dir.mkdir()
+
+    backend_buggy, n_buggy = build_backend(True, buggy_dir)
+    backend_fixed, n_fixed = build_backend(False, fixed_dir)
+
+    closed_buggy = np.zeros(n_buggy, dtype=bool)
+    closed_buggy[1] = True
+    closed_fixed = np.zeros(n_fixed, dtype=bool)
+    closed_fixed[1] = True
+
+    open_buggy = backend_buggy.simulate(np.zeros(n_buggy, dtype=bool))
+    after_buggy = backend_buggy.simulate(closed_buggy)
+    open_fixed = backend_fixed.simulate(np.zeros(n_fixed, dtype=bool))
+    after_fixed = backend_fixed.simulate(closed_fixed)
+
+    # With the duplicate present, the untouched twin bypasses the closure entirely.
+    assert np.allclose(open_buggy.origin_access, after_buggy.origin_access)
+    # Without it, the same closure genuinely cuts off access.
+    assert not np.allclose(open_fixed.origin_access, after_fixed.origin_access)
+    assert after_fixed.origin_access[0] == pytest.approx(0.0)
