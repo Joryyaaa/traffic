@@ -114,11 +114,15 @@ def test_origin_access_is_positive_when_destination_reachable(backend):
 
 def test_closing_the_only_path_makes_destination_unreachable(backend):
     """Sanity-check the closure mechanics themselves: cutting segment 1 (the
-    middle block) should make mean_trip_distance NaN (nothing left to reach)
-    and access drop to 0 -- there is no other route around."""
+    middle block) should make the destination unreachable and access drop to
+    0 -- there is no other route around. mean_trip_distance should register
+    this as search_radius (the penalty for a missed pair, see the fix in
+    madina_backend.py), NOT silently drop to NaN/0 -- a value that just
+    vanished would mean closing streets could look "good" for detour by
+    cutting someone off entirely instead of properly counting it as bad."""
     closed = np.array([False, True, False])
     result = backend.simulate(closed)
-    assert not np.isfinite(result.mean_trip_distance) or result.mean_trip_distance == 0
+    assert result.mean_trip_distance == pytest.approx(1000.0, abs=1e-6)  # == search_radius
     assert (result.origin_access <= 0).all()
 
 

@@ -287,7 +287,9 @@ class MadinaBackend(FlowBackend):
         return result
 
     def _mean_trip_distance(self, zonal) -> float:
-        """Average network distance over every reachable origin-destination pair.
+        """Average network distance over every origin-destination pair,
+        treating an unreachable pair as costing `search_radius` rather than
+        vanishing from the average.
 
         Madina's `betweenness()` never returns this directly — it computes it
         internally (see `una.betweenness.one_access` / `turn_o_scope`) and
@@ -302,14 +304,28 @@ class MadinaBackend(FlowBackend):
         flow/access numbers above, at the cost of one extra graph walk per
         origin (cheap next to the betweenness computation itself).
 
-        Unweighted mean across O-D pairs, mirroring `StubBackend.simulate`.
+        IMPORTANT: an origin-destination pair that turn_o_scope doesn't reach
+        within search_radius is NOT dropped from the average -- it's counted
+        as `search_radius` (the worst distance the search still considers,
+        i.e. "as bad as the edge of the search area"). Earlier this method
+        just used the *reachable* pairs and silently ignored the rest, which
+        meant closing streets could *lower* the reported mean_trip_distance by
+        cutting a long/costly trip off entirely rather than making it longer
+        -- i.e. it was possible to earn a *better* detour reward for making
+        someone's destination completely unreachable, exactly the same shape
+        of bug as the pedestrian_zone "free lunch" (see commit 15d2fa2).
+        origin_access already correctly reflects this harm (unreachable
+        origins get 0 access, pulling the mean down), but mean_trip_distance
+        did not, so the two reward terms could disagree about whether cutting
+        someone off was good or bad.
         """
         from madina.una.paths import turn_o_scope
 
         network = zonal.network
         node_gdf = network.nodes
         origins = node_gdf[node_gdf["type"] == "origin"].index
-        if len(origins) == 0:
+        n_destinations = int((node_gdf["type"] == "destination").sum())
+        if len(origins) == 0 or n_destinations == 0:
             return float("nan")
 
         sc = self.cfg.simulation
@@ -329,6 +345,9 @@ class MadinaBackend(FlowBackend):
             )
             network.remove_node_to_graph(o_graph, o_idx)
             distances.extend(d_idxs.values())
+            n_missed = n_destinations - len(d_idxs)
+            if n_missed > 0:
+                distances.extend([float(sc.search_radius)] * n_missed)
 
         return float(np.mean(distances)) if distances else float("nan")
 
