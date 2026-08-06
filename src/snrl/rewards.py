@@ -128,10 +128,27 @@ class RewardFunction:
         b = self.baseline
         n_closed = int(np.sum(closed_mask))
 
-        def rel(key: str) -> float:
-            """Change in `key` vs. the reference, scaled by the baseline level."""
+        def rel(key: str, bounded: bool = False) -> float:
+            """Change in `key` vs. the reference.
+
+            For raw-scale quantities (mean_access, mean_trip_distance), the
+            change is scaled by the baseline level so the term is comparable
+            across networks of different sizes.
+
+            For quantities that are already normalized to [0, 1] (access_gini,
+            flow_entropy: `bounded=True`), just take the plain difference.
+            Dividing an already-bounded value by its own baseline blows up
+            whenever that baseline happens to be small -- caught by the
+            mentor on Al Nakheel, where a baseline access_gini of 0.0576 made
+            the equity term ~17x too sensitive and swamped every other term.
+            It also isn't really "relative scaling" in a meaningful sense for
+            a value that's already on a comparable, bounded scale.
+            """
+            diff = cur[key] - ref.get(key, 0.0)
+            if bounded:
+                return diff
             scale = abs(b.get(key, 0.0)) or 1.0
-            return (cur[key] - ref.get(key, 0.0)) / scale
+            return diff / scale
 
         out = RewardBreakdown()
         out.accessibility = self.cfg.w_accessibility * rel("mean_access")
@@ -139,9 +156,9 @@ class RewardFunction:
         # Lower entropy = flow concentrated on fewer corridors.
         # TODO: replace with a corridor-targeted term once the mentor confirms
         # which streets should attract flow (e.g. designated bike spines).
-        out.flow_concentration = -self.cfg.w_flow_concentration * rel("flow_entropy")
+        out.flow_concentration = -self.cfg.w_flow_concentration * rel("flow_entropy", bounded=True)
 
-        out.equity = -self.cfg.w_equity * rel("access_gini")
+        out.equity = -self.cfg.w_equity * rel("access_gini", bounded=True)
 
         # zone_score has no meaningful baseline (it is 0 when nothing is closed),
         # so it is compared against the reference directly rather than via rel().

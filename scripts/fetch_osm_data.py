@@ -38,9 +38,20 @@ def fetch_streets(radius_m: float, center=(CENTER_LAT, CENTER_LON)) -> gpd.GeoDa
     G = ox.graph_from_point(
         center, dist=radius_m, network_type=NETWORK_TYPE, simplify=True
     )
+    # osmnx represents a walk/bike network as a MultiDiGraph with BOTH
+    # directions of every bidirectional street as separate edges (mentor
+    # caught this). If we don't collapse them, every physical street shows
+    # up twice in streets.geojson with identical geometry -- and in
+    # "penalize" mode, closing one copy leaves its untouched twin sitting
+    # right next to it, so the closure has zero real effect (routing just
+    # uses the twin). to_undirected() merges reciprocal edges with matching
+    # geometry back into one -- it does NOT change which streets exist or
+    # their geometry, only removes the duplicate rows, so it doesn't affect
+    # simulation results on the open network, only makes closures real.
+    G = ox.convert.to_undirected(G)
     _, edges = ox.graph_to_gdfs(G)
     edges = edges.reset_index(drop=True)[["geometry"]].copy()
-    print(f"    -> {len(edges)} street segments")
+    print(f"    -> {len(edges)} street segments (deduped from directed pairs)")
     return edges
 
 
