@@ -143,11 +143,13 @@ def zone_builder_best_policy(cfg):
         if total > best_return:
             best_return, best_sequence = total, sequence
 
-    state = {"i": 0}
-
     def choose(env, obs):
-        i = state["i"]
-        state["i"] += 1
+        # Index by how many segments *this episode* has already closed, not
+        # a manually-incremented counter -- that counter never reset between
+        # episodes, so eval runs past the first one silently replayed nothing
+        # (index already past the end of best_sequence). closed_mask itself
+        # resets to all-False on env.reset(), so this self-corrects per episode.
+        i = int(env.closed_mask.sum())
         if best_sequence is None or i >= len(best_sequence):
             return env.n_segments  # no-op fallback
         return best_sequence[i]
