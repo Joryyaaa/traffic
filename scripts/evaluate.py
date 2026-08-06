@@ -98,6 +98,63 @@ def zone_builder_policy(env):
     return choose
 
 
+def zone_builder_best_policy(cfg):
+    """Exhaustive-seed variant of zone_builder: the single-seed version always
+    starts from the highest-degree segment, which can miss a better zone
+    sitting elsewhere in the network. This tries every flow-qualifying
+    segment as the starting seed (falls back to every segment if
+    zone_min_flow_fraction is disabled), greedily extends from each exactly
+    like zone_builder does, and replays whichever full sequence scored
+    highest. One full episode per candidate seed -- cheap on small networks
+    (candidates are usually a small qualifying subset, e.g. 11 of 52 on Al
+    Nakheel), but scales with network size, so expect it to be much slower
+    on the full 3km city config.
+
+    Not a true combinatorial optimum (that's intractable -- it would mean
+    trying every subset of segments, not just every starting seed), but a
+    meaningfully stronger ceiling than the single-heuristic-seed version.
+    """
+    probe_env = StreetNetworkEnv(cfg)
+    qualifying_mask = probe_env.reward_fn._qualifying_mask
+    candidate_seeds = (
+        np.flatnonzero(qualifying_mask)
+        if qualifying_mask is not None
+        else np.arange(probe_env.n_segments)
+    )
+
+    best_sequence, best_return = None, -np.inf
+    for seed_segment in candidate_seeds:
+        seed_segment = int(seed_segment)
+        trial_env = StreetNetworkEnv(cfg)
+        obs, _ = trial_env.reset()
+        if not trial_env.action_masks()[seed_segment]:
+            continue  # not a legal first move (e.g. would disconnect the network)
+
+        sequence = [seed_segment]
+        obs, reward, terminated, truncated, _ = trial_env.step(seed_segment)
+        total = reward
+        extend = zone_builder_policy(trial_env)
+        while not (terminated or truncated):
+            a = extend(trial_env, obs)
+            obs, reward, terminated, truncated, _ = trial_env.step(a)
+            sequence.append(a)
+            total += reward
+
+        if total > best_return:
+            best_return, best_sequence = total, sequence
+
+    state = {"i": 0}
+
+    def choose(env, obs):
+        i = state["i"]
+        state["i"] += 1
+        if best_sequence is None or i >= len(best_sequence):
+            return env.n_segments  # no-op fallback
+        return best_sequence[i]
+
+    return choose
+
+
 def flow_ranked_policy(env, descending: bool):
     order = np.argsort(env._baseline_sim.segment_flow)
     if descending:
@@ -132,6 +189,7 @@ def main() -> None:
         "highest_flow": flow_ranked_policy(env, descending=True),
         "lowest_flow": flow_ranked_policy(env, descending=False),
         "zone_builder": zone_builder_policy(env),
+        "zone_builder_best": zone_builder_best_policy(cfg),
     }
 
     if args.model:
