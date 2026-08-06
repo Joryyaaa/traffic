@@ -1,0 +1,70 @@
+# Seed-sweep results
+
+Two generations of results are kept here on purpose.
+
+`*_fixed` directories were run on the **current** reward (Jory's `b138dba`, which
+stopped `rel()` dividing bounded [0,1] metrics by their own baseline, plus
+`de90953`, which made unreachable O-D pairs count as a detour penalty instead of
+silently vanishing). **These are the numbers to quote.**
+
+The directories without the suffix were run earlier the same day on the reward as
+it stood before those commits. They are retained only as a before-measurement, to
+show what the two reward bugs were worth. Do not quote them as results.
+
+## Al Nakheel, Riyadh -- 26 centerlines, r=250m
+
+| | old reward | **fixed reward** |
+|---|---|---|
+| 30k, 100 seeds: mean | -0.0158 | **+0.1478** |
+| 30k: max | +0.1366 | **+0.3323** |
+| 30k: beat inaction (>= 0.0) | 41/100 | **80/100** |
+| 30k: match/beat planner | n/a | **32/100** (vs zone_builder +0.2661) |
+| 100k, 11 seeds: mean | +0.0118 | **+0.2375** |
+| 100k: match/beat planner | n/a | **8/11** |
+
+The fixed reward turns this scenario into one where RL genuinely outperforms the
+hand-coded planner: the best seed (+0.3323) exceeds zone_builder (+0.2661), and a
+third of seeds match or beat it. It also reverses an earlier conclusion drawn from
+the old-reward run -- more training does help here (32% of seeds reach
+planner-class at 30k vs 8 of 11 at 100k), whereas on the broken reward extra
+training was actively harmful because the ~17x-amplified equity term punished any
+closure.
+
+## Jeddah, Al Salamah -- 58 centerlines, r=250m
+
+| | old reward | **fixed reward** |
+|---|---|---|
+| mean | +0.2705 | **+0.2881** |
+| std | 0.3162 | 0.3317 |
+| median | +0.1901 | +0.1909 |
+| max | +0.9459 | +0.9435 |
+| beat inaction | 67/100 | **69/100** |
+| >= 0.90 | 7/100 | **11/100** |
+| matched planner | 1/100 | **1/100** |
+
+Essentially unchanged, as expected: Jeddah's `zone_builder` differs by only 0.0024
+between the two rewards, because its baseline access_gini (0.119) was never small
+enough for the normalizer bug to bite hard.
+
+Read honestly: 11 of 100 seeds reach >= 0.90 and one matches the planner, but 31
+finish negative, the median is +0.19, and the std exceeds the mean. So PPO reaches
+planner-class on a minority of seeds and is strongly seed-sensitive. It does
+**not** beat the planner here -- zone_builder sits at the 0.95 ceiling.
+
+## The contrast is the interesting result
+
+On the small network (26 streets, 3 destinations) RL beats the planner. On the
+larger, better-served network (58 streets, 31 destinations) the planner reaches the
+reward ceiling and RL only occasionally matches it. Neither scenario alone tells
+that story.
+
+## Baselines, both measured on the fixed reward
+
+| scenario | greedy | zone_builder | zone_builder_best |
+|---|---|---|---|
+| Al Nakheel 26 | 0.0000 | +0.2661 | +0.2661 |
+| Jeddah 58 | 0.0000 | +0.9435 | +0.9435 |
+| Al Nakheel 386 (budget 12) | 0.0000 (by construction) | +0.2878 | not run (cost) |
+
+Greedy scores exactly 0.0000 on every scenario by refusing to ever start a plaza,
+which is the greedy-fails half of the claim holding on real data throughout.

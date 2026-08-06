@@ -49,17 +49,21 @@ action:
   action_type: toggle
   closure_mode: penalize
   closure_penalty: 1000.0
-  # 10% of the 386 real centerlines (see notes/2026-08-06-street-duplication.md
-  # section 6). A fixed absolute budget meant a 7x different physical
-  # intervention across scenarios -- 6 closures is 23% of Al Nakheel's 26
-  # streets but 1.6% of these 386 -- so returns were not comparable between
-  # cities even though the reward normalizes them onto the same 0-0.95 scale.
-  # NOTE: 39 raises the zone_score normalizer to 39^2 = 1521 and makes greedy
-  # (n_segments+1) x episode_length simulations much more expensive. Re-check
-  # the cost before running.
-  max_closures: 39
+  # MEASURED, not derived. A "10% of the network" rule was tried first and is
+  # wrong here: at that budget the intervention is so large that the
+  # accessibility loss swamps the pedestrian_zone bonus, and the hand-coded
+  # planner scores WORSE than doing nothing, so the scenario cannot test the
+  # greedy-fails/planning-wins claim at all. zone_builder on the fixed reward:
+  #
+  #   max_closures=12, min_zone_size=6,  episode_length=30  ->  +0.2878
+  #   max_closures=20, min_zone_size=10, episode_length=40  ->  -0.0525
+  #   max_closures=39, min_zone_size=20, episode_length=60  ->  -0.2177
+  #
+  # 12 of 386 centerlines is ~3%, which is also closer to the scale of a real
+  # pedestrianization scheme than 10% was.
+  max_closures: 12
   # Must exceed max_closures, or the budget is unreachable: one closure per step.
-  episode_length: 60
+  episode_length: 30
   allow_reopen: false
   allow_noop: true
   forbid_disconnection: true
@@ -73,7 +77,7 @@ reward:
   disconnection_penalty: 5.0
 
   w_pedestrian_zone: 1.0
-  min_zone_size: 20        # half the budget, matching Jeddah's 3-of-6 ratio
+  min_zone_size: 6         # half the budget, matching Jeddah's 3-of-6 ratio
   zone_exponent: 2.0
   zone_min_flow_fraction: 0.1   # same as the 26-street scenario (see 15d2fa2)
 
