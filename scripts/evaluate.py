@@ -1,10 +1,15 @@
 """Evaluate a trained policy against baselines.
 
 Baselines to beat (all implemented here so comparisons are apples-to-apples):
-    random        - random valid closures
-    greedy        - one-step lookahead, close the segment with the best reward
-    highest_flow  - close the segments carrying the most baseline flow
-    lowest_flow   - close the least-used segments
+    random             - random valid closures
+    greedy             - one-step lookahead, close the segment with the best reward
+    highest_flow       - close the segments carrying the most baseline flow
+    lowest_flow        - close the least-used segments
+    zone_builder       - hand-coded planner: seed on the highest-degree qualifying
+                          segment, then always extend the same cluster
+    zone_builder_best  - zone_builder repeated from every qualifying seed segment,
+                          keeps the best-scoring full sequence (stronger ceiling,
+                          more expensive)
 
     python scripts/evaluate.py --config configs/default.yaml --model runs/ppo_baseline/model.zip
 """

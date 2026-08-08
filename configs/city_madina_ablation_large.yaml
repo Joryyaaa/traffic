@@ -19,6 +19,18 @@
 #   python scripts/check_zone_feasibility.py --config configs/city_madina_ablation_large.yaml
 #   python scripts/baseline_report.py --config configs/city_madina_ablation_large.yaml
 #
+# Also the largest point (386 segments) in the network-size sweep: 26 (r250,
+# city_madina_ablation.yaml) / 89 (r400) / 226 (r500) / 386 (r700, this file).
+# Recommended training budget for the sweep: 300,000 steps.
+#   python scripts/train.py --config configs/city_madina_ablation_large.yaml --timesteps 300000 --run-name scale_r700
+#
+# WARNING measured locally on Windows (2026-08-08, non-Ibex machine): ~1.68s
+# per env.step() on this config (~2-4s per genuinely new closed-segment
+# combination, cheap no-ops after each episode's budget is exhausted). That
+# puts 300k steps at roughly 140 hours (~5.8 days) PER SEED on a single local
+# machine -- this sweep is meant to run on Ibex/Slurm (see slurm/ on
+# origin/mentor/sweep-harness), not locally.
+#
 # Budget and episode length are set from the *real* centerline count, not the
 # row count -- see notes/2026-08-06-street-duplication.md. The 700m fetch returns
 # 772 directed rows, which is 386 actual streets; max_closures is 10% of that.
