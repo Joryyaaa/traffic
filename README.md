@@ -173,6 +173,15 @@ ever start. Only an agent willing to absorb an early loss reaches the payoff.
 permanently wasted, so the agent must commit to a plan rather than explore
 by trial and error within the episode.
 
+> **Stale-numbers warning:** every table in this section (through "Larger
+> networks") was measured before commit `b138dba` (OSM street dedup +
+> `rel()` no longer over-scaling bounded [0,1] metrics) and before
+> `zone_builder_best` existed. They're kept here as the historical record of
+> how the environment mechanisms were validated, but the absolute numbers are
+> superseded — pending a rerun on the stub lattice. Only the **Real-city case
+> study** section below reflects post-fix numbers. Do not cite numbers from
+> before `b138dba` as current.
+
 ### Baseline comparison (6×6 lattice, 60 segments, 3 episodes)
 
 | policy | easy (`default.yaml`) | hard (`hard.yaml`) |
@@ -194,7 +203,10 @@ Read the two columns together:
 
 `zone_builder` is a hand-coded planner that is *told* contiguity matters. It is
 included as a headroom measure, not as a competitor: it marks the return that is
-reachable when you plan ahead.
+reachable when you plan ahead. `zone_builder_best` is the same policy repeated
+from every flow-qualifying starting segment, keeping whichever full sequence
+scores highest — a stronger (but more expensive) hand-coded ceiling than
+picking a single highest-degree seed.
 
 ### The agent learns the structure on its own
 
@@ -318,6 +330,98 @@ inference is paid per decision.
 Returns are small in absolute terms because a uniform lattice with uniformly
 distributed origins and destinations offers little to improve. Non-uniform
 demand is the next mechanism to add.
+
+### `hard.yaml` — post-fix PPO retrain + seed sweep
+
+The `rel()` fix changes the reward scale for every backend, including the
+stub lattice, so the historical **PPO 0.872 vs. `zone_builder` 0.619**
+headline number needed reconfirming, not just the real-city numbers. Re-ran
+the full baseline table post-fix (3 episodes, `seed 42`):
+
+| policy | hard.yaml (post-fix) |
+|---|---|
+| random | −0.1195 |
+| greedy | 0.0032 |
+| highest_flow | 0.2941 |
+| lowest_flow | 0.0667 |
+| zone_builder | 0.7605 |
+| zone_builder_best | **0.9533** |
+
+Greedy is still pinned near zero and both zone-planning baselines score much
+higher than their pre-fix values — the core claim (greedy fails, planning
+wins) holds, and `zone_builder_best` is now a meaningfully stronger ceiling
+than plain `zone_builder`.
+
+The PPO side needed more care. A 30k-step retrain at `seed 42` (matching the
+original run) landed at 0.8378 — close to the old 0.872 but not identical, as
+expected since the reward scale itself moved. Training for 100k steps at the
+same seed reached only **0.8780**, with `ep_rew_mean` plateaued (oscillating
+0.81–0.88 from ~40k steps onward, not still climbing) — on its own, that
+looked like a possible capacity ceiling: PPO stuck below `zone_builder_best`
+(0.9533) no matter how long it trained.
+
+That reading turned out to be wrong. `seed 42` has a known history of getting
+stuck in a local optimum on this project (see the Al Nakheel seed-sweep note
+in Open Questions) — so before treating 0.878 as a structural ceiling, we
+reran the same 100k-step config at two other seeds:
+
+| seed | rl_agent (100k steps) | % of `zone_builder_best` |
+|---|---|---|
+| 42 | 0.8780 (plateaued) | 92% |
+| 1 | **0.9435** | 99% |
+| 3 | **0.9374** | 98% |
+
+Seeds 1 and 3 land within 1–2% of the hand-coded ceiling; seed 42 alone was
+stuck at 92%. **This says the seed-42 shortfall was a local optimum, not
+evidence that the MLP policy has a hard capacity ceiling at this network
+size (60 segments).**
+
+**Scope of this finding — important:** this only reconfirms/updates the
+original `hard.yaml` (60-segment) result. It does **not** answer the
+separate, still-open question of whether the MLP policy hits a real capacity
+ceiling as network size grows into the hundreds of segments (the
+`configs/hard_large.yaml`-and-beyond regime, tracked as "[needs APEX] Larger
+network size" in Status and in Open Questions). That question needs its own
+scaling-curve experiment across network sizes at 200k–300k+ steps per size,
+which is a separate, still-in-progress effort — see that experiment's own
+results/tracking once available; do not extrapolate the 60-segment seed-sweep
+finding above onto it.
+
+### Real-city case study (Al Nakheel, Jeddah) — post-fix
+
+Data was re-fetched (deduped OSM streets) and re-evaluated after `b138dba`,
+so these numbers, unlike the tables above, are current. Any number for these
+scenarios from before that commit — including anything quoted verbally
+earlier — should be discarded; the dedup fix changes whether closures do
+anything at all, and the `rel()` fix changes the reward scale itself.
+
+| policy | Al Nakheel (`city_madina_ablation.yaml`, 26 segments) | Jeddah (`city_madina_jeddah.yaml`, 58 segments) |
+|---|---|---|
+| random | −0.8197 (±0.3835) | −0.1474 (±0.1156) |
+| greedy | 0.0000 (±0.0000) | 0.0000 (±0.0000) |
+| highest_flow | −0.1305 (±0.1846) | −0.0473 (±0.0669) |
+| lowest_flow | −0.0167 (±0.0236) | −0.0167 (±0.0236) |
+| zone_builder | 0.2661 (±0.0000) | 0.9435 (±0.0000) |
+| zone_builder_best | 0.2661 (±0.0000) | 0.9435 (±0.0000) |
+
+(3 episodes each, `--episodes 3`, seeds `cfg.seed + i`.)
+
+Two things worth noting:
+
+- **Greedy is stuck at exactly zero in both real cities**, same trap as on
+  the synthetic `hard.yaml` lattice — it never finds a one-step move worth
+  taking, so it never starts a zone. The pattern generalizes past the stub
+  network.
+- **`zone_builder_best` matches `zone_builder` exactly on both cities** — the
+  exhaustive seed search didn't find a better starting point than the
+  single-highest-degree-qualifying-segment heuristic on either real network.
+  That may just reflect how small these networks are (26 and 58 segments);
+  worth re-checking once a larger-radius real scenario exists.
+- No `rl_agent` row: the trained models under `runs/ablation_riyadh*` predate
+  `b138dba`, so they were trained against the old (buggy) reward and network
+  topology. They need to be retrained before a PPO-vs-baseline comparison on
+  real-city data is meaningful again — not done here since it wasn't asked
+  for yet.
 
 ## Open questions 
 
