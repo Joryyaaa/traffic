@@ -1,0 +1,86 @@
+# Fifth point in the network-size sweep: Al Nakheel at r=460m, 186 centerlines.
+#
+# Sizes: 26 (r250, city_madina_ablation.yaml) / 89 (r400) / 186 (r460, this file)
+# / 226 (r500) / 386 (r700, city_madina_ablation_large.yaml). Same center
+# (24.7412, 46.6335) throughout, so scale is isolated from city and demand.
+#
+# This is the point results/scale_sweep_prep/PROVENANCE.md reports as unfetchable:
+# the amenities query to overpass-api.de timed out on every attempt. It fetched
+# first try on 2026-08-08 once two osmnx/Overpass quirks were worked around:
+# overpass-api.de round-robins over two backends and 65.109.112.52 refuses
+# connections outright, while osmnx resolves the host itself over DNS-over-HTTPS
+# (settings.doh_url_template) and re-pins via socket.gethostbyname, so ordinary
+# DNS overrides are ignored. Pin the healthy IP and disable DoH and it is
+# reliable. Counts: 186 segments, 66 residential, 18 amenities.
+#
+#   python scripts/fetch_osm_data.py --radius 460 --out data/raw/riyadh_r460 --lat 24.7412 --lon 46.6335
+#
+# BUDGET: measured, and this size is the clearest evidence yet that a flat
+# percentage rule does not work. zone_builder on the fixed reward, one episode:
+#
+#   max_closures=23, min_zone_size=11, episode_length=58  ->  -0.0678  (r500's values, NEGATIVE)
+#   max_closures=19, min_zone_size=9,  episode_length=48  ->  +0.1046  (the ~10% rule)
+#   max_closures=12, min_zone_size=6,  episode_length=30  ->  +0.6190  (used)
+#
+# The ~10% rule scores 6x worse than the chosen budget, and simply carrying r500's
+# budget across makes the planner lose to doing nothing. PROVENANCE.md already
+# warned that the rule "happened to coincide" at 89 and 226 segments; at 186 it
+# does not. Note 12/6/30 is also the measured-good budget at 386 segments, so the
+# workable budget is not tracking network size in any simple way.
+#
+# TIMESTEPS: 214,000. The 4-point sweep interpolates 100k->300k by rank; adding a
+# fifth point mid-curve makes rank ambiguous, so this is interpolated by segment
+# count between its two neighbours as actually submitted -- 89 segments at 167k
+# and 226 at 233k give 167k + (186-89)/(226-89) * 66k ~= 214k. That keeps this
+# point consistent with the runs already in flight rather than renumbering them.
+#
+#   sbatch --array=1-3 --time=24:00:00 --mem=16G \
+#     --export=ALL,CONFIG=configs/city_madina_ablation_r460.yaml,TIMESTEPS=214000,OUTROOT=runs/scale_r460,EPISODES=1 \
+#     slurm/sweep_array.sbatch
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_r460/streets.geojson
+  origins_path: data/raw/riyadh_r460/residential.geojson
+  destinations_path: data/raw/riyadh_r460/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"   # UTM 38N -- Riyadh
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 12
+  episode_length: 30      # must exceed max_closures: one closure per step
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 6        # half the budget, matching the other sizes
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta
