@@ -395,6 +395,22 @@ class MadinaBackend(FlowBackend):
         original_executor = _betweenness_module.concurrent.futures.ProcessPoolExecutor
         _betweenness_module.concurrent.futures.ProcessPoolExecutor = _ImmediateExecutor
 
+        # TODO(perf): this patch does NOT cover mp.Manager(), which
+        # paralell_betweenness_exposure() still calls directly (for the
+        # origin Queue) regardless of the ProcessPoolExecutor patch above.
+        # On Windows (spawn, not fork) that still pays a real OS
+        # process-spawn cost on every single simulate() call. Measured
+        # 2026-08-08 on a 386-segment scenario: ~2-4s per genuinely new
+        # closed-segment combination -- almost certainly dominated by this
+        # spawn, not the actual betweenness computation. Also requires every
+        # caller to guard top-level code with `if __name__ == "__main__":`
+        # (scripts/*.py already do; ad-hoc one-off scripts easily don't, and
+        # fail with a cryptic multiprocessing bootstrap RuntimeError, or hang
+        # indefinitely with near-zero CPU use, if they skip that guard).
+        # Worth patching mp.Manager() the same way _ImmediateExecutor patches
+        # ProcessPoolExecutor above, if local Windows training throughput
+        # matters again.
+
         # Madina's per-origin worker loop also throttles itself: before each
         # destination chunk it checks psutil.virtual_memory() and sleeps in a
         # loop (no output at all -- looks exactly like a hang) until at least

@@ -1,0 +1,64 @@
+# Scale scenario 3 of 4 in the network-size sweep: SAME neighborhood as
+# city_madina_ablation.yaml (Al Nakheel, north Riyadh), r=500m instead of
+# r=250m -- 226 street segments instead of 26. Full sweep: 26 (r250) / 89
+# (r400) / 226 (r500, this file) / 386 (r700).
+#
+#   python scripts/fetch_osm_data.py --radius 500 --out data/raw/riyadh_r500 --lat 24.7412 --lon 46.6335
+#
+# Budget MEASURED, not derived from a flat 10% rule (see
+# results/large_30k_fixed/PROVENANCE.md on origin/mentor/sweep-harness).
+# zone_builder on the fixed reward, measured 2026-08-08:
+#
+#   max_closures=23, min_zone_size=11, episode_length=58  ->  +0.3297
+#
+# Recommended training budget for the scale sweep (100k smallest -> 300k
+# largest, evenly interpolated by rank across the 4 sizes): 233,000 steps.
+#   python scripts/train.py --config configs/city_madina_ablation_r500.yaml --timesteps 233000 --run-name scale_r500
+#
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_r500/streets.geojson
+  origins_path: data/raw/riyadh_r500/residential.geojson
+  destinations_path: data/raw/riyadh_r500/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 23
+  episode_length: 58
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 11
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta

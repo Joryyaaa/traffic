@@ -1,0 +1,96 @@
+# Larger-network scenario: the SAME neighborhood as city_madina_ablation.yaml
+# (Al Nakheel, north Riyadh) at a 700m radius instead of 250m -- 772 street
+# segments instead of 52.
+#
+# Why the same neighborhood rather than a new city: this experiment is about
+# *scale*, so everything except network size should be held fixed. Comparing
+# against city_madina_ablation.yaml then isolates the effect of size, instead of
+# confounding it with a different city's demand pattern and street morphology.
+#
+# The point of this scenario is not that the task is harder to learn -- it is
+# that one-step-lookahead greedy stops being affordable. Greedy costs
+# (n_segments + 1) x episode_length simulations per episode; a trained policy
+# costs episode_length. At 52 segments / 15 steps that is 795 vs 15 (53x).
+# At 772 segments / 30 steps it is 23,190 vs 30 (773x), and each simulation is
+# itself slower because there are more origins to route from. See
+# configs/hard_large.yaml for the same argument on the synthetic lattice.
+#
+#   python scripts/fetch_osm_data.py --radius 700 --out data/raw/riyadh_large --lat 24.7412 --lon 46.6335
+#   python scripts/check_zone_feasibility.py --config configs/city_madina_ablation_large.yaml
+#   python scripts/baseline_report.py --config configs/city_madina_ablation_large.yaml
+#
+# Also the largest point (386 segments) in the network-size sweep: 26 (r250,
+# city_madina_ablation.yaml) / 89 (r400) / 226 (r500) / 386 (r700, this file).
+# Recommended training budget for the sweep: 300,000 steps.
+#   python scripts/train.py --config configs/city_madina_ablation_large.yaml --timesteps 300000 --run-name scale_r700
+#
+# WARNING measured locally on Windows (2026-08-08, non-Ibex machine): ~1.68s
+# per env.step() on this config (~2-4s per genuinely new closed-segment
+# combination, cheap no-ops after each episode's budget is exhausted). That
+# puts 300k steps at roughly 140 hours (~5.8 days) PER SEED on a single local
+# machine -- this sweep is meant to run on Ibex/Slurm (see slurm/ on
+# origin/mentor/sweep-harness), not locally.
+#
+# Budget and episode length are set from the *real* centerline count, not the
+# row count -- see notes/2026-08-06-street-duplication.md. The 700m fetch returns
+# 772 directed rows, which is 386 actual streets; max_closures is 10% of that.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_large/streets.geojson
+  origins_path: data/raw/riyadh_large/residential.geojson
+  destinations_path: data/raw/riyadh_large/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"   # UTM 38N -- Riyadh, same as city_madina_ablation.yaml
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  # MEASURED, not derived. A "10% of the network" rule was tried first and is
+  # wrong here: at that budget the intervention is so large that the
+  # accessibility loss swamps the pedestrian_zone bonus, and the hand-coded
+  # planner scores WORSE than doing nothing, so the scenario cannot test the
+  # greedy-fails/planning-wins claim at all. zone_builder on the fixed reward:
+  #
+  #   max_closures=12, min_zone_size=6,  episode_length=30  ->  +0.2878
+  #   max_closures=20, min_zone_size=10, episode_length=40  ->  -0.0525
+  #   max_closures=39, min_zone_size=20, episode_length=60  ->  -0.2177
+  #
+  # 12 of 386 centerlines is ~3%, which is also closer to the scale of a real
+  # pedestrianization scheme than 10% was.
+  max_closures: 12
+  # Must exceed max_closures, or the budget is unreachable: one closure per step.
+  episode_length: 30
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 6         # half the budget, matching Jeddah's 3-of-6 ratio
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1   # same as the 26-street scenario (see 15d2fa2)
+
+  reward_mode: delta

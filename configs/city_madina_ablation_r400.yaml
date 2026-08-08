@@ -1,0 +1,68 @@
+# Scale scenario 2 of 4 in the network-size sweep: SAME neighborhood as
+# city_madina_ablation.yaml (Al Nakheel, north Riyadh), r=400m instead of
+# r=250m -- 89 street segments instead of 26. Isolates network scale from
+# city/demand, same idea as city_madina_ablation_large.yaml (r=700m, 386
+# segments). Full sweep: 26 (r250) / 89 (r400, this file) / 226 (r500) /
+# 386 (r700).
+#
+#   python scripts/fetch_osm_data.py --radius 400 --out data/raw/riyadh_r400 --lat 24.7412 --lon 46.6335
+#
+# Budget MEASURED, not derived from a flat 10% rule (see
+# results/large_30k_fixed/PROVENANCE.md on origin/mentor/sweep-harness for
+# why the naive rule breaks down at scale -- it happened to hold up here on
+# the first try, unlike the 386-segment scenario). zone_builder on the fixed
+# reward, measured 2026-08-08:
+#
+#   max_closures=9,  min_zone_size=4, episode_length=22  ->  +0.6863
+#
+# Recommended training budget for the scale sweep (100k smallest -> 300k
+# largest, evenly interpolated by rank across the 4 sizes): 167,000 steps.
+#   python scripts/train.py --config configs/city_madina_ablation_r400.yaml --timesteps 167000 --run-name scale_r400
+#
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_r400/streets.geojson
+  origins_path: data/raw/riyadh_r400/residential.geojson
+  destinations_path: data/raw/riyadh_r400/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 9
+  episode_length: 22
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 4
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta

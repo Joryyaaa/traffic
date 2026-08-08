@@ -9,6 +9,13 @@
 #   python scripts/evaluate.py --config configs/city_madina_ablation.yaml --episodes 2
 #   python scripts/train.py --config configs/city_madina_ablation.yaml --timesteps 3000 --run-name ablation_riyadh
 #   python scripts/evaluate.py --config configs/city_madina_ablation.yaml --model runs/ablation_riyadh/model.zip --episodes 2
+#
+# Also the smallest point (26 segments) in the network-size sweep: 26 (r250,
+# this file) / 89 (r400) / 226 (r500) / 386 (r700, city_madina_ablation_large.yaml).
+# Recommended training budget for the sweep: 100,000 steps (the smallest size
+# anchors the low end; largest gets 300,000, the two middle sizes interpolate
+# evenly by rank).
+#   python scripts/train.py --config configs/city_madina_ablation.yaml --timesteps 100000 --run-name scale_r250
 seed: 42
 
 network:
