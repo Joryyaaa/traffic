@@ -1,0 +1,16 @@
+segments,radius_m,config,timesteps,seed,mean_return,train_seconds,planner_zone_builder
+26,250,configs/city_madina_ablation.yaml,100000,1,0.268895,879.8,0.2661
+26,250,configs/city_madina_ablation.yaml,100000,2,0.332296,830.9,0.2661
+26,250,configs/city_madina_ablation.yaml,100000,3,0.177309,863.8,0.2661
+89,400,configs/city_madina_ablation_r400.yaml,167000,1,0.812453,7331.7,0.6863
+89,400,configs/city_madina_ablation_r400.yaml,167000,2,-0.024868,6630.1,0.6863
+89,400,configs/city_madina_ablation_r400.yaml,167000,3,0.001617,7877.8,0.6863
+186,460,configs/city_madina_ablation_r460.yaml,214000,1,-0.047465,24745.7,0.6190
+186,460,configs/city_madina_ablation_r460.yaml,214000,2,-0.043715,17717.7,0.6190
+186,460,configs/city_madina_ablation_r460.yaml,214000,3,-0.049874,15255.4,0.6190
+226,500,configs/city_madina_ablation_r500.yaml,233000,1,-0.030174,51440.8,0.3297
+226,500,configs/city_madina_ablation_r500.yaml,233000,2,0.019477,53730.8,0.3297
+226,500,configs/city_madina_ablation_r500.yaml,233000,3,0.023825,54729.7,0.3297
+386,700,configs/city_madina_ablation_large.yaml,300000,1,-0.046460,55577.3,0.2878
+386,700,configs/city_madina_ablation_large.yaml,300000,2,-0.039463,62629.0,0.2878
+386,700,configs/city_madina_ablation_large.yaml,300000,3,0.001800,84681.5,0.2878

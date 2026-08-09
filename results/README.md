@@ -58,6 +58,30 @@ larger, better-served network (58 streets, 31 destinations) the planner reaches 
 reward ceiling and RL only occasionally matches it. Neither scenario alone tells
 that story.
 
+## Network-size sweep, 5 sizes x 3 seeds
+
+`scale_sweep/` holds the completed version of the experiment prepared in
+`scale_sweep_prep/`: one neighborhood (Al Nakheel) at five radii, so size varies
+and city and demand do not. All 15 tasks completed.
+
+| segments | steps | mean | std | max | planner | >= planner | > 0 |
+|---|---|---|---|---|---|---|---|
+| 26 | 100k | **+0.2595** | 0.0636 | +0.3323 | +0.2661 | **2/3** | 3/3 |
+| 89 | 167k | **+0.2631** | 0.3886 | **+0.8125** | +0.6863 | **1/3** | 2/3 |
+| 186 | 214k | -0.0470 | 0.0025 | -0.0437 | +0.6190 | 0/3 | 0/3 |
+| 226 | 233k | +0.0044 | 0.0245 | +0.0238 | +0.3297 | 0/3 | 2/3 |
+| 386 | 300k | -0.0280 | 0.0213 | +0.0018 | +0.2878 | 0/3 | 1/3 |
+
+Three regimes rather than a smooth decay: reliable at 26, bimodal at 89 (one seed
+beats the planner, two sit at zero), collapsed from 186 up. The 26- and
+89-segment means are nearly equal while the std grows 6x, so quoting means alone
+would hide the change.
+
+This also closes the open caveat in `large_30k_fixed/`: at 386 segments, 10x the
+training (300k vs 30k) still leaves every seed at or below zero, so the failure is
+not undertraining. See `scale_sweep/PROVENANCE.md` for the confounds, which are
+significant: n=3, and budget and timesteps both vary with size.
+
 ## Baselines, both measured on the fixed reward
 
 | scenario | greedy | zone_builder | zone_builder_best |
