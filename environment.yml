@@ -22,6 +22,7 @@ dependencies:
   - tensorboard
   - pytest
   - matplotlib
+  - rasterio   # scripts/fetch_population.py (WorldPop raster clipping)
   - pip
   - pip:
       - -i https://test.pypi.org/simple/
