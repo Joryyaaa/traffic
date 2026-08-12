@@ -1,0 +1,86 @@
+======================================================================
+ABHA OSM VEHICULAR NETWORK
+======================================================================
+Center: (18.2264426, 42.5053914)
+Radius: 1500 meters
+Network type: drive
+
+[1/3] Downloading Abha driving network...
+Nodes: 1,729
+Directed road segments: 4,586
+
+[2/3] Downloading buildings for provisional origins...
+All OSM buildings found: 330
+Final provisional origins: 315
+
+[3/3] Downloading amenities and shops...
+Destinations: 56
+
+======================================================================
+ABHA ROAD NETWORK REPORT
+======================================================================
+Total nodes: 1,729
+Total directed road segments: 4,586
+
+Road types:
+residential                 2702
+unclassified                1308
+tertiary                     353
+primary                       96
+trunk                         42
+trunk_link                    16
+residential;unclassified      14
+unclassified;residential      14
+secondary                     14
+primary_link                  12
+tertiary_link                  5
+motorway                       5
+motorway_link                  3
+trunk;motorway                 2
+
+Attribute coverage:
+lanes     : 35/4,586 (0.8%)
+maxspeed  : 0/4,586 (0.0%)
+oneway    : 4,586/4,586 (100.0%)
+name      : 137/4,586 (3.0%)
+
+======================================================================
+MAIN CORRIDORS
+======================================================================
+Named road segments: 137
+Target main-road segments found: 104
+King Faisal Road       61
+King Abdulaziz Road    29
+King Khalid Road       14
+
+======================================================================
+RING CORRIDOR CANDIDATE
+======================================================================
+Candidate segments: 114
+
+======================================================================
+CLEANED STUDY CORRIDOR
+======================================================================
+Final cleaned segments: 44
+
+======================================================================
+S0 BASELINE DATA READINESS
+======================================================================
+name      : 27/44 (61.4%)
+lanes     : 0/44 (0.0%)
+maxspeed  : 0/44 (0.0%)
+oneway    : 44/44 (100.0%)
+
+======================================================================
+ABHA NETWORK BASELINE COMPLETED
+======================================================================
+Scenario: S0 — Baseline
+Road segments: 4,586
+Cleaned corridor segments: 44
+Origins: 315
+Destinations: 56
+
+Outputs saved in:
+data/processed/abha_baseline
+
+Next stage: integrate official traffic data when received.
