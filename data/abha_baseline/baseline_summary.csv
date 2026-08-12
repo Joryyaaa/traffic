@@ -1,0 +1,12 @@
+metric,value
+Scenario ID,S0
+Scenario Name,Baseline
+Total Road Segments,4586
+Total Network Length (km),304.3
+Study Corridor Segments,44
+Study Corridor Length (km),7.81
+Origins,315
+Destinations,56
+Named Road Segments,137
+Segments with Lane Data,35
+Segments with Speed Data,0
