@@ -1,0 +1,10 @@
+metric,value
+Scenario ID,S1A
+Scenario Name,King Abdulaziz One-Way — NE
+Target Road,King Abdulaziz Road
+Target Bearing,45.0
+Target Road Segments,29
+Open Target Segments,13
+Closed Target Segments,16
+Open Target Length (km),3.02
+Closed Target Length (km),3.17
