@@ -16,9 +16,8 @@
 # mp.Manager()-per-call spawn cost documented as a TODO in
 # src/snrl/backends/madina_backend.py is Windows-spawn-specific) -- so expect
 # roughly ~1 day for greedy and ~35 min for zone_builder_best here instead.
-# random/highest_flow/lowest_flow/zone_builder were already run locally (see
-# results/abha_s0_baselines/PROVENANCE.md) -- this job re-runs them too
-# (cheap, seconds each) just so one table has all six numbers together.
+# Only S0 random completed locally before the Windows run was stopped. This
+# job runs all six policies and records one complete table per scenario.
 #
 # One-time setup (see slurm/README.md on origin/mentor/sweep-harness for the
 # rest of the env): this config's data/raw/abha_s0/*.geojson isn't fetched by
@@ -37,8 +36,11 @@
 # Submit S1B (King Abdulaziz one-way SW, 4,573 segments):
 #   sbatch --export=ALL,CONFIG=configs/city_madina_abha_s1b.yaml slurm/abha_s0_baselines.sbatch
 #
-# Submit all three at once:
-#   for cfg in configs/city_madina_abha_s0.yaml configs/city_madina_abha_s1a.yaml configs/city_madina_abha_s1b.yaml; do
+# Submit S2 (hypothetical Green Road alignment, 4,602 segments):
+#   sbatch --export=ALL,CONFIG=configs/city_madina_abha_s2.yaml slurm/abha_s0_baselines.sbatch
+#
+# Submit all four at once:
+#   for cfg in configs/city_madina_abha_s0.yaml configs/city_madina_abha_s1a.yaml configs/city_madina_abha_s1b.yaml configs/city_madina_abha_s2.yaml; do
 #     sbatch --export=ALL,CONFIG="$cfg" slurm/abha_s0_baselines.sbatch
 #   done
 #
@@ -89,6 +91,16 @@ if echo "$CONFIG" | grep -q "s1[ab]" && [ ! -f "$(python -c "from snrl import lo
     python scripts/build_abha_s1_env_data.py
 fi
 
+if echo "$CONFIG" | grep -q "s2" && [ ! -f data/raw/abha_s2/streets.geojson ]; then
+    echo "S2 streets missing -- building the clearly-labelled hypothetical alignment"
+    python scripts/build_abha_s2_env_data.py
+fi
+
+SCENARIO="$(basename "$CONFIG" .yaml | sed 's/city_madina_abha_//')"
+RESULT_DIR="results/abha_${SCENARIO}_baselines"
+mkdir -p "$RESULT_DIR"
+RESULT_FILE="$RESULT_DIR/ibex_full_baselines_${SLURM_JOB_ID:-local}.txt"
+
 echo "=== Abha full baseline suite (evaluate.py, all 6 policies) ==="
 echo "host      : $(hostname)"
 echo "job       : ${SLURM_JOB_ID:-local}"
@@ -98,9 +110,8 @@ echo "python    : $(which python)"
 echo "started   : $(date -Is)"
 echo
 
-python scripts/evaluate.py --config "$CONFIG" --episodes "$EPISODES"
+python scripts/evaluate.py --config "$CONFIG" --episodes "$EPISODES" | tee "$RESULT_FILE"
 
 echo
 echo "finished  : $(date -Is)"
-echo "compare greedy/zone_builder_best here against the locally-run cheap subset in"
-echo "results/abha_s0_baselines/cheap_baselines.json (random/highest_flow/lowest_flow/zone_builder)"
+echo "results   : $RESULT_FILE"

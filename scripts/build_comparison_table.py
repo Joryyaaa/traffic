@@ -1,162 +1,108 @@
-"""Build the final Abha scenario comparison table.
+"""Build the final Abha S0/S1A/S1B/S2 comparison table.
 
-Reads baseline results and scenario metrics, produces a formatted table
-comparing S0 vs S1A vs S1B (and S2 when available).
-
-Output: results/abha_scenario_maps/comparison_table.txt
-        results/abha_scenario_maps/comparison_table.csv
+The table reports ``vkt_proxy_km`` rather than claiming observed VKT.  The
+proxy is Madina betweenness multiplied by segment length and summed over the
+network.  Baseline cells stay explicitly pending when only Ibex can finish
+them in practical time.
 """
 from __future__ import annotations
 
 import csv
 import json
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "results" / "abha_scenario_maps"
+TAGS = ("S0", "S1A", "S1B", "S2")
+POLICIES = ("random", "highest_flow", "lowest_flow", "zone_builder", "greedy", "zone_builder_best")
 
 
-def load_baseline_results(tag: str) -> dict | None:
-    path = ROOT / "results" / f"abha_{tag.lower()}_baselines" / "cheap_baselines.json"
-    if not path.exists():
-        return None
-    return json.loads(path.read_text(encoding="utf-8"))
+def _read_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
-def load_scenario_metrics() -> dict | None:
-    path = OUT_DIR / "scenario_metrics.json"
-    if not path.exists():
-        return None
-    return json.loads(path.read_text(encoding="utf-8"))
+def load_policy_results(tag: str) -> dict:
+    directory = ROOT / "results" / f"abha_{tag.lower()}_baselines"
+    complete = _read_json(directory / "cheap_baselines.json")
+    partial = _read_json(directory / "cheap_baselines_partial.json")
+    return complete or partial
+
+
+def _fmt(value, decimals=3):
+    return "pending" if value in (None, "") else f"{float(value):.{decimals}f}"
 
 
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    tags = ["S0", "S1A", "S1B"]
-    metrics = load_scenario_metrics()
-
+    metrics = _read_json(OUT_DIR / "scenario_metrics.json")
     rows = []
-    for tag in tags:
-        baselines = load_baseline_results(tag)
-        m = (metrics or {}).get(tag, {})
-
+    for tag in TAGS:
+        m = metrics.get(tag, {})
+        policies = load_policy_results(tag)
         row = {
             "scenario": tag,
-            "segments": m.get("n_segments", "—"),
-            "mean_access": m.get("mean_access", "—"),
-            "total_flow": m.get("total_flow", "—"),
-            "trip_dist_m": m.get("mean_trip_dist_m", "—"),
+            "segments": m.get("n_segments"),
+            "mean_access": m.get("mean_access"),
+            "access_gini": m.get("access_gini"),
+            "vkt_proxy_km": m.get("vkt_proxy_km"),
+            "total_flow": m.get("total_flow"),
+            "mean_trip_dist_m": m.get("mean_trip_dist_m"),
+            "n_components": m.get("n_components"),
+            "unreachable_fraction": m.get("unreachable_fraction"),
         }
-
-        if baselines:
-            for policy in ["random", "highest_flow", "lowest_flow", "zone_builder"]:
-                if policy in baselines:
-                    row[f"{policy}_mean"] = baselines[policy]["mean_return"]
-                    row[f"{policy}_std"] = baselines[policy]["std"]
-                else:
-                    row[f"{policy}_mean"] = "—"
-                    row[f"{policy}_std"] = "—"
-        else:
-            for policy in ["random", "highest_flow", "lowest_flow", "zone_builder"]:
-                row[f"{policy}_mean"] = "—"
-                row[f"{policy}_std"] = "—"
-
+        for policy in POLICIES:
+            row[f"{policy}_mean_return"] = (policies.get(policy) or {}).get("mean_return")
+            row[f"{policy}_std"] = (policies.get(policy) or {}).get("std")
         rows.append(row)
 
-    print("\n" + "=" * 90)
-    print("  ABHA SCENARIO COMPARISON TABLE")
-    print("=" * 90)
+    s0 = rows[0]
+    for row in rows:
+        for metric in ("mean_access", "vkt_proxy_km", "total_flow", "mean_trip_dist_m"):
+            base, value = s0.get(metric), row.get(metric)
+            row[f"{metric}_delta_vs_s0"] = None if base is None or value is None else value - base
+            row[f"{metric}_pct_vs_s0"] = (
+                None if base in (None, 0) or value is None else 100.0 * (value - base) / base
+            )
 
-    header = f"{'scenario':<6} {'seg':>5} {'access':>8} {'flow':>9} {'trip_m':>7}"
-    for p in ["random", "highest_flow", "lowest_flow", "zone_builder"]:
-        header += f"  {p[:10]:>10}"
-    print(header)
-    print("-" * len(header))
-
-    for r in rows:
-        line = f"{r['scenario']:<6} {r['segments']:>5}"
-        if isinstance(r["mean_access"], float):
-            line += f" {r['mean_access']:>8.4f}"
-        else:
-            line += f" {r['mean_access']:>8}"
-        if isinstance(r["total_flow"], float):
-            line += f" {r['total_flow']:>9.1f}"
-        else:
-            line += f" {r['total_flow']:>9}"
-        if isinstance(r["trip_dist_m"], float):
-            line += f" {r['trip_dist_m']:>7.1f}"
-        else:
-            line += f" {r['trip_dist_m']:>7}"
-        for p in ["random", "highest_flow", "lowest_flow", "zone_builder"]:
-            v = r.get(f"{p}_mean", "—")
-            if isinstance(v, float):
-                line += f"  {v:>10.4f}"
-            else:
-                line += f"  {v:>10}"
-            s = r.get(f"{p}_std", "—")
-        print(line)
-
-    # Deltas vs S0
-    if len(rows) > 1 and isinstance(rows[0]["mean_access"], float):
-        print("\n  Change vs S0:")
-        s0 = rows[0]
-        for r in rows[1:]:
-            parts = [f"  {r['scenario']}:"]
-            if isinstance(r["mean_access"], float) and isinstance(s0["mean_access"], float):
-                d = r["mean_access"] - s0["mean_access"]
-                pct = 100 * d / s0["mean_access"] if s0["mean_access"] else 0
-                parts.append(f"access {d:+.4f} ({pct:+.1f}%)")
-            if isinstance(r["total_flow"], float) and isinstance(s0["total_flow"], float):
-                d = r["total_flow"] - s0["total_flow"]
-                pct = 100 * d / s0["total_flow"] if s0["total_flow"] else 0
-                parts.append(f"flow {d:+.1f} ({pct:+.2f}%)")
-            if isinstance(r["trip_dist_m"], float) and isinstance(s0["trip_dist_m"], float):
-                d = r["trip_dist_m"] - s0["trip_dist_m"]
-                parts.append(f"trip_dist {d:+.1f}m")
-            print("  ".join(parts))
-
-    # Save CSV
     csv_path = OUT_DIR / "comparison_table.csv"
-    fields = list(rows[0].keys())
-    with open(csv_path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fields)
+    with csv_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    print(f"\n  -> {csv_path}")
 
-    # Save text
+    lines = [
+        "ABHA SCENARIO COMPARISON",
+        "VKT proxy = sum(Madina segment betweenness x segment length_km); not observed traffic VKT.",
+        "",
+        f"{'scenario':<9}{'segments':>10}{'access':>11}{'gini':>9}{'VKT proxy':>14}{'flow':>12}{'trip_m':>11}",
+        "-" * 76,
+    ]
+    for row in rows:
+        lines.append(
+            f"{row['scenario']:<9}{str(row['segments'] or 'pending'):>10}"
+            f"{_fmt(row['mean_access'], 4):>11}{_fmt(row['access_gini'], 4):>9}"
+            f"{_fmt(row['vkt_proxy_km'], 1):>14}{_fmt(row['total_flow'], 1):>12}"
+            f"{_fmt(row['mean_trip_dist_m'], 1):>11}"
+        )
+    lines.extend(["", "Change vs S0:"])
+    for row in rows[1:]:
+        lines.append(
+            f"  {row['scenario']}: access {_fmt(row['mean_access_pct_vs_s0'], 2)}%; "
+            f"VKT proxy {_fmt(row['vkt_proxy_km_pct_vs_s0'], 2)}%; "
+            f"flow {_fmt(row['total_flow_pct_vs_s0'], 2)}%; "
+            f"trip distance {_fmt(row['mean_trip_dist_m_delta_vs_s0'], 1)} m"
+        )
+    lines.extend(["", "Policy returns (pending = deferred to Ibex):"])
+    for row in rows:
+        values = ", ".join(f"{policy}={_fmt(row[f'{policy}_mean_return'], 4)}" for policy in POLICIES)
+        lines.append(f"  {row['scenario']}: {values}")
+
+    text = "\n".join(lines) + "\n"
     txt_path = OUT_DIR / "comparison_table.txt"
-    import io
-    old_stdout = sys.stdout
-    buf = io.StringIO()
-    sys.stdout = buf
-    print(header)
-    print("-" * len(header))
-    for r in rows:
-        line = f"{r['scenario']:<6} {r['segments']:>5}"
-        if isinstance(r["mean_access"], float):
-            line += f" {r['mean_access']:>8.4f}"
-        else:
-            line += f" {r['mean_access']:>8}"
-        if isinstance(r["total_flow"], float):
-            line += f" {r['total_flow']:>9.1f}"
-        else:
-            line += f" {r['total_flow']:>9}"
-        if isinstance(r["trip_dist_m"], float):
-            line += f" {r['trip_dist_m']:>7.1f}"
-        else:
-            line += f" {r['trip_dist_m']:>7}"
-        for p in ["random", "highest_flow", "lowest_flow", "zone_builder"]:
-            v = r.get(f"{p}_mean", "—")
-            if isinstance(v, float):
-                line += f"  {v:>10.4f}"
-            else:
-                line += f"  {v:>10}"
-        print(line)
-    sys.stdout = old_stdout
-    txt_path.write_text(buf.getvalue(), encoding="utf-8")
-    print(f"  -> {txt_path}")
+    txt_path.write_text(text, encoding="utf-8")
+    print(text)
+    print(f"Saved -> {csv_path}")
+    print(f"Saved -> {txt_path}")
 
 
 if __name__ == "__main__":

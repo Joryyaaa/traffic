@@ -1,0 +1,56 @@
+# Abha S2: Green Road (hypothetical bypass Khamis Mushait → Sali).
+# Built by scripts/build_abha_s2_env_data.py: S0 streets + 8 new bypass
+# segments (16 directed edges). The bypass connects the eastern motorway
+# approach (node 2918462198) to the southern network edge used as the
+# assumed direction toward Sali (node 1107465655),
+# curving through the SE quadrant to avoid the central ring road.
+# ~4,602 segments (S0's 4,586 + 16 Green Road edges). Same origins/destinations as S0.
+#
+# HYPOTHETICAL ROUTE — replace when ASDA provides real alignment.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/abha_s2/streets.geojson
+  origins_path: data/raw/abha_s2/residential.geojson
+  destinations_path: data/raw/abha_s2/amenities.geojson
+  origin_weight: origin_weight
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta

@@ -1,5 +1,20 @@
-scenario   seg   access      flow  trip_m      random  highest_fl  lowest_flo  zone_build
------------------------------------------------------------------------------------------
-S0         —        —         —       —           —           —           —           —
-S1A        —        —         —       —           —           —           —           —
-S1B        —        —         —       —           —           —           —           —
+ABHA SCENARIO COMPARISON
+VKT proxy = sum(Madina segment betweenness x segment length_km); not observed traffic VKT.
+
+scenario   segments     access     gini     VKT proxy        flow     trip_m
+----------------------------------------------------------------------------
+S0             4586     1.3013   0.3516        2232.8     22232.5      774.9
+S1A            4570     1.3026   0.3503        2231.2     22257.0      774.9
+S1B            4573     1.3008   0.3520        2232.8     22232.5      774.9
+S2             4602     1.2921   0.3554        2216.7     22092.5      775.1
+
+Change vs S0:
+  S1A: access 0.10%; VKT proxy -0.07%; flow 0.11%; trip distance -0.0 m
+  S1B: access -0.04%; VKT proxy 0.00%; flow 0.00%; trip distance 0.0 m
+  S2: access -0.71%; VKT proxy -0.72%; flow -0.63%; trip distance 0.2 m
+
+Policy returns (pending = deferred to Ibex):
+  S0: random=-0.0500, highest_flow=pending, lowest_flow=pending, zone_builder=pending, greedy=pending, zone_builder_best=pending
+  S1A: random=pending, highest_flow=pending, lowest_flow=pending, zone_builder=pending, greedy=pending, zone_builder_best=pending
+  S1B: random=pending, highest_flow=pending, lowest_flow=pending, zone_builder=pending, greedy=pending, zone_builder_best=pending
+  S2: random=pending, highest_flow=pending, lowest_flow=pending, zone_builder=pending, greedy=pending, zone_builder_best=pending

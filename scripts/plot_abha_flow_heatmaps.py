@@ -1,10 +1,12 @@
-"""Generate Madina-based flow heatmaps for Abha scenarios (S0, S1A, S1B).
+"""Generate Madina flow maps and metrics for Abha S0/S1A/S1B/S2.
 
-Uses actual Madina betweenness simulation (not a graph-theory proxy).
-Each scenario: load config → build env → simulate(no closures) → plot
-segment_flow on the street geometry.
+The flow-difference maps align edges by the persistent ``road_segment_id``
+property.  They must not align rows by position because S1A/S1B physically
+remove directed edges and therefore shift every later row.
 
-Output: results/abha_scenario_maps/*.png (DPI=220)
+``vkt_proxy_km`` is a demand-weighted network-load proxy:
+``sum(Madina segment betweenness * segment length_km)``.  It is not observed
+vehicle-kilometres travelled; measured traffic counts are still unavailable.
 """
 from __future__ import annotations
 
@@ -17,8 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.collections import LineCollection
-from matplotlib.colors import LogNorm, Normalize
-from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.colors import LogNorm, TwoSlopeNorm
 from shapely.geometry import shape
 
 from snrl import StreetNetworkEnv, load_config
@@ -26,213 +27,214 @@ from snrl import StreetNetworkEnv, load_config
 SCENARIOS = {
     "S0": {
         "config": "configs/city_madina_abha_s0.yaml",
-        "label": "S0 — Baseline (fully open)",
+        "label": "S0 - Baseline",
         "streets": "data/raw/abha_s0/streets.geojson",
     },
     "S1A": {
         "config": "configs/city_madina_abha_s1a.yaml",
-        "label": "S1A — King Abdulaziz One-Way NE",
+        "label": "S1A - King Abdulaziz one-way NE",
         "streets": "data/raw/abha_s1a/streets.geojson",
     },
     "S1B": {
         "config": "configs/city_madina_abha_s1b.yaml",
-        "label": "S1B — King Abdulaziz One-Way SW",
+        "label": "S1B - King Abdulaziz one-way SW",
         "streets": "data/raw/abha_s1b/streets.geojson",
+    },
+    "S2": {
+        "config": "configs/city_madina_abha_s2.yaml",
+        "label": "S2 - Green Road (hypothetical alignment)",
+        "streets": "data/raw/abha_s2/streets.geojson",
     },
 }
 
 OUT_DIR = Path("results/abha_scenario_maps")
-DPI = 220
+DPI = 240
 
 
-def load_street_coords(geojson_path: str) -> list[list[tuple[float, float]]]:
-    data = json.loads(Path(geojson_path).read_text(encoding="utf-8"))
-    coords = []
-    for f in data["features"]:
-        geom = shape(f["geometry"])
+def _gini(values: np.ndarray) -> float:
+    values = np.asarray(values, dtype=float)
+    values = values[np.isfinite(values)]
+    if values.size == 0 or np.allclose(values, 0):
+        return 0.0
+    values = np.sort(np.maximum(values, 0))
+    n = values.size
+    return float((2 * np.sum(np.arange(1, n + 1) * values) / (n * values.sum())) - (n + 1) / n)
+
+
+def load_street_features(path: str) -> list[dict]:
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    rows = []
+    for index, feature in enumerate(data["features"]):
+        props = feature.get("properties") or {}
+        geom = shape(feature["geometry"])
         if geom.geom_type == "MultiLineString":
-            for part in geom.geoms:
-                coords.append(list(part.coords))
-        else:
-            coords.append(list(geom.coords))
-    return coords
+            geom = max(geom.geoms, key=lambda part: part.length)
+        rows.append({
+            "road_segment_id": int(props.get("road_segment_id", index)),
+            "coords": list(geom.coords),
+            "length_m": float(props.get("length") or 0.0),
+            "green_road": bool(props.get("green_road", False)),
+        })
+    return rows
 
 
 def run_scenario(tag: str, info: dict) -> dict:
-    print(f"\n{'='*60}")
-    print(f"  {tag}: {info['label']}")
-    print(f"{'='*60}")
+    print(f"\n{'=' * 64}\n  {tag}: {info['label']}\n{'=' * 64}", flush=True)
     cfg = load_config(info["config"])
     env = StreetNetworkEnv(cfg)
-    closed = np.zeros(env.n_segments, dtype=bool)
-    sim = env.backend.simulate(closed)
-    print(f"  segments={env.n_segments}  mean_access={np.mean(sim.origin_access):.4f}  "
-          f"total_flow={np.sum(sim.segment_flow):.1f}  "
-          f"mean_trip_dist={sim.mean_trip_distance:.1f}m")
-    coords = load_street_coords(info["streets"])
-    return {
+    sim = env.backend.simulate(np.zeros(env.n_segments, dtype=bool))
+    features = load_street_features(info["streets"])
+    if len(features) != env.n_segments:
+        raise RuntimeError(f"{tag}: {len(features)} geometries != {env.n_segments} simulated segments")
+
+    flow = np.asarray(sim.segment_flow, dtype=float)
+    lengths_m = np.asarray([row["length_m"] for row in features], dtype=float)
+    vkt_proxy_km = float(np.sum(flow * lengths_m) / 1000.0)
+    flow_by_id = {row["road_segment_id"]: float(flow[i]) for i, row in enumerate(features)}
+    feature_by_id = {row["road_segment_id"]: row for row in features}
+
+    result = {
         "tag": tag,
         "label": info["label"],
-        "flow": sim.segment_flow,
-        "access": sim.origin_access,
-        "mean_access": float(np.mean(sim.origin_access)),
-        "total_flow": float(np.sum(sim.segment_flow)),
-        "mean_trip_dist": sim.mean_trip_distance,
+        "flow": flow,
+        "features": features,
+        "flow_by_id": flow_by_id,
+        "feature_by_id": feature_by_id,
         "n_segments": env.n_segments,
-        "coords": coords,
+        "mean_access": float(np.mean(sim.origin_access)),
+        "access_gini": _gini(sim.origin_access),
+        "total_flow": float(np.sum(flow)),
+        "vkt_proxy_km": vkt_proxy_km,
+        "mean_trip_dist_m": float(sim.mean_trip_distance),
+        "n_components": int(sim.n_components),
+        "unreachable_fraction": float(sim.unreachable_fraction),
     }
+    print(
+        f"  segments={env.n_segments} access={result['mean_access']:.4f} "
+        f"flow={result['total_flow']:.1f} vkt_proxy={vkt_proxy_km:.1f} km "
+        f"trip={result['mean_trip_dist_m']:.1f} m",
+        flush=True,
+    )
+    return result
 
 
-def plot_flow_map(result: dict, ax, vmin=None, vmax=None, show_colorbar=True):
-    coords = result["coords"]
-    flow = result["flow"]
-    n = min(len(coords), len(flow))
-    segments = [coords[i] for i in range(n)]
-    values = flow[:n]
-
-    if vmin is None:
-        vmin = max(values[values > 0].min(), 0.01) if np.any(values > 0) else 0.01
-    if vmax is None:
-        vmax = values.max() if values.max() > 0 else 1.0
-
-    bg_segs = [coords[i] for i in range(n) if values[i] <= 0]
-    if bg_segs:
-        bg_lc = LineCollection(bg_segs, colors="#cccccc", linewidths=0.3, alpha=0.4)
-        ax.add_collection(bg_lc)
-
-    active_idx = [i for i in range(n) if values[i] > 0]
-    active_segs = [coords[i] for i in active_idx]
-    active_vals = np.array([values[i] for i in active_idx])
-
-    order = np.argsort(active_vals)
-    active_segs = [active_segs[i] for i in order]
-    active_vals = active_vals[order]
-
-    norm = LogNorm(vmin=vmin, vmax=vmax, clip=True)
-    lc = LineCollection(active_segs, cmap="YlOrRd", norm=norm, linewidths=0.6, alpha=0.9)
-    lc.set_array(active_vals)
+def plot_flow_map(result: dict, ax, vmin: float, vmax: float, show_colorbar: bool = True):
+    values = result["flow"]
+    features = result["features"]
+    inactive = [row["coords"] for row, value in zip(features, values) if value <= 0]
+    active = [(row["coords"], value) for row, value in zip(features, values) if value > 0]
+    if inactive:
+        ax.add_collection(LineCollection(inactive, colors="#d5d5d5", linewidths=0.35, alpha=0.45))
+    active.sort(key=lambda item: item[1])
+    lc = LineCollection(
+        [item[0] for item in active], cmap="inferno",
+        norm=LogNorm(vmin=vmin, vmax=vmax, clip=True), linewidths=0.8, alpha=0.95,
+    )
+    lc.set_array(np.asarray([item[1] for item in active]))
     ax.add_collection(lc)
+
+    green = [row["coords"] for row in features if row["green_road"]]
+    if green:
+        ax.add_collection(LineCollection(green, colors="#00b050", linewidths=2.0, alpha=0.95))
 
     ax.set_aspect("equal")
     ax.autoscale_view()
-    ax.set_title(result["label"], fontsize=8, fontweight="bold")
-    stats = (f"segments={result['n_segments']}  access={result['mean_access']:.3f}  "
-             f"flow={result['total_flow']:.0f}")
-    ax.set_xlabel(stats, fontsize=5.5)
-    ax.tick_params(labelsize=5)
-
+    ax.set_axis_off()
+    ax.set_title(result["label"], fontsize=10, fontweight="bold")
+    ax.text(
+        0.01, 0.01,
+        f"access={result['mean_access']:.3f} | VKT proxy={result['vkt_proxy_km']:.0f} km\n"
+        f"flow={result['total_flow']:.0f} | trip={result['mean_trip_dist_m']:.1f} m",
+        transform=ax.transAxes, fontsize=7, bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
+    )
     if show_colorbar:
-        divider = make_axes_locatable(ax)
-        cax = divider.append_axes("right", size="3%", pad=0.04)
-        cb = plt.colorbar(lc, cax=cax)
-        cb.set_label("Betweenness flow", fontsize=5.5)
-        cb.ax.tick_params(labelsize=5)
-
+        cb = plt.colorbar(lc, ax=ax, fraction=0.035, pad=0.015)
+        cb.set_label("Madina betweenness flow", fontsize=7)
+        cb.ax.tick_params(labelsize=6)
     return lc
+
+
+def plot_difference(s0: dict, other: dict, out_path: Path):
+    ids = sorted(set(s0["flow_by_id"]) | set(other["flow_by_id"]))
+    diffs = {
+        segment_id: other["flow_by_id"].get(segment_id, 0.0) - s0["flow_by_id"].get(segment_id, 0.0)
+        for segment_id in ids
+    }
+    max_abs = max(max(abs(value) for value in diffs.values()), 1.0)
+    features = {**s0["feature_by_id"], **other["feature_by_id"]}
+    unchanged, changed, changed_values = [], [], []
+    for segment_id in ids:
+        coords = features[segment_id]["coords"]
+        value = diffs[segment_id]
+        if abs(value) <= 0.1:
+            unchanged.append(coords)
+        else:
+            changed.append(coords)
+            changed_values.append(value)
+
+    fig, ax = plt.subplots(figsize=(9, 7))
+    if unchanged:
+        ax.add_collection(LineCollection(unchanged, colors="#dddddd", linewidths=0.3, alpha=0.35))
+    lc = LineCollection(
+        changed, cmap="RdBu_r", norm=TwoSlopeNorm(vmin=-max_abs, vcenter=0, vmax=max_abs),
+        linewidths=0.9, alpha=0.95,
+    )
+    lc.set_array(np.asarray(changed_values))
+    ax.add_collection(lc)
+    green = [row["coords"] for row in other["features"] if row["green_road"]]
+    if green:
+        ax.add_collection(LineCollection(green, colors="#00b050", linewidths=2.2, alpha=0.95))
+    ax.set_aspect("equal")
+    ax.autoscale_view()
+    ax.set_axis_off()
+    ax.set_title(f"Flow change: {other['tag']} minus S0\nred = increase, blue = decrease", fontsize=10)
+    cb = plt.colorbar(lc, ax=ax, fraction=0.035, pad=0.015)
+    cb.set_label("Change in Madina betweenness flow", fontsize=7)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
 
 
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    results = {}
+    results = {tag: run_scenario(tag, info) for tag, info in SCENARIOS.items()}
+    positive = np.concatenate([r["flow"][r["flow"] > 0] for r in results.values()])
+    vmin, vmax = max(float(positive.min()), 0.01), float(positive.max())
 
-    for tag, info in SCENARIOS.items():
-        results[tag] = run_scenario(tag, info)
-
-    all_flows = np.concatenate([r["flow"][r["flow"] > 0] for r in results.values()])
-    vmin = max(all_flows.min(), 0.01)
-    vmax = all_flows.max()
-
-    for tag, r in results.items():
-        fig, ax = plt.subplots(figsize=(8, 6))
-        plot_flow_map(r, ax, vmin=vmin, vmax=vmax)
+    for tag, result in results.items():
+        fig, ax = plt.subplots(figsize=(9, 7))
+        plot_flow_map(result, ax, vmin, vmax)
         fig.tight_layout()
-        out = OUT_DIR / f"flow_{tag.lower()}.png"
-        fig.savefig(out, dpi=DPI, bbox_inches="tight")
+        path = OUT_DIR / f"madina_flow_{tag.lower()}.png"
+        fig.savefig(path, dpi=DPI, bbox_inches="tight")
         plt.close(fig)
-        print(f"  -> {out}")
+        print(f"  -> {path}")
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-    for ax, (tag, r) in zip(axes, results.items()):
-        plot_flow_map(r, ax, vmin=vmin, vmax=vmax, show_colorbar=(tag == "S1B"))
-    fig.suptitle("Abha Traffic Flow Comparison — Madina Betweenness Simulation",
-                 fontsize=11, fontweight="bold", y=0.98)
-    fig.tight_layout(rect=[0, 0, 1, 0.95])
-    out = OUT_DIR / "flow_comparison_s0_s1a_s1b.png"
-    fig.savefig(out, dpi=DPI, bbox_inches="tight")
+    fig, axes = plt.subplots(2, 2, figsize=(16, 13))
+    for ax, result in zip(axes.flat, results.values()):
+        plot_flow_map(result, ax, vmin, vmax, show_colorbar=False)
+    fig.suptitle("Abha scenario comparison - Madina simulation", fontsize=15, fontweight="bold")
+    fig.tight_layout(rect=[0, 0, 1, 0.97])
+    comparison = OUT_DIR / "madina_flow_comparison_s0_s1a_s1b_s2.png"
+    fig.savefig(comparison, dpi=DPI, bbox_inches="tight")
     plt.close(fig)
-    print(f"\n  -> {out}")
+    print(f"  -> {comparison}")
 
-    s0 = results["S0"]
-    n0 = s0["n_segments"]
-    for other_tag in ["S1A", "S1B"]:
-        r = results[other_tag]
-        n_other = r["n_segments"]
-        diff = np.zeros(n0, dtype=float)
-        n_shared = min(n0, n_other)
-        diff[:n_shared] = r["flow"][:n_shared] - s0["flow"][:n_shared]
+    for tag in ("S1A", "S1B", "S2"):
+        path = OUT_DIR / f"madina_flow_diff_{tag.lower()}_vs_s0.png"
+        plot_difference(results["S0"], results[tag], path)
+        print(f"  -> {path}")
 
-        fig, ax = plt.subplots(figsize=(8, 6))
-        coords = s0["coords"]
-        n = min(len(coords), n0)
-        pos_idx = [i for i in range(n) if diff[i] > 0.1]
-        neg_idx = [i for i in range(n) if diff[i] < -0.1]
-        zero_idx = [i for i in range(n) if abs(diff[i]) <= 0.1]
-
-        if zero_idx:
-            lc0 = LineCollection([coords[i] for i in zero_idx],
-                                 colors="#dddddd", linewidths=0.3, alpha=0.3)
-            ax.add_collection(lc0)
-
-        max_abs = max(abs(diff).max(), 1.0)
-        if neg_idx:
-            neg_segs = [coords[i] for i in neg_idx]
-            neg_vals = np.array([abs(diff[i]) for i in neg_idx])
-            norm_n = Normalize(vmin=0, vmax=max_abs, clip=True)
-            lc_neg = LineCollection(neg_segs, cmap="Blues", norm=norm_n,
-                                    linewidths=0.7, alpha=0.8)
-            lc_neg.set_array(neg_vals)
-            ax.add_collection(lc_neg)
-
-        if pos_idx:
-            pos_segs = [coords[i] for i in pos_idx]
-            pos_vals = np.array([diff[i] for i in pos_idx])
-            norm_p = Normalize(vmin=0, vmax=max_abs, clip=True)
-            lc_pos = LineCollection(pos_segs, cmap="Reds", norm=norm_p,
-                                    linewidths=0.7, alpha=0.8)
-            lc_pos.set_array(pos_vals)
-            ax.add_collection(lc_pos)
-
-        ax.set_aspect("equal")
-        ax.autoscale_view()
-        ax.set_title(f"Flow difference: {other_tag} minus S0\n"
-                     f"Red = more flow, Blue = less flow", fontsize=9)
-        ax.tick_params(labelsize=5)
-        fig.tight_layout()
-        out = OUT_DIR / f"flow_diff_{other_tag.lower()}_vs_s0.png"
-        fig.savefig(out, dpi=DPI, bbox_inches="tight")
-        plt.close(fig)
-        print(f"  -> {out}")
-
+    metrics = {
+        tag: {key: value for key, value in result.items() if key in {
+            "label", "n_segments", "mean_access", "access_gini", "total_flow",
+            "vkt_proxy_km", "mean_trip_dist_m", "n_components", "unreachable_fraction",
+        }}
+        for tag, result in results.items()
+    }
     metrics_path = OUT_DIR / "scenario_metrics.json"
-    metrics = {}
-    for tag, r in results.items():
-        metrics[tag] = {
-            "label": r["label"],
-            "n_segments": r["n_segments"],
-            "mean_access": r["mean_access"],
-            "total_flow": r["total_flow"],
-            "mean_trip_dist_m": r["mean_trip_dist"],
-        }
-    Path(metrics_path).write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-    print(f"\n  -> {metrics_path}")
-
-    print("\n" + "="*60)
-    print("  SCENARIO COMPARISON")
-    print("="*60)
-    print(f"{'scenario':<8} {'segments':>8} {'mean_access':>12} {'total_flow':>11} {'trip_dist_m':>11}")
-    for tag, m in metrics.items():
-        print(f"{tag:<8} {m['n_segments']:>8} {m['mean_access']:>12.4f} "
-              f"{m['total_flow']:>11.1f} {m['mean_trip_dist_m']:>11.1f}")
+    metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    print(f"  -> {metrics_path}")
 
 
 if __name__ == "__main__":

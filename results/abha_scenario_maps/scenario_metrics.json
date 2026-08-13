@@ -1,0 +1,46 @@
+{
+  "S0": {
+    "label": "S0 - Baseline",
+    "n_segments": 4586,
+    "mean_access": 1.3013132673934966,
+    "access_gini": 0.35155285482019605,
+    "total_flow": 22232.471639640193,
+    "vkt_proxy_km": 2232.8005967591935,
+    "mean_trip_dist_m": 774.905287156689,
+    "n_components": 1,
+    "unreachable_fraction": 0.0
+  },
+  "S1A": {
+    "label": "S1A - King Abdulaziz one-way NE",
+    "n_segments": 4570,
+    "mean_access": 1.3025891706630686,
+    "access_gini": 0.3503477054879569,
+    "total_flow": 22257.021039143227,
+    "vkt_proxy_km": 2231.2187981001252,
+    "mean_trip_dist_m": 774.8933611220227,
+    "n_components": 1,
+    "unreachable_fraction": 0.0
+  },
+  "S1B": {
+    "label": "S1B - King Abdulaziz one-way SW",
+    "n_segments": 4573,
+    "mean_access": 1.3008445234355408,
+    "access_gini": 0.3519850325266518,
+    "total_flow": 22232.483619351147,
+    "vkt_proxy_km": 2232.80075410688,
+    "mean_trip_dist_m": 774.9144919709149,
+    "n_components": 1,
+    "unreachable_fraction": 0.0
+  },
+  "S2": {
+    "label": "S2 - Green Road (hypothetical alignment)",
+    "n_segments": 4602,
+    "mean_access": 1.292055350139809,
+    "access_gini": 0.3554380008716729,
+    "total_flow": 22092.450794817392,
+    "vkt_proxy_km": 2216.735267182302,
+    "mean_trip_dist_m": 775.0642343435652,
+    "n_components": 1,
+    "unreachable_fraction": 0.0
+  }
+}
