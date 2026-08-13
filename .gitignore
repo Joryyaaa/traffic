@@ -30,7 +30,7 @@ wandb/
 *.pth
 *.zip.sb3
 
-# Cached data
+# osmnx HTTP response cache, created by scripts/fetch_osm_data.py.
 cache/
 
 # OS / editors
@@ -38,8 +38,3 @@ cache/
 Thumbs.db
 .vscode/
 .idea/
-# osmnx HTTP response cache, created by scripts/fetch_osm_data.py.
-# The comment must be on its own line: .gitignore has no trailing-comment
-# syntax, so "cache/  # ..." was one literal pattern and matched nothing.
-cache/
-data/raw
