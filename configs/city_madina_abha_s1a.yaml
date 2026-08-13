@@ -1,0 +1,51 @@
+# Abha S1A: King Abdulaziz One-Way NE — 16 SW-bearing segments removed from S0.
+# Built by scripts/build_abha_s1_env_data.py from S0 streets minus
+# data/abha_baseline/s1a_king_abdulaziz.geojson road_open=False segments.
+# 4,570 segments (vs S0's 4,586). Same origins/destinations as S0.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/abha_s1a/streets.geojson
+  origins_path: data/raw/abha_s1a/residential.geojson
+  destinations_path: data/raw/abha_s1a/amenities.geojson
+  origin_weight: origin_weight
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta

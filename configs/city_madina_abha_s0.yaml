@@ -1,0 +1,68 @@
+# Abha S0 baseline, wired into the same RL env as Al Nakheel / Jeddah --
+# center (18.2264426, 42.5053914), r=1500m, drive network, same data the
+# mentor's S0/S1A/S1B King Abdulaziz one-way scenarios are built on (see
+# results/abha_scenario_maps/ and data/abha_baseline/). Regenerated from OSM
+# by scripts/build_abha_s0_env_data.py (re-running the mentor's own
+# abha_network_baseline.py query) -- node/segment/origin/destination counts
+# cross-checked exactly against data/abha_baseline/run_output.txt, see
+# data/raw/abha_s0/regeneration_check.json.
+#
+# SCALE WARNING: this is a full city-drive network, 4,586 segments -- over
+# 10x city_madina_ablation_large.yaml's 386-segment config, which
+# results/scale_sweep_prep/PROVENANCE.md already found infeasible to train
+# locally (~1.68s/env.step() at 386 segments, days of wall-clock for
+# 100k-300k steps on one machine). greedy/zone_builder_best in evaluate.py
+# additionally do one Madina simulate() call per *candidate* action per step
+# (up to n_segments per step), which scales far worse than training does.
+# Timed before running anything real -- see PROVENANCE note in
+# results/abha_s0_baselines/ once that exists.
+#
+#   python scripts/build_abha_s0_env_data.py
+#   python scripts/evaluate.py --config configs/city_madina_abha_s0.yaml --episodes 3
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/abha_s0/streets.geojson
+  origins_path: data/raw/abha_s0/residential.geojson
+  destinations_path: data/raw/abha_s0/amenities.geojson
+  origin_weight: origin_weight
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"   # UTM 38N -- same zone as configs/city_madina_abha.yaml (42.5E)
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 3
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta
