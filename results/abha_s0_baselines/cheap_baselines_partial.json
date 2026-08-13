@@ -1,0 +1,16 @@
+{
+  "random": {
+    "mean_return": -0.05,
+    "std": 0.0,
+    "episodes": 5,
+    "wall_s": 4565.0,
+    "note": "Only completed policy before local run was stopped — remaining policies + S1A/S1B deferred to Ibex (see slurm/abha_s0_baselines.sbatch)"
+  },
+  "_meta": {
+    "config": "configs/city_madina_abha_s0.yaml",
+    "n_segments": 4586,
+    "policies_run": ["random"],
+    "policies_skipped_locally": ["highest_flow", "lowest_flow", "zone_builder", "greedy", "zone_builder_best"],
+    "reason": "simulate() ~61s/call locally (vs ~2s on Ibex), 11h estimated for all 3 scenarios — deferred to mentor's Ibex"
+  }
+}
