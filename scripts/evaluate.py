@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -184,19 +185,37 @@ def main() -> None:
     ap.add_argument("--config", default="configs/default.yaml")
     ap.add_argument("--model", default=None)
     ap.add_argument("--episodes", type=int, default=5)
+    # Run a subset instead of the whole suite. Needed on big networks: greedy is
+    # the second entry in the dict below and costs one simulate() per candidate
+    # action per step, so on Abha S0 (4,531 valid actions) it blocks every
+    # cheaper policy behind roughly a day of compute. Splitting the suite into
+    # separate jobs gets the cheap numbers back in minutes instead.
+    ap.add_argument(
+        "--policies",
+        default=None,
+        help="comma-separated subset of policy names (default: all). "
+             "e.g. --policies random,zone_builder",
+    )
     args = ap.parse_args()
 
     cfg = load_config(args.config)
     env = StreetNetworkEnv(cfg)
     rng = np.random.default_rng(cfg.seed)
 
-    policies = {
-        "random": random_policy(rng),
-        "greedy": greedy_policy(),
-        "highest_flow": flow_ranked_policy(env, descending=True),
-        "lowest_flow": flow_ranked_policy(env, descending=False),
-        "zone_builder": zone_builder_policy(env),
-        "zone_builder_best": zone_builder_best_policy(cfg),
+    # Built lazily, one thunk per policy. zone_builder_best_policy() does its
+    # whole exhaustive seed search *at construction time*, so building it
+    # eagerly made every other policy wait for it even when it wasn't being
+    # run: on Abha S0 that is 561 seeds x a 15-step episode before the first
+    # row of the table prints. Constructing only what --policies selects keeps
+    # the cheap policies cheap. Order is preserved, so the default run is
+    # unchanged.
+    policy_factories = {
+        "random": lambda: random_policy(rng),
+        "greedy": lambda: greedy_policy(),
+        "highest_flow": lambda: flow_ranked_policy(env, descending=True),
+        "lowest_flow": lambda: flow_ranked_policy(env, descending=False),
+        "zone_builder": lambda: zone_builder_policy(env),
+        "zone_builder_best": lambda: zone_builder_best_policy(cfg),
     }
 
     if args.model:
@@ -223,12 +242,33 @@ def main() -> None:
             def rl_policy(env, obs):
                 return int(model.predict(obs, deterministic=True)[0])
 
-        policies["rl_agent"] = rl_policy
+        policy_factories["rl_agent"] = lambda: rl_policy
 
-    print(f"{'policy':<14} {'mean return':>12} {'std':>8}")
-    for name, choose in policies.items():
+    names = list(policy_factories)
+    if args.policies:
+        names = [p.strip() for p in args.policies.split(",") if p.strip()]
+        unknown = [p for p in names if p not in policy_factories]
+        if unknown:
+            ap.error(
+                f"unknown policy {unknown}; available: {sorted(policy_factories)}"
+            )
+
+    print(f"config   : {args.config}")
+    print(f"segments : {env.n_segments}")
+    print(f"episodes : {args.episodes}")
+    print(f"policies : {', '.join(names)}\n")
+    print(f"{'policy':<18} {'mean return':>12} {'std':>8} {'wall_s':>10}")
+    for name in names:
+        t0 = time.time()
+        choose = policy_factories[name]()
         returns = [run_policy(env, choose, cfg.seed + i)[0] for i in range(args.episodes)]
-        print(f"{name:<14} {np.mean(returns):>12.4f} {np.std(returns):>8.4f}")
+        dt = time.time() - t0
+        # flush: on a multi-hour policy the log should show each row as it lands,
+        # not buffer the whole table until the job ends.
+        print(
+            f"{name:<18} {np.mean(returns):>12.4f} {np.std(returns):>8.4f} {dt:>10.1f}",
+            flush=True,
+        )
 
 
 if __name__ == "__main__":

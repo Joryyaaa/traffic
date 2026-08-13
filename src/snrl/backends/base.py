@@ -57,6 +57,28 @@ class FlowBackend(ABC):
     def is_connected(self, closed_mask: np.ndarray) -> bool:
         """True if the open network is still one connected component."""
 
+    def connectivity_mask(
+        self,
+        closed_mask: np.ndarray,
+        candidates: np.ndarray,
+        n_workers: int = 1,
+    ) -> np.ndarray:
+        """Would closing each candidate (on top of `closed_mask`) keep the
+        network connected? One bool per candidate, in candidate order.
+
+        Exists so `env.action_masks()` can ask the question once for a whole
+        batch: it is called for every still-open segment on every step, and a
+        backend that can answer in bulk (see MadinaBackend) is far cheaper than
+        one call per segment. This default is the straightforward loop, so a
+        backend that does not override it behaves exactly as before.
+        """
+        out = np.empty(len(candidates), dtype=bool)
+        for i, c in enumerate(candidates):
+            trial = closed_mask.copy()
+            trial[int(c)] = True
+            out[i] = self.is_connected(trial)
+        return out
+
     def reseed(self, seed: int) -> bool:
         """Redraw any stochastic demand for a new episode.
 

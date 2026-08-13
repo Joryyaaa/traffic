@@ -1,0 +1,7 @@
+config   : configs/city_madina_abha_s1b.yaml
+segments : 4573
+episodes : 5
+policies : random
+
+policy              mean return      std     wall_s
+random                  -0.0500   0.0000      896.6

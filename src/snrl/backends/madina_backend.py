@@ -25,6 +25,33 @@ import numpy as np
 
 from .base import FlowBackend, SimulationResult
 
+# Set on the parent just before a fork pool is created, so forked workers
+# inherit the backend (and its topology) copy-on-write instead of pickling it.
+# Module level because pool.map needs a picklable top-level callable.
+_MASK_WORKER_BACKEND = None
+
+
+def _connectivity_chunk_worker(args):
+    closed_mask, chunk = args
+    return _MASK_WORKER_BACKEND._connectivity_mask_serial(closed_mask, chunk)
+
+
+def _connected_ignoring_isolates(g) -> bool:
+    """Is the graph connected once isolated nodes are disregarded?
+
+    Exactly the predicate MadinaBackend.is_connected() applies: it drops
+    isolated nodes and then requires the remainder to be non-empty and
+    connected. Phrased as an induced subgraph on the positive-degree nodes so
+    it needs no mutation, which is what makes the batched path able to reuse
+    one graph across candidates.
+    """
+    import networkx as nx
+
+    live = [n for n, d in g.degree() if d > 0]
+    if not live:
+        return False
+    return nx.is_connected(g.subgraph(live))
+
 
 def _read_geojson(path):
     """Read a .geojson file into a GeoDataFrame.
@@ -488,6 +515,98 @@ class MadinaBackend(FlowBackend):
         )
         g.remove_nodes_from(list(nx.isolates(g)))
         return g.number_of_nodes() > 0 and nx.is_connected(g)
+
+    # --- batched connectivity -------------------------------------------------
+    #
+    # env.action_masks() asks "would closing segment i disconnect the network?"
+    # for every still-open segment, once per step. Answering that with
+    # is_connected() per segment means one full _topology.copy() per segment:
+    # measured on Abha S0 (4,586 segments, 1,729-node topology) the copies alone
+    # were 18.3s of a 33.5s mask, and the whole mask was 95% of per-step cost.
+    #
+    # This does one copy for the whole batch and then mutates-and-restores a
+    # single candidate's edges at a time, which is exactly equivalent. The
+    # equivalence is not obvious and is worth spelling out, because _topology is
+    # a plain nx.Graph and several segments can share one (u, v) edge:
+    #
+    #   * is_connected(closed | {i}) removes the edge (u, v) if ANY segment
+    #     mapping to it is closed. So if candidate i shares its edge with an
+    #     already-closed segment j, the edge is already absent from the base
+    #     graph, `removed` comes out empty, and we test the base graph. That is
+    #     the same graph is_connected() would have built.
+    #   * restoring only the edges we actually removed cannot resurrect an edge
+    #     that some closed segment was suppressing, for the same reason.
+    #
+    # That shared-edge collapse is also why single-pass bridge detection is NOT
+    # a drop-in here: a bridge in _topology need not correspond to a unique
+    # segment. Left as a follow-up rather than assumed equivalent.
+    def _open_topology(self, closed_mask: np.ndarray):
+        """`_topology` with every closed segment's edge removed. One copy."""
+        if not hasattr(self, "_topology"):
+            self._topology = self._build_topology()
+        g = self._topology.copy()
+        g.remove_edges_from(
+            [(u, v) for (u, v, k) in self._edge_keys if closed_mask[k]]
+        )
+        return g
+
+    def _edges_by_segment(self) -> dict:
+        if not hasattr(self, "_edges_by_segment_cache"):
+            if not hasattr(self, "_topology"):
+                self._topology = self._build_topology()
+            cache: dict = {}
+            for (u, v, k) in self._edge_keys:
+                cache.setdefault(k, []).append((u, v))
+            self._edges_by_segment_cache = cache
+        return self._edges_by_segment_cache
+
+    def _connectivity_mask_serial(
+        self, closed_mask: np.ndarray, candidates: np.ndarray
+    ) -> np.ndarray:
+        g = self._open_topology(closed_mask)
+        by_seg = self._edges_by_segment()
+        out = np.empty(len(candidates), dtype=bool)
+        for i, c in enumerate(candidates):
+            removed = [e for e in by_seg.get(int(c), []) if g.has_edge(*e)]
+            g.remove_edges_from(removed)
+            out[i] = _connected_ignoring_isolates(g)
+            g.add_edges_from(removed)
+        return out
+
+    def connectivity_mask(
+        self,
+        closed_mask: np.ndarray,
+        candidates: np.ndarray,
+        n_workers: int = 1,
+    ) -> np.ndarray:
+        candidates = np.asarray(candidates, dtype=int)
+        if candidates.size == 0:
+            return np.zeros(0, dtype=bool)
+
+        n_workers = int(n_workers or 1)
+        if n_workers <= 1 or candidates.size < 2:
+            return self._connectivity_mask_serial(closed_mask, candidates)
+
+        # fork so the topology is shared copy-on-write instead of pickled per
+        # worker. Each worker makes one base copy for its whole chunk.
+        import multiprocessing as mp
+
+        n_workers = min(n_workers, candidates.size)
+        chunks = [c for c in np.array_split(candidates, n_workers) if c.size]
+        global _MASK_WORKER_BACKEND
+        _MASK_WORKER_BACKEND = self
+        try:
+            ctx = mp.get_context("fork")
+            with ctx.Pool(len(chunks)) as pool:
+                parts = pool.map(
+                    _connectivity_chunk_worker,
+                    [(closed_mask, c) for c in chunks],
+                )
+        except (OSError, ValueError, ImportError, RuntimeError):
+            # no fork (or no process room): the serial path is equivalent, just
+            # slower, so degrade rather than fail a multi-hour job.
+            return self._connectivity_mask_serial(closed_mask, candidates)
+        return np.concatenate(parts)
 
     def _build_topology(self):
         """Node-and-edge graph derived from segment endpoints (rounded to the

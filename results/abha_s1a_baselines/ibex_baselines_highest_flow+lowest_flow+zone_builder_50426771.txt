@@ -1,0 +1,9 @@
+config   : configs/city_madina_abha_s1a.yaml
+segments : 4570
+episodes : 1
+policies : highest_flow, lowest_flow, zone_builder
+
+policy              mean return      std     wall_s
+highest_flow             0.0662   0.0000      171.2
+lowest_flow             -0.0500   0.0000      194.2
+zone_builder             0.9500   0.0000      206.2

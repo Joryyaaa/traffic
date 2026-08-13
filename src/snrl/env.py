@@ -22,11 +22,28 @@ plus a small global vector appended as a final row:
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
+
+
+def _mask_workers() -> int:
+    """Processes to fan the action-mask connectivity batch across.
+
+    Defaults to 1, i.e. unchanged behaviour, because the mask runs inside
+    training loops that may already be parallel at a higher level and silently
+    forking there would be a surprise. Batch jobs opt in by exporting
+    SNRL_MASK_WORKERS (see slurm/abha_s0_baselines.sbatch). Measured on Abha S0:
+    1 worker 16.5s, 8 workers 4.8s, and it stops improving past 8.
+    """
+    try:
+        n = int(os.environ.get("SNRL_MASK_WORKERS", "1") or 1)
+    except ValueError:
+        return 1
+    return max(1, n)
 
 from .backends import build_backend
 from .config import EnvConfig
@@ -167,20 +184,33 @@ class StreetNetworkEnv(gym.Env):
 
         Cheap connectivity pre-check; the expensive flow simulation never runs
         on an invalid configuration.
+
+        The connectivity question is asked for every still-open segment, so it
+        goes to the backend as one batch (`connectivity_mask`) rather than one
+        call per segment. On Abha S0 (4,586 segments) the per-segment version
+        was 34s and 95% of the cost of a step. Set SNRL_MASK_WORKERS>1 to fan
+        the batch across processes; the answer is identical either way, so the
+        knob only trades cores for latency.
         """
         cfg = self.cfg.action
         size = self.n_segments + (1 if cfg.allow_noop else 0)
         mask = np.ones(size, dtype=bool)
         at_budget = self.closed_mask.sum() >= cfg.max_closures
+
+        needs_check = []
         for i in range(self.n_segments):
             if self.closed_mask[i]:
                 mask[i] = cfg.allow_reopen
             elif at_budget:
                 mask[i] = False
             elif cfg.forbid_disconnection:
-                trial = self.closed_mask.copy()
-                trial[i] = True
-                mask[i] = self.backend.is_connected(trial)
+                needs_check.append(i)
+
+        if needs_check:
+            idx = np.asarray(needs_check, dtype=int)
+            mask[idx] = self.backend.connectivity_mask(
+                self.closed_mask, idx, n_workers=_mask_workers()
+            )
         return mask
 
     def _segment_degree(self) -> np.ndarray:

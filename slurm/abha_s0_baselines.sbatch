@@ -60,6 +60,24 @@ PROJECT_DIR="${PROJECT_DIR:-/home/shiekhmf/Student_Projects/Jory/traffic}"
 CONFIG="${CONFIG:-configs/city_madina_abha_s0.yaml}"
 EPISODES="${EPISODES:-5}"
 CONDA_ENV="${CONDA_ENV:-snrl}"
+# Optional subset, e.g. POLICIES=greedy. Left empty this runs the whole suite,
+# which is the original behaviour.
+#
+# Worth splitting on this network. greedy is the *second* entry in evaluate.py's
+# policy dict, so a single whole-suite job prints `random` and then blocks every
+# remaining policy behind greedy's ~19h+, and the cheap numbers that take five
+# minutes arrive a day late. Three jobs per scenario instead:
+#
+#   POLICIES=random,highest_flow,lowest_flow,zone_builder  EPISODES=5   (minutes)
+#   POLICIES=zone_builder_best                             EPISODES=1   (hours)
+#   POLICIES=greedy                                        EPISODES=1   (~a day)
+#
+# EPISODES=1 for the deterministic policies is not a shortcut: MadinaBackend
+# inherits FlowBackend.reseed() returning False (src/snrl/backends/base.py), so
+# demand never redraws and N episodes of a deterministic policy are N identical
+# rollouts with a structurally-zero std. Only `random` gets anything from N>1.
+# See slurm/README.md, which sets EPISODES=1 for the seed sweeps for this reason.
+POLICIES="${POLICIES:-}"
 
 cd "$PROJECT_DIR"
 mkdir -p logs
@@ -73,6 +91,21 @@ export MKL_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 export TOKENIZERS_PARALLELISM=false
+
+# Fan action_masks()'s per-candidate connectivity checks across the CPUs this
+# job was actually given. They are independent, and on Abha S0 the mask was 95%
+# of per-step cost (34s of 36s), so this is where the wall-clock is.
+#
+# Measured on S0: 1 worker 16.5s, 8 workers 4.8s, and it stops improving beyond
+# 8 (fork setup starts to outweigh the work), hence the cap. The mask is
+# bit-identical at every worker count -- verified against the pre-batching
+# implementation on 26/58/89/226-segment networks and on S0 itself -- so this
+# only trades cores for latency and never changes a result.
+#
+# Ask for the cores too, or this does nothing: sbatch --cpus-per-task=8 ...
+MASK_CPUS="${SLURM_CPUS_PER_TASK:-1}"
+if [ "$MASK_CPUS" -gt 8 ]; then MASK_CPUS=8; fi
+export SNRL_MASK_WORKERS="${SNRL_MASK_WORKERS:-$MASK_CPUS}"
 export MPLCONFIGDIR="${MPLCONFIGDIR:-/ibex/user/$USER/mplconfig}"
 mkdir -p "$MPLCONFIGDIR"
 
@@ -99,18 +132,32 @@ fi
 SCENARIO="$(basename "$CONFIG" .yaml | sed 's/city_madina_abha_//')"
 RESULT_DIR="results/abha_${SCENARIO}_baselines"
 mkdir -p "$RESULT_DIR"
-RESULT_FILE="$RESULT_DIR/ibex_full_baselines_${SLURM_JOB_ID:-local}.txt"
+# Tag the filename with the subset so the three jobs per scenario do not read as
+# interchangeable when they land side by side.
+if [ -n "$POLICIES" ]; then
+    TAG="$(echo "$POLICIES" | tr ',' '+' | cut -c1-40)"
+else
+    TAG="all"
+fi
+RESULT_FILE="$RESULT_DIR/ibex_baselines_${TAG}_${SLURM_JOB_ID:-local}.txt"
 
-echo "=== Abha full baseline suite (evaluate.py, all 6 policies) ==="
+echo "=== Abha baseline suite (evaluate.py) ==="
 echo "host      : $(hostname)"
 echo "job       : ${SLURM_JOB_ID:-local}"
 echo "config    : $CONFIG"
 echo "episodes  : $EPISODES"
+echo "policies  : ${POLICIES:-all 6}"
+echo "cpus      : ${SLURM_CPUS_PER_TASK:-?}  mask_workers: $SNRL_MASK_WORKERS"
 echo "python    : $(which python)"
 echo "started   : $(date -Is)"
 echo
 
-python scripts/evaluate.py --config "$CONFIG" --episodes "$EPISODES" | tee "$RESULT_FILE"
+if [ -n "$POLICIES" ]; then
+    python scripts/evaluate.py --config "$CONFIG" --episodes "$EPISODES" \
+        --policies "$POLICIES" | tee "$RESULT_FILE"
+else
+    python scripts/evaluate.py --config "$CONFIG" --episodes "$EPISODES" | tee "$RESULT_FILE"
+fi
 
 echo
 echo "finished  : $(date -Is)"
