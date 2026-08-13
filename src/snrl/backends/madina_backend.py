@@ -26,6 +26,42 @@ import numpy as np
 from .base import FlowBackend, SimulationResult
 
 
+def _read_geojson(path):
+    """Read a .geojson file into a GeoDataFrame.
+
+    Prefers `geopandas.read_file` (pyogrio/GDAL). Falls back to a plain
+    json+shapely reader when pyogrio's bundled GDAL binary can't load at all
+    -- confirmed on at least one dev machine where an OS-level Application
+    Control policy blocks that specific DLL (not a "pyogrio isn't installed"
+    case, an "installed but the DLL won't load" case, which geopandas doesn't
+    itself fall back from). GeoJSON is plain JSON, so OGR was never
+    load-bearing for *this* format -- only reprojection/other formats
+    actually need GDAL, and reprojection already happens separately via
+    `.to_crs()` on the returned GeoDataFrame.
+    """
+    import geopandas as gpd
+
+    try:
+        return gpd.read_file(path)
+    except ImportError:
+        pass
+
+    import json
+
+    import pandas as pd
+    from shapely.geometry import shape
+
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    features = data["features"]
+    geoms = [shape(f["geometry"]) for f in features]
+    props = pd.DataFrame([f.get("properties") or {} for f in features])
+    crs = "EPSG:4326"
+    crs_name = (data.get("crs") or {}).get("properties", {}).get("name", "")
+    if crs_name and "CRS84" not in crs_name and "4326" not in crs_name:
+        crs = crs_name
+    return gpd.GeoDataFrame(props, geometry=geoms, crs=crs)
+
+
 class MadinaBackend(FlowBackend):
     """Wraps a Madina `Zonal` object.
 
@@ -85,9 +121,7 @@ class MadinaBackend(FlowBackend):
                 raise FileNotFoundError(f"network.{label}: {p} not found")
 
     def _read_streets(self):
-        import geopandas as gpd
-
-        gdf = gpd.read_file(self.cfg.network.streets_path)
+        gdf = _read_geojson(self.cfg.network.streets_path)
         gdf = gdf.to_crs(self.cfg.network.crs)
         gdf = gdf.reset_index(drop=True)
         gdf["segment_id"] = np.arange(len(gdf))
@@ -101,9 +135,7 @@ class MadinaBackend(FlowBackend):
         (typically WGS84 degrees), which silently produces nonsense nearest-edge
         snaps instead of an error.
         """
-        import geopandas as gpd
-
-        gdf = gpd.read_file(path)
+        gdf = _read_geojson(path)
         return gdf.to_crs(self.cfg.network.crs)
 
     def _build_zonal(self, closed_mask: np.ndarray):

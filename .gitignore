@@ -30,6 +30,9 @@ wandb/
 *.pth
 *.zip.sb3
 
+# Cached data
+cache/
+
 # OS / editors
 .DS_Store
 Thumbs.db
