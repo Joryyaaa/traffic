@@ -1,0 +1,7 @@
+config   : configs/city_madina_abha_s2.yaml
+segments : 4602
+episodes : 1
+policies : zone_builder_best
+
+policy              mean return      std     wall_s
+zone_builder_best        0.9518   0.0000    16309.5

@@ -32,8 +32,10 @@ Only `random` uses 5 episodes.
 | highest_flow | +0.0660 | +0.0662 | +0.0660 | +0.0651 |
 | lowest_flow | -0.0500 | -0.0500 | -0.0500 | -0.0500 |
 | zone_builder | **+0.9500** | **+0.9500** | **+0.9500** | **+0.9500** |
-| greedy | pending | pending | pending | pending |
-| zone_builder_best | pending | pending | pending | pending |
+| zone_builder_best | **+0.9518** | **+0.9518** | **+0.9518** | **+0.9518** |
+| greedy | not run, see below | not run | not run | not run |
+
+`zone_builder_best` took 4.2 to 4.7 h per scenario (8 mask workers, 64 GB).
 
 `zone_builder = 0.9500` on all four is **the reward's structural ceiling, not a
 measurement**. With `max_closures: 6` and `zone_exponent: 2.0`,
@@ -57,9 +59,25 @@ Two consequences:
    arithmetic and not by the network. The discriminating comparison is the flow
    metrics in `results/abha_scenario_maps/`, where S2 is the only scenario that
    moves anything (access -0.71%, VKT proxy -0.72%).
-2. **`zone_builder_best` is expected to be exactly +0.9500 too.** It maximizes
-   over candidate seeds, and +0.95 is the maximum attainable. It is still being
-   run as a check on that reasoning rather than because the number is in doubt.
+2. **`zone_builder_best` reaches +0.9518, slightly above that floor.** This was
+   predicted as "exactly +0.9500, because +0.95 is the maximum attainable" before
+   the runs finished, and that prediction was wrong. 0.95 is a *floor* for any
+   planner that spends the whole budget on one contiguous zone, not a ceiling:
+   the remaining terms are very small but not identically zero, and the best seed
+   clears 0.95 by +0.0018 by picking a zone that also marginally helps
+   accessibility, equity, flow-entropy or detour.
+
+   The residual is nevertheless **not** scenario-sensitive. All four scenarios
+   return +0.9518, including S2, which is the only one that actually changes the
+   network (it adds a road, 4,602 segments) and the only one that moves the flow
+   metrics at all (-0.63% flow, -0.72% VKT proxy). A scenario that visibly
+   changes the network and still produces a bit-identical return is the strongest
+   evidence here that the return is measuring the zone-contiguity arithmetic and
+   not the network.
+
+   Treat the +0.0018 as unusable regardless of sign: it is one seed search per
+   scenario with no error bars, four decimal places of printed precision, and no
+   spread to compare against.
 
 `lowest_flow` at exactly -0.0500 is the same signature seen at 186 and 386
 segments in `results/scale_sweep/`: the full intervention cost paid for a zone
@@ -115,10 +133,57 @@ The fix takes `zone_builder_best` from ~34h to ~6.5h per scenario. It barely
 helps `greedy` (~13.8h either way), which is bound by 4,531 `simulate()` calls
 per step, not by masking; parallelizing those is the next lever there.
 
+## greedy could not be run: simulate() leaks 6.75 MB per call
+
+`abha-s2-greedy` was OOM-killed at 16 GB after 1h13. That is not a too-small
+memory request, it is a leak, measured directly and perfectly linear:
+
+| simulate() calls | RSS above baseline |
+|---|---|
+| 10 | +68 MB |
+| 20 | +137 MB |
+| 30 | +203 MB |
+| 40 | +270 MB |
+
+**6.75 MB per call.** The result cache cannot account for it: `cache_size`
+defaults to 4096 and a `SimulationResult` is ~40 KB, so that is ~0.15 GB bounded.
+The likely source is the `mp.Manager()` that madina's
+`paralell_betweenness_exposure()` creates on **every** `simulate()`, which is
+exactly the TODO already recorded in `src/snrl/backends/madina_backend.py`. Note
+also that this backend deliberately reports fake `psutil.virtual_memory()` to
+stop madina's own throttle from sleeping, which also disables madina's own OOM
+guard, so nothing brakes before the kernel does.
+
+Consequences:
+
+- **greedy is infeasible here at any memory.** It needs 15 steps x 4,531
+  candidates = 67,965 calls, i.e. ~448 GB. The other three greedy jobs were
+  cancelled at 1h16 rather than left to reach the same OOM; S1A and S1B were
+  already at 16.5 and 16.8 GB against a 16 GB request.
+- **`zone_builder_best` needed 64 GB, not the 24 GB first requested.** It makes
+  561 x (1 fresh-env baseline + up to 6 closures) ~= 3,927 calls, projecting to
+  26.1 GB, so the first attempt would have died at roughly 90% completion after
+  nearly six hours. Cancelled at 53 min and resubmitted at 64 GB, which
+  completed.
+
+greedy's answer is however known by construction and by measurement. Sampling 25
+of the 554 flow-qualifying first closures gives a best single-closure reward of
+**-0.00668** against **0.0** for the no-op, because `min_zone_size: 3` means a
+one-segment zone scores zero, so a first closure earns no bonus and only pays
+`w_intervention`. greedy therefore takes the no-op at every step and returns
+**0.0000**, as it does on Al Nakheel and Jeddah. That also means it never spends
+its budget, so `at_budget` never short-circuits the mask and it pays the full
+candidate lookahead on all 15 steps rather than 6, which is why it is ~34 h
+rather than ~14 h.
+
+Fixing the leak (patch `mp.Manager()` the way `_ImmediateExecutor` already
+patches `ProcessPoolExecutor`) would make greedy roughly a day instead of
+impossible, and matters well beyond greedy: it caps how long any evaluation or
+training run on a large network can go before it dies.
+
 ## Caveats
 
-- `greedy` and `zone_builder_best` are still running; the table above is four of
-  six policies.
+- `greedy` is missing from the table above: five of six policies were measured.
 - Budget (`max_closures: 6`, `min_zone_size: 3`, `episode_length: 15`) is Jory's
   and was **not** re-derived by measurement here, unlike the scale-sweep configs.
   Given the ceiling analysis above, that is the parameter most worth revisiting.
