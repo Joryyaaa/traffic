@@ -1,0 +1,4 @@
+scenario,segments,mean_access,total_flow,trip_dist_m,random_mean,random_std,highest_flow_mean,highest_flow_std,lowest_flow_mean,lowest_flow_std,zone_builder_mean,zone_builder_std
+S0,—,—,—,—,—,—,—,—,—,—,—,—
+S1A,—,—,—,—,—,—,—,—,—,—,—,—
+S1B,—,—,—,—,—,—,—,—,—,—,—,—

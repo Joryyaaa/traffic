@@ -1,0 +1,5 @@
+scenario   seg   access      flow  trip_m      random  highest_fl  lowest_flo  zone_build
+-----------------------------------------------------------------------------------------
+S0         —        —         —       —           —           —           —           —
+S1A        —        —         —       —           —           —           —           —
+S1B        —        —         —       —           —           —           —           —
