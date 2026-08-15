@@ -34,11 +34,11 @@ network. Flows are simulated with [**Madina**](https://github.com/City-Form-Lab/
 - [x] Episode recording / video of the trained agent (`scripts/record_episode.py`)
 - [ ] Abha scenario: fetch real data + confirm residential buildings (`configs/city_madina_abha.yaml`) -- 3rd city, different terrain (mountains vs plateau/coast)
 - [ ] NEOM data request follow-up — unblocks `configs/city_madina_neom.yaml` (currently a placeholder, no usable OSM data exists yet)
-- [ ] **[needs APEX]** Large seed sweep (~100 seeds) on Al Nakheel for a real mean ± std (`scripts/seed_sweep.py`)
-- [ ] **[needs APEX]** Seed sweep repeated on Jeddah — does greedy-fails/planning-wins hold in a 2nd city?
-- [ ] **[needs APEX]** Seed sweep repeated on NEOM, once real data exists
-- [ ] **[needs APEX]** Larger network size (bigger radius, hundreds of segments) — note greedy itself becomes the bottleneck at this scale
-- [ ] **[needs APEX]** Longer training per seed (100,000+ steps) — do stuck seeds (like 42) eventually escape the local optimum, or is it seed-dependent regardless of budget?
+- [ ] **[needs Ibex]** Large seed sweep (~100 seeds) on Al Nakheel for a real mean ± std (`scripts/seed_sweep.py`)
+- [ ] **[needs Ibex]** Seed sweep repeated on Jeddah — does greedy-fails/planning-wins hold in a 2nd city?
+- [ ] **[needs Ibex]** Seed sweep repeated on NEOM, once real data exists
+- [ ] **[needs Ibex]** Larger network size (bigger radius, hundreds of segments) — note greedy itself becomes the bottleneck at this scale
+- [ ] **[needs Ibex]** Longer training per seed (100,000+ steps) — do stuck seeds (like 42) eventually escape the local optimum, or is it seed-dependent regardless of budget?
 
 ## Repository layout
 
@@ -380,7 +380,7 @@ size (60 segments).**
 original `hard.yaml` (60-segment) result. It does **not** answer the
 separate, still-open question of whether the MLP policy hits a real capacity
 ceiling as network size grows into the hundreds of segments (the
-`configs/hard_large.yaml`-and-beyond regime, tracked as "[needs APEX] Larger
+`configs/hard_large.yaml`-and-beyond regime, tracked as "[needs Ibex] Larger
 network size" in Status and in Open Questions). That question needs its own
 scaling-curve experiment across network sizes at 200k–300k+ steps per size,
 which is a separate, still-in-progress effort — see that experiment's own
