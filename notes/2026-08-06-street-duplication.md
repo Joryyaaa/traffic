@@ -19,7 +19,7 @@
 results (`hard.yaml`, `hard_demand`, `hard_stochastic`, `hard_large`) are **not**
 affected -- `StubBackend` builds its own grid and has no duplicates.
 
-This was found while preparing the `[needs APEX]` seed sweeps. The sweeps were
+This was found while preparing the `[needs Ibex]` seed sweeps. The sweeps were
 **not** submitted, because they would have spent ~280 core-hours computing a
 precise mean ± std for a setup in which the agent's closures did nothing.
 
