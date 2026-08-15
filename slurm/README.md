@@ -1,6 +1,6 @@
 # Running the heavy experiments on Ibex
 
-The README's `[needs APEX]` items are all the same shape: train the same config
+The README's `[needs Ibex]` items are all the same shape: train the same config
 across many seeds, then report a mean ± std instead of one lucky run.
 `scripts/seed_sweep.py` does that serially in one process. On a cluster the
 seeds are independent, so they belong in a Slurm **array** job: one seed per
