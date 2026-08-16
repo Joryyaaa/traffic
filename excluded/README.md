@@ -1,35 +1,60 @@
 # Excluded Abha Files
 
-This folder lists files that were removed from the active Abha scenario workflow.
+This folder contains Abha files that were removed from the active scenario workflow.
 
-The original files remain in their existing repository locations for traceability. They should not be used as inputs or results for the current analysis.
+They are kept only for traceability and development history and should not be used as current scenario inputs or current results.
 
-## Excluded Data and Maps
+## Folder Structure
 
-- `data/abha_baseline/abha_corridor_validation_map.html`
-- `data/abha_baseline/abha_s1_oneway_comparison_map_fixed.html`
-- `data/abha_baseline/s1a_king_abdulaziz.geojson`
-- `data/abha_baseline/s1b_king_abdulaziz.geojson`
-- `data/abha_baseline/s1a_oneway_summary.csv`
-- `data/abha_baseline/s1b_oneway_summary.csv`
+```text
+excluded/
+├── README.md
+├── maps/
+│   ├── abha_corridor_validation_map.html
+│   └── abha_s1_oneway_comparison_map_fixed.html
+├── geojson/
+│   ├── s1a_king_abdulaziz.geojson
+│   └── s1b_king_abdulaziz.geojson
+├── summaries/
+│   ├── s1a_oneway_summary.csv
+│   ├── s1b_oneway_summary.csv
+│   ├── baseline_summary.csv
+│   └── run_output.txt
+└── configs/
+    ├── city_madina_abha_s0.yaml
+    ├── city_madina_abha_s1a.yaml
+    ├── city_madina_abha_s1b.yaml
+    └── city_madina_abha_s2.yaml
+```
 
-## Excluded Configurations
+## Excluded Experiments
 
-- `configs/city_madina_abha_s1a.yaml`
-- `configs/city_madina_abha_s1b.yaml`
-- `configs/city_madina_abha_s2.yaml`
+### Previous King Abdulaziz One-Way Experiment
 
-## Reference-Only Previous Baseline
+- S1A: King Abdulaziz One-Way NE
+- S1B: King Abdulaziz One-Way SW
 
-- `configs/city_madina_abha_s0.yaml`
-- `data/abha_baseline/baseline_summary.csv`
-- `data/abha_baseline/run_output.txt`
+Associated maps, GeoJSON files, summaries, and configurations are archived here.
 
-## Notes
+### Previous S2 Experiment
 
-- The previous S1A definition was King Abdulaziz One-Way NE.
-- The previous S1B definition was King Abdulaziz One-Way SW.
-- The previous S2 definition was a hypothetical Green Road bypass from Khamis Mushait toward Sali.
-- The previous S0 setup used a 1500 m study radius and was associated with the old scenario definitions.
+The previous S2 configuration represented a hypothetical Green Road bypass from Khamis Mushait toward Sali. It was not based on a confirmed alignment and is archived here.
 
-These items are excluded from the active scenario analysis and retained only as historical reference.
+### Previous S0 Setup
+
+The previous S0 setup used:
+
+- Center: `(18.2264426, 42.5053914)`
+- Radius: `1500 m`
+- Network type: `drive`
+- Total directed road segments: `4,586`
+- Origins: `315`
+- Destinations: `56`
+- Cleaned study corridor: `44 segments`
+- Cleaned study corridor length: `7.81 km`
+
+This baseline is retained only as historical reference for the previous scenario setup.
+
+## Usage Rule
+
+Files in this folder are excluded from the active Abha scenario analysis. Do not use them as current simulation inputs or report their outputs as current scenario results.
