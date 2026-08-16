@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.363614,
+          18.2704765
+        ]
+      },
+      "properties": {
+        "endpoint_key": "soudah",
+        "name": "Destination: Jabal Soudah Viewpoint",
+        "network_node": 9992117959,
+        "trip_role": "destination",
+        "weight_is_observed_count": false,
+        "destination_weight": 1.0,
+        "destination_access_segment_ids": [
+          129
+        ],
+        "viewpoint_to_access_node_m": 97.28269436046882
+      }
+    }
+  ]
+}

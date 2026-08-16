@@ -20,6 +20,7 @@ from __future__ import annotations
 import contextlib
 from functools import lru_cache
 from pathlib import Path
+from types import MethodType
 
 import numpy as np
 
@@ -87,6 +88,151 @@ def _read_geojson(path):
     if crs_name and "CRS84" not in crs_name and "4326" not in crs_name:
         crs = crs_name
     return gpd.GeoDataFrame(props, geometry=geoms, crs=crs)
+
+
+def _rebuild_directed_edge(network, graph, edge_id: int) -> None:
+    """Rebuild one street chain while preserving its allowed directions."""
+    edge_id = int(edge_id)
+    edge = network.edges.loc[edge_id]
+    start, end = int(edge["start"]), int(edge["end"])
+    forward_cost, reverse_cost = network._snrl_direction_costs[edge_id]
+
+    for u, v, data in list(graph.edges(data=True)):
+        if data.get("id") == edge_id:
+            graph.remove_edge(u, v)
+
+    added = set(graph.graph.get("added_nodes", []))
+    nodes = network.nodes
+    inserted = [
+        int(idx)
+        for idx in added
+        if int(nodes.at[idx, "nearest_edge_id"]) == edge_id
+    ]
+    total = max(float(edge["weight"]), 1e-12)
+    positions = {idx: float(nodes.at[idx, "weight_to_start"]) / total for idx in inserted}
+    inserted.sort(key=positions.__getitem__)
+    chain = [start, *inserted, end]
+    fractions = [0.0, *(positions[idx] for idx in inserted), 1.0]
+
+    def add_chain(cost: float, reverse: bool) -> None:
+        pairs = list(zip(chain[:-1], chain[1:], fractions[:-1], fractions[1:]))
+        if reverse:
+            pairs = [(v, u, left, right) for u, v, left, right in reversed(pairs)]
+        for u, v, left, right in pairs:
+            graph.add_edge(
+                int(u), int(v), weight=max((right - left) * cost, 0.0), id=edge_id
+            )
+
+    if forward_cost is not None:
+        add_chain(float(forward_cost), reverse=False)
+    if reverse_cost is not None:
+        add_chain(float(reverse_cost), reverse=True)
+
+
+def _directed_add_node_to_graph(network, graph, node_idx) -> None:
+    node_idx = int(node_idx)
+    added = graph.graph.setdefault("added_nodes", [])
+    if node_idx in added:
+        return
+    added.append(node_idx)
+    graph.add_node(node_idx)
+    _rebuild_directed_edge(network, graph, int(network.nodes.at[node_idx, "nearest_edge_id"]))
+
+
+def _directed_remove_node_to_graph(network, graph, node_idx) -> None:
+    node_idx = int(node_idx)
+    edge_id = int(network.nodes.at[node_idx, "nearest_edge_id"])
+    added = graph.graph.setdefault("added_nodes", [])
+    if node_idx in added:
+        added.remove(node_idx)
+    if node_idx in graph:
+        graph.remove_node(node_idx)
+    _rebuild_directed_edge(network, graph, edge_id)
+
+
+def _directed_turn_o_scope(
+    network,
+    o_idx,
+    search_radius: float,
+    detour_ratio: float,
+    turn_penalty=True,
+    o_graph=None,
+    return_paths=True,
+):
+    """Madina shortest-path scope without its undirected leaf shortcut."""
+    from heapq import heappop, heappush
+
+    from madina.una.paths import turn_penalty_value
+
+    graph = o_graph if o_graph is not None else network.d_graph
+    destinations = set(network.nodes[network.nodes["type"] == "destination"].index)
+    scope = {o_idx: 0.0}
+    destination_distances = {}
+    scope_paths = {}
+    queue = [(0.0, o_idx, [o_idx])]
+
+    while queue:
+        weight, node, visited = heappop(queue)
+        if weight > scope.get(node, float("inf")):
+            continue
+        for neighbor in graph.neighbors(node):
+            turn_cost = 0.0
+            if turn_penalty and len(visited) >= 2:
+                turn_cost = turn_penalty_value(network, visited[-2], node, neighbor)
+            new_weight = weight + graph.edges[node, neighbor]["weight"] + turn_cost
+            if new_weight > search_radius * detour_ratio:
+                continue
+            if new_weight >= scope.get(neighbor, float("inf")):
+                continue
+            scope[neighbor] = new_weight
+            path = visited + [neighbor]
+            if return_paths:
+                scope_paths[neighbor] = path
+            if neighbor in destinations and new_weight <= search_radius:
+                destination_distances[neighbor] = new_weight
+            heappush(queue, (new_weight, neighbor, path))
+
+    return destination_distances, scope, scope_paths
+
+
+def _directed_bfs_subgraph_generation(
+    o_idx,
+    detour_ratio=1.15,
+    o_graph=None,
+    d_idxs=None,
+    o_scope=None,
+    o_scope_paths=None,
+):
+    """Build destination distances by traversing a directed graph backwards."""
+    import networkx as nx
+
+    d_idxs = d_idxs or {}
+    o_scope = o_scope or {}
+    distance_matrix = {node: {} for node in o_scope}
+    od_scope = set()
+    reverse_graph = o_graph.reverse(copy=False)
+
+    for destination, shortest in d_idxs.items():
+        allowed = shortest * detour_ratio
+        distances = nx.single_source_dijkstra_path_length(
+            reverse_graph, destination, cutoff=allowed, weight="weight"
+        )
+        for node, distance in distances.items():
+            if node not in o_scope:
+                continue
+            if o_scope[node] + distance <= allowed + 1e-7:
+                distance_matrix[node][destination] = distance
+                od_scope.add(node)
+
+        shortest_path = (o_scope_paths or {}).get(destination, [])
+        for node in shortest_path:
+            if node in distance_matrix:
+                distance_matrix[node][destination] = max(
+                    float(shortest) - float(o_scope[node]), 0.0
+                )
+                od_scope.add(node)
+
+    return od_scope, distance_matrix, d_idxs
 
 
 class MadinaBackend(FlowBackend):
@@ -210,8 +356,126 @@ class MadinaBackend(FlowBackend):
             self.DESTINATIONS, label="destination", weight_attribute=nc.destination_weight
         )
         self._debug(f"  inserted destinations [{time.time()-t0:.1f}s]")
-        zonal.create_graph()
+        if nc.respect_oneway:
+            self._create_directed_graphs(zonal, streets, weight_attribute)
+        else:
+            zonal.create_graph()
         return zonal
+
+    @staticmethod
+    def _oneway_mode(value) -> str:
+        """Normalize common OSM/GeoJSON one-way encodings."""
+        if value is None:
+            return "both"
+        try:
+            if np.isnan(value):
+                return "both"
+        except TypeError:
+            pass
+        text = str(value).strip().lower()
+        if text in {"-1", "reverse", "backward"}:
+            return "reverse"
+        if text in {"1", "true", "yes", "y", "t"}:
+            return "forward"
+        return "both"
+
+    @staticmethod
+    def _physical_pair_key(row):
+        """Identify opposite OSM rows belonging to one physical link."""
+        if "u" in row.index and "v" in row.index:
+            u, v = row["u"], row["v"]
+            if not (np.isscalar(u) and np.isscalar(v)):
+                u = v = None
+            if u is not None and v is not None:
+                try:
+                    if not (np.isnan(u) or np.isnan(v)):
+                        return ("osm", *sorted((int(u), int(v))))
+                except TypeError:
+                    return ("osm", *sorted((str(u), str(v))))
+        geom = row.geometry
+        a = tuple(round(float(x), 3) for x in geom.coords[0])
+        b = tuple(round(float(x), 3) for x in geom.coords[-1])
+        return ("geometry", *sorted((a, b)))
+
+    @staticmethod
+    def _same_orientation(row, parent) -> bool:
+        if all(name in row.index for name in ("u", "v")):
+            try:
+                return int(row["u"]) == int(parent["u"]) and int(row["v"]) == int(parent["v"])
+            except (TypeError, ValueError):
+                pass
+        row_start = np.asarray(row.geometry.coords[0], dtype=float)
+        parent_start = np.asarray(parent.geometry.coords[0], dtype=float)
+        return bool(np.linalg.norm(row_start - parent_start) <= 0.01)
+
+    @staticmethod
+    def _row_cost(row, weight_attribute: str | None) -> float:
+        value = row.geometry.length if weight_attribute is None else row[weight_attribute]
+        if value == 0:
+            value = row.geometry.length
+        return max(float(value), 0.01)
+
+    def _direction_costs(self, network, streets, weight_attribute):
+        """Recover allowed forward/reverse costs from the original OSM rows."""
+        groups = {}
+        for idx, row in streets.iterrows():
+            groups.setdefault(self._physical_pair_key(row), []).append((idx, row))
+
+        result = {}
+        for edge_id, edge in network.edges.iterrows():
+            parent = streets.loc[int(edge["parent_street_id"])]
+            rows = groups[self._physical_pair_key(parent)]
+            orientations = [self._same_orientation(row, parent) for _, row in rows]
+            has_forward_row = any(orientations)
+            has_reverse_row = any(not same for same in orientations)
+            forward_costs, reverse_costs = [], []
+
+            for (_, row), same in zip(rows, orientations):
+                mode = self._oneway_mode(row.get("oneway", False))
+                cost = self._row_cost(row, weight_attribute)
+                if mode == "reverse":
+                    same = not same
+                    mode = "forward"
+
+                both = mode == "both" and not (has_forward_row and has_reverse_row)
+                if same or both:
+                    forward_costs.append(cost)
+                if (not same) or both:
+                    reverse_costs.append(cost)
+
+            result[int(edge_id)] = (
+                min(forward_costs) if forward_costs else None,
+                min(reverse_costs) if reverse_costs else None,
+            )
+        return result
+
+    def _create_directed_graphs(self, zonal, streets, weight_attribute) -> None:
+        """Create Madina-compatible directed graphs for drive networks."""
+        import networkx as nx
+
+        network = zonal.network
+        network.street_node_ids = set(
+            network.nodes[network.nodes["type"] == "street_node"].index
+        )
+        network._snrl_direction_costs = self._direction_costs(
+            network, streets, weight_attribute
+        )
+        network.add_node_to_graph = MethodType(_directed_add_node_to_graph, network)
+        network.remove_node_to_graph = MethodType(_directed_remove_node_to_graph, network)
+
+        light = nx.DiGraph()
+        light.graph["added_nodes"] = []
+        for idx in network.street_node_ids:
+            light.add_node(int(idx), type="street_node")
+        network.light_graph = light
+        for edge_id in network.edges.index:
+            _rebuild_directed_edge(network, network.light_graph, int(edge_id))
+
+        network.d_graph = network.light_graph.copy()
+        network.d_graph.graph["added_nodes"] = []
+        destinations = list(network.nodes[network.nodes["type"] == "destination"].index)
+        for node_idx in destinations:
+            network.add_node_to_graph(network.d_graph, int(node_idx))
 
     # --- static properties --------------------------------------------------
     @property
@@ -251,7 +515,7 @@ class MadinaBackend(FlowBackend):
         zonal = self._build_zonal(closed_mask)
         self._debug(f"_build_zonal total [{time.time()-t0:.1f}s]")
 
-        with self._force_single_process_betweenness():
+        with self._force_single_process_betweenness(), self._directed_scope_patch():
             if self._debug_enabled:
                 import faulthandler
                 import sys
@@ -378,7 +642,7 @@ class MadinaBackend(FlowBackend):
         did not, so the two reward terms could disagree about whether cutting
         someone off was good or bad.
         """
-        from madina.una.paths import turn_o_scope
+        from madina.una.paths import turn_o_scope as undirected_turn_o_scope
 
         network = zonal.network
         node_gdf = network.nodes
@@ -389,6 +653,9 @@ class MadinaBackend(FlowBackend):
 
         sc = self.cfg.simulation
         o_graph = network.d_graph
+        turn_o_scope = (
+            _directed_turn_o_scope if o_graph.is_directed() else undirected_turn_o_scope
+        )
 
         distances: list[float] = []
         for o_idx in origins:
@@ -409,6 +676,25 @@ class MadinaBackend(FlowBackend):
                 distances.extend([float(sc.search_radius)] * n_missed)
 
         return float(np.mean(distances)) if distances else float("nan")
+
+    @contextlib.contextmanager
+    def _directed_scope_patch(self):
+        """Use directed-compatible path helpers inside Madina betweenness."""
+        if not self.cfg.network.respect_oneway:
+            yield
+            return
+
+        from madina.una import betweenness as betweenness_module
+
+        original_scope = betweenness_module.turn_o_scope
+        original_subgraph = betweenness_module.bfs_subgraph_generation
+        betweenness_module.turn_o_scope = _directed_turn_o_scope
+        betweenness_module.bfs_subgraph_generation = _directed_bfs_subgraph_generation
+        try:
+            yield
+        finally:
+            betweenness_module.turn_o_scope = original_scope
+            betweenness_module.bfs_subgraph_generation = original_subgraph
 
     @staticmethod
     @contextlib.contextmanager
@@ -501,7 +787,11 @@ class MadinaBackend(FlowBackend):
         import networkx as nx
 
         graph = zonal.network.light_graph or zonal.network.d_graph
-        return nx.number_connected_components(graph) if graph is not None else 1
+        if graph is None:
+            return 1
+        if graph.is_directed():
+            return nx.number_weakly_connected_components(graph)
+        return nx.number_connected_components(graph)
 
     def is_connected(self, closed_mask: np.ndarray) -> bool:
         """Cheap connectivity check on the segment graph, without rebuilding Madina."""

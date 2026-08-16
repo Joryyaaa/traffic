@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.714163,
+          18.192559
+        ]
+      },
+      "properties": {
+        "endpoint_key": "route2120",
+        "name": "Khamis approach candidate: Route 2120",
+        "network_node": 13509344341,
+        "trip_role": "origin",
+        "demand_weight": 1.0,
+        "weight_is_observed_count": false
+      }
+    }
+  ]
+}

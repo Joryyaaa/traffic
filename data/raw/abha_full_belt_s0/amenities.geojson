@@ -1,0 +1,4405 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1201697498,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.407205,
+          18.2234293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1201725689,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.3744221,
+          18.2580307
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1202231639,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.3675714,
+          18.2718018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1202231640,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.3680333,
+          18.2726694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1202231642,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.3674209,
+          18.2725734
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1185289914,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5071386,
+          18.1965767
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1185291251,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5079843,
+          18.1980335
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1185292048,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5070596,
+          18.1990869
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1185292049,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.50776,
+          18.1994615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1185292114,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5074248,
+          18.1999972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1185292357,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5101905,
+          18.19939
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1185293633,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5057098,
+          18.1989973
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267184779,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.506557,
+          18.2039895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401907,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5097821,
+          18.2031783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485066004,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4967304,
+          18.1999846
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 369848784,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5235418,
+          18.2029821
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 495787493,
+        "type": "bus_station",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5270851,
+          18.2033589
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 962540480,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5550028,
+          18.1865665
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 962550374,
+        "type": "hospital",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5243292,
+          18.1994872
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 962550375,
+        "type": "hospital",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5276223,
+          18.2011972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 962551899,
+        "type": "studio",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5176058,
+          18.202176
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 358377281,
+        "type": "marketplace",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.496705,
+          18.2147425
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 358397304,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4997686,
+          18.2166972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 369468467,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4996765,
+          18.2155829
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 369656878,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5007694,
+          18.2250074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 650827722,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4885098,
+          18.2219131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387032,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5103943,
+          18.2415205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387045,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4956307,
+          18.2438553
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387136,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4628173,
+          18.2399116
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387137,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4617426,
+          18.2389596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387138,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4626622,
+          18.241559
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387175,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4786347,
+          18.242529
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387176,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4783341,
+          18.2470714
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387177,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4781544,
+          18.2465437
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387178,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4777,
+          18.2471792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267132502,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5118123,
+          18.2139681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267178463,
+        "type": "toilets",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5146686,
+          18.2120585
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267180626,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5121279,
+          18.209455
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267182467,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5146875,
+          18.2088525
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267184784,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5002729,
+          18.2149064
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267184794,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4991055,
+          18.2144326
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267184824,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.502455,
+          18.2230586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1299509586,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5106216,
+          18.2137599
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1299509602,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5097281,
+          18.2131531
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1299509615,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5104235,
+          18.2129112
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1414102542,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4953277,
+          18.2142997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1414109445,
+        "type": "hospital",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5050885,
+          18.2321957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468150299,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.484661,
+          18.209648
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468150300,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.482768,
+          18.2099032
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468150302,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4824491,
+          18.2106062
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468150303,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4837822,
+          18.2115809
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468272658,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4889787,
+          18.2141182
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468272659,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4902175,
+          18.2139471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401864,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.495263,
+          18.2101537
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401868,
+        "type": "clinic",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.507971,
+          18.2273201
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401872,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.506724,
+          18.2285112
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401873,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5060014,
+          18.2285946
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401877,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.504005,
+          18.2280412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401884,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5002579,
+          18.2070386
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401887,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5151847,
+          18.2225314
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401889,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4937396,
+          18.2179661
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401891,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4937697,
+          18.230596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401894,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5106685,
+          18.228614
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401895,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5119507,
+          18.2288079
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401896,
+        "type": "clinic",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4977645,
+          18.2088553
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401897,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.494814,
+          18.2206402
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401898,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5073129,
+          18.2142557
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401909,
+        "type": "fire_station",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4880153,
+          18.2276127
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401910,
+        "type": "clinic",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5149282,
+          18.2073448
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401915,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5003782,
+          18.2279713
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401917,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5107318,
+          18.2222224
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468426029,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4978014,
+          18.2102408
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468426030,
+        "type": "hospital",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4982386,
+          18.2095771
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484162957,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.502295,
+          18.2319087
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484162959,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5004964,
+          18.232872
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485065998,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4934233,
+          18.2131327
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485065999,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4938547,
+          18.2135459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485066000,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4952266,
+          18.2134315
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485066001,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4925253,
+          18.2096109
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485075108,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5009999,
+          18.2367393
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485075141,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4875016,
+          18.2150235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540894408,
+        "type": "hospital",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6012406,
+          18.2483492
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540894409,
+        "type": "university",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5990547,
+          18.2447825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540894410,
+        "type": "university",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5957064,
+          18.2446584
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 703937331,
+        "type": "mall",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5799541,
+          18.2371051
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 962551901,
+        "type": "prison",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5324517,
+          18.2191403
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 962551902,
+        "type": "greengrocer",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5201448,
+          18.2367959
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173386948,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5562412,
+          18.2391779
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173386982,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5702107,
+          18.2455439
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387033,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5164132,
+          18.2402138
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387034,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5174091,
+          18.235498
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1173387039,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5154389,
+          18.2303693
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1267132554,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5151662,
+          18.2156254
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401861,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5177229,
+          18.2235024
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401862,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5166753,
+          18.2252419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401866,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5179828,
+          18.2096241
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401878,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5188529,
+          18.2181478
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1468401913,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5194608,
+          18.2137721
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759080,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5846901,
+          18.2341235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759081,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5848867,
+          18.2341586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759101,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5998307,
+          18.2337294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759111,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5962539,
+          18.2321358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759112,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5964034,
+          18.2299965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759114,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5929286,
+          18.228896
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759115,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5913421,
+          18.2279292
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1543055098,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6004001,
+          18.2480656
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759102,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6031361,
+          18.2335577
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 591413336,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6898719,
+          18.189548
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 591413340,
+        "type": "college",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6891828,
+          18.1869353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 591413341,
+        "type": "college",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7010803,
+          18.1885041
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 591413343,
+        "type": "hospital",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7064856,
+          18.1881694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 409210404,
+        "type": "mall",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6749602,
+          18.2839272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540894259,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.632191,
+          18.2465098
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 553864211,
+        "type": "mall",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.604916,
+          18.2401
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 634396007,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6097463,
+          18.2369085
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 634396951,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.603583,
+          18.2419143
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 857300348,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6728511,
+          18.2844909
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759103,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6116263,
+          18.2356247
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759106,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6049154,
+          18.2369067
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759107,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.602543,
+          18.2363864
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759108,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6014668,
+          18.2363176
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1484759109,
+        "type": "clinic",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6004971,
+          18.2361189
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1543055091,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.600568,
+          18.2466267
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 328304254,
+        "type": "mall",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7322336,
+          18.3060178
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540863567,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7260222,
+          18.3026162
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540863582,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7239875,
+          18.3046575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540863595,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6964677,
+          18.3059766
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540863702,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7280486,
+          18.3034296
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540880688,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7033935,
+          18.3117621
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 540880712,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7111605,
+          18.3084848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 669736422,
+        "type": "cafe",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6827741,
+          18.2921231
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485073512,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7375902,
+          18.315053
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485073515,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7372029,
+          18.3104211
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485073516,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7355552,
+          18.3099117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1485125403,
+        "type": "school",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7075871,
+          18.2991134
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7523055470,
+        "type": "toilets",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.364142,
+          18.2711743
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10214272098,
+        "type": "drinking_water",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.3936983,
+          18.2403294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10214272099,
+        "type": "drinking_water",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4140687,
+          18.2363375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10214272100,
+        "type": "drinking_water",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.3907542,
+          18.254208
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11225378278,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4097458,
+          18.2337452
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12272940587,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.367446,
+          18.2607062
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13404063601,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.3829849,
+          18.2605313
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13404063701,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.3824822,
+          18.2605059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 9034246099,
+        "type": "bakery",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4969414,
+          18.2003332
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11052943574,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5138015,
+          18.1958065
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11052943580,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5089735,
+          18.1950319
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4111112574,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5170336,
+          18.203389
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4687832121,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5428748,
+          18.1958561
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702586,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5244766,
+          18.1959797
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11052943570,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5187018,
+          18.1975086
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11443450208,
+        "type": "charging_station",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5242675,
+          18.1958625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4111112575,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.489808,
+          18.2108561
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4236729289,
+        "type": "atm",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4980386,
+          18.2072869
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4466355390,
+        "type": "optician",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5034971,
+          18.2171866
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7057065785,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4906043,
+          18.2100777
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7162070085,
+        "type": "bus_station",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5010552,
+          18.2342301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7162423485,
+        "type": "post_office",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4991708,
+          18.2133836
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10214272093,
+        "type": "drinking_water",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4772565,
+          18.2207091
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10214272094,
+        "type": "drinking_water",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5005239,
+          18.2246021
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10214272095,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5033355,
+          18.2298481
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10214272096,
+        "type": "drinking_water",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5031602,
+          18.2298748
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702585,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.506704,
+          18.233636
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702596,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4912414,
+          18.207708
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11225377171,
+        "type": "supermarket",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5017252,
+          18.2188159
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11225381644,
+        "type": "bakery",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5002925,
+          18.2255143
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623223,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4677969,
+          18.2305318
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623224,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.50625,
+          18.23287
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12992141478,
+        "type": "cafe",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5092645,
+          18.2310656
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13388756001,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5075331,
+          18.2110786
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13466545110,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4980274,
+          18.2159887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13466545111,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.496866,
+          18.2158307
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13467646690,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5085681,
+          18.2264406
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13467646972,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.4875763,
+          18.2271864
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13467647082,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5106794,
+          18.2211275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4111112573,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5559599,
+          18.2317463
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4311995689,
+        "type": "atm",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5563862,
+          18.2271534
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4529852792,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5732473,
+          18.2465907
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4687832119,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5411498,
+          18.2181902
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4687832128,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5560371,
+          18.2289392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4687832129,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.557006,
+          18.225633
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4687832132,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5478912,
+          18.2218555
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4687832133,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5451698,
+          18.2217341
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4687832134,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5462664,
+          18.2196307
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231823231,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5894258,
+          18.2375527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5316647922,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5800578,
+          18.2379435
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7159865385,
+        "type": "car_rental",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5154626,
+          18.2161492
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7252210886,
+        "type": "cafe",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5222887,
+          18.2166801
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7252211685,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5218626,
+          18.2168804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 8365140017,
+        "type": "pharmacy",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5533574,
+          18.2228257
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702588,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5562554,
+          18.2231454
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702591,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5643879,
+          18.2348336
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702597,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5304955,
+          18.219079
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11055055711,
+        "type": "chocolate",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5539917,
+          18.2226396
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11750369877,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5879024,
+          18.2309315
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12105668352,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.582507,
+          18.237269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360616793,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5615569,
+          18.2391818
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623212,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5303569,
+          18.2213018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623213,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5219169,
+          18.2302618
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623252,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.51869,
+          18.20605
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623253,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.54118,
+          18.22649
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623254,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.56373,
+          18.23513
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623255,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5971169,
+          18.2398418
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12799882472,
+        "type": "fast_food",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5804087,
+          18.2381999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13272629420,
+        "type": "cafe",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5226069,
+          18.2234199
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13328291335,
+        "type": "hardware",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5550984,
+          18.2325565
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13335254393,
+        "type": "social_facility",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.581863,
+          18.2315927
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13355266701,
+        "type": "cinema",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.5789918,
+          18.2360944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623210,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.60137,
+          18.18221
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5646296710,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6859429,
+          18.1914293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5646297151,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.722634,
+          18.1908738
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5646659425,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6891437,
+          18.1902629
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5646659475,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6888787,
+          18.1880438
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 2714171326,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6680932,
+          18.2823027
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 2714171327,
+        "type": "hospital",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6693431,
+          18.2812178
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4111112576,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6746593,
+          18.2842305
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4463466289,
+        "type": "car_parts",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6299247,
+          18.2556054
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231713096,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6686619,
+          18.2886061
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231714112,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6505618,
+          18.2746798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231714154,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6506577,
+          18.271436
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231714300,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6289452,
+          18.2509272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231714617,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6186352,
+          18.2473788
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702587,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6418984,
+          18.2652486
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702589,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.628056,
+          18.253889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12314099229,
+        "type": "clothes",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6027784,
+          18.240782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12314099230,
+        "type": "clothes",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.672609,
+          18.2798947
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360616788,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.64226,
+          18.26516
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623256,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6327869,
+          18.2565918
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360623257,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6340369,
+          18.2590718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13232926120,
+        "type": "doityourself",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6678155,
+          18.2766073
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13355266801,
+        "type": "books",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6721691,
+          18.2803936
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13421210322,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6647347,
+          18.2736738
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13698098224,
+        "type": "car",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6503856,
+          18.2670727
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4365027889,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7304995,
+          18.306102
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4365154090,
+        "type": "fast_food",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7317325,
+          18.3052473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4394454697,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7302587,
+          18.3048105
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 4879625421,
+        "type": "restaurant",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.675085,
+          18.2864644
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231523694,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7148226,
+          18.3050986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231523752,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7046083,
+          18.3073212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231523804,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7150281,
+          18.3098548
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231523839,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7232408,
+          18.3090536
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231523840,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7198457,
+          18.3089738
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231523846,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7301507,
+          18.3104724
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231621911,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7073101,
+          18.3092625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231621912,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7132655,
+          18.3109046
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231625834,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7038279,
+          18.3108326
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231625944,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7160436,
+          18.3020332
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626053,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6835021,
+          18.2945778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626078,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.686125,
+          18.3078354
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626223,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6805881,
+          18.3019691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626224,
+        "type": "parking",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6808284,
+          18.3032332
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626388,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6760108,
+          18.2974301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626389,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6776817,
+          18.2926645
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626400,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6766288,
+          18.2937872
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626732,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6886879,
+          18.3116597
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 5231626733,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6924678,
+          18.311579
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 6271963012,
+        "type": "cafe",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6828281,
+          18.2921479
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7060479286,
+        "type": "bus_station",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7333869,
+          18.3155793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 7574324885,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6912825,
+          18.3018169
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 9044910016,
+        "type": "bakery",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.688604,
+          18.3010553
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041702584,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7070707,
+          18.3073665
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11041724008,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6983053,
+          18.3135238
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 11443450216,
+        "type": "charging_station",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7072799,
+          18.3073666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12105668345,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6804141,
+          18.2917419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12204496049,
+        "type": "car",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6914817,
+          18.3025232
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12360616787,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.72614,
+          18.31233
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 12462999688,
+        "type": "car_rental",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7171343,
+          18.3012143
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13264468807,
+        "type": "car_repair",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.6911652,
+          18.3015734
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13421210307,
+        "type": "car",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.678816,
+          18.289006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13479976838,
+        "type": "kiosk",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7337614,
+          18.3156431
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13479976843,
+        "type": "tyres",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7338138,
+          18.3166923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13479976849,
+        "type": "cafe",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.734051,
+          18.3166147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13479976861,
+        "type": "fuel",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7341037,
+          18.3167373
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13479976865,
+        "type": "tyres",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7354567,
+          18.3171366
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13479976867,
+        "type": "place_of_worship",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.7375277,
+          18.3150188
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 13479976871,
+        "type": "tyres",
+        "floor_area": 50.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.733624,
+          18.3164691
+        ]
+      }
+    }
+  ]
+}

@@ -8,7 +8,23 @@ env/
 .ipynb_checkpoints/
 
 # Data & outputs (keep small samples only, use DVC/LFS for big files)
-data/raw/
+# Raw data is ignored by default. Keep only the compact, reproducible Abha
+# Ibex inputs in Git so the checked-in Slurm configs do not point to files
+# that are missing on the cluster.
+data/raw/*
+!data/raw/abha_full_belt_s0/
+data/raw/abha_full_belt_s0/*
+!data/raw/abha_full_belt_s0/streets.geojson
+!data/raw/abha_full_belt_s0/residential.geojson
+!data/raw/abha_full_belt_s0/amenities.geojson
+!data/raw/abha_full_belt_s0/qa_report.json
+!data/raw/abha_full_belt_s0/approved_main_corridors.geojson
+!data/raw/abha_khamis_soudah_demand/
+data/raw/abha_khamis_soudah_demand/*
+!data/raw/abha_khamis_soudah_demand/corridor_allowed_streets.geojson
+!data/raw/abha_khamis_soudah_demand/*_origins.geojson
+!data/raw/abha_khamis_soudah_demand/al_soudah_destination.geojson
+!data/raw/abha_khamis_soudah_demand/demand_qa.json
 data/interim/
 data/processed/
 Cities/

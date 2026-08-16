@@ -1,0 +1,31 @@
+{
+  "status": "PASS_FOR_MENTOR_GEOMETRY_REVIEW",
+  "purpose": "scenario definition preview only; no Madina/RL model was run",
+  "display_names_use_s_numbers": false,
+  "safe_corridor": {
+    "preferred_route_segments": 169,
+    "backup_route_segments": 245,
+    "protected_local_street_segments_near_corridors": 10711,
+    "local_access_preserved": true,
+    "peak_demand_is_visualized_not_simulated": true
+  },
+  "bypass_or_bridge": {
+    "final_alignment_drawn": false,
+    "search_band_m": 3500.0,
+    "available_osm_building_constraints": 1038,
+    "existing_bridge_references": 131,
+    "connection_zones": 3,
+    "missing_before_candidate_selection": [
+      "terrain_and_slope",
+      "wadis_and_drainage",
+      "protected_land",
+      "right_of_way",
+      "engineering_cost_assumptions"
+    ]
+  },
+  "residents_and_visitors": {
+    "information_decision_points": 2,
+    "behavior_is_sensitivity_assumption_not_observed_data": true,
+    "residential_shortcuts_allowed": false
+  }
+}

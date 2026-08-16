@@ -1,0 +1,44 @@
+# Both approved Khamis approaches -> Jabal Soudah Viewpoint, reference demand.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/abha_khamis_soudah_demand/corridor_allowed_streets.geojson
+  origins_path: data/raw/abha_khamis_soudah_demand/combined_reference_origins.geojson
+  destinations_path: data/raw/abha_khamis_soudah_demand/al_soudah_destination.geojson
+  origin_weight: demand_weight
+  destination_weight: destination_weight
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+  respect_oneway: true
+
+simulation:
+  search_radius: 75000
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.00003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 0
+  episode_length: 1
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.0
+  w_equity: 0.0
+  w_detour: 0.0
+  w_intervention: 0.0
+  disconnection_penalty: 5.0
+  w_pedestrian_zone: 0.0
+  reward_mode: delta
