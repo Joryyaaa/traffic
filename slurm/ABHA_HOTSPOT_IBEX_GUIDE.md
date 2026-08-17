@@ -42,6 +42,14 @@ The two 2,048-step model tasks run concurrently:
 - Central Al-Muftaha Market;
 - King Abdulaziz Grand Mosque.
 
+After training completes, evaluate both saved agents with the unchanged
+`evaluate.py` and reward-breakdown pipeline:
+
+```bash
+sbatch --export=ALL,CONDA_ENV=snrl \
+  slurm/abha_hotspot_evaluate_trained_array.sbatch
+```
+
 School cluster and Abu Kheyal Park are data-blocked and are not silently run.
 
 ## Monitor
