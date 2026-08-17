@@ -51,7 +51,7 @@ export MKL_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 export TOKENIZERS_PARALLELISM=false
-export MPLCONFIGDIR="${MPLCONFIGDIR:-/ibex/user/$USER/mplconfig}"
+export MPLCONFIGDIR="${MPLCONFIGDIR:-$HOME/.cache/matplotlib}"
 mkdir -p "$MPLCONFIGDIR"
 
 # Mentor-measured optimum: fan the batched action mask over at most 8 workers.
