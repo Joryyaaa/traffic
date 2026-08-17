@@ -25,6 +25,8 @@ class NetworkConfig:
     weight_attribute: str | None = None    # perceived cost column; None -> geometric length
     crs: str = "EPSG:3857"                 # projected CRS, units = meters
     node_snapping_tolerance: float = 0.0
+    # Preserve allowed travel directions for drive-network scenarios.
+    respect_oneway: bool = False
 
     # --- stub backend (for smoke tests / CI, no geopandas needed) ---
     stub_grid_size: int = 6                # 6x6 lattice -> 60 segments

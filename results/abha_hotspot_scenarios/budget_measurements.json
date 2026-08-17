@@ -1,0 +1,173 @@
+{
+  "method": "scripts/evaluate.py zone_builder, one deterministic episode, current reward unchanged",
+  "acceptance_rule": "positive total return (>1e-6) on a data-valid network with positive baseline accessibility; accessibility change is reported separately and is not hidden",
+  "measurements": {
+    "art_street_baseline": {
+      "config": "configs/city_madina_abha_art_street_baseline.yaml",
+      "segments": 57,
+      "max_closures": 0,
+      "min_zone_size": 3,
+      "episode_length": 1,
+      "zone_builder_return": 0.0,
+      "accepted_positive_return": false,
+      "actions": [],
+      "baseline": {
+        "mean_access": 2.3367285322964806,
+        "access_gini": 0.069858689379799,
+        "total_flow": 5.282456319720865,
+        "mean_trip_distance_m": 296.1157516088517,
+        "vkt_proxy_km": 0.6419792775719524
+      },
+      "final": {
+        "mean_access": 2.3367285322964806,
+        "access_gini": 0.069858689379799,
+        "total_flow": 5.282456319720865,
+        "mean_trip_distance_m": 296.1157516088517,
+        "vkt_proxy_km": 0.6419792775719524
+      },
+      "wall_s": 5.5753213000134565,
+      "status": "baseline_no_intervention"
+    },
+    "central_market": {
+      "config": "configs/city_madina_abha_central_market.yaml",
+      "segments": 82,
+      "max_closures": 4,
+      "min_zone_size": 2,
+      "episode_length": 10,
+      "zone_builder_return": 0.8363338733539972,
+      "accepted_positive_return": true,
+      "actions": [
+        21,
+        71,
+        74,
+        73,
+        82,
+        82,
+        82,
+        82,
+        82,
+        82
+      ],
+      "baseline": {
+        "mean_access": 1.3573284653434878,
+        "access_gini": 0.2113595489777056,
+        "total_flow": 11.79529344746927,
+        "mean_trip_distance_m": 554.4104342399212,
+        "vkt_proxy_km": 1.1992927149296213
+      },
+      "final": {
+        "mean_access": 1.2333742353185098,
+        "access_gini": 0.2386965061614854,
+        "total_flow": 11.289958644121182,
+        "mean_trip_distance_m": 579.6189300491271,
+        "vkt_proxy_km": 1.122122697903709
+      },
+      "wall_s": 8.521948100009467,
+      "status": "accepted_positive_return"
+    },
+    "asir_central_hospital": {
+      "config": "configs/city_madina_abha_asir_central_hospital.yaml",
+      "segments": 96,
+      "max_closures": 3,
+      "min_zone_size": 2,
+      "episode_length": 8,
+      "zone_builder_return": -0.41727075014370296,
+      "accepted_positive_return": false,
+      "actions": [
+        24,
+        42,
+        25,
+        96,
+        96,
+        96,
+        96,
+        96
+      ],
+      "baseline": {
+        "mean_access": 0.18685441989457624,
+        "access_gini": 0.043080374604912874,
+        "total_flow": 3.9078433009748172,
+        "mean_trip_distance_m": 560.3837174047984,
+        "vkt_proxy_km": 0.2490302364111289
+      },
+      "final": {
+        "mean_access": 0.0,
+        "access_gini": 0.0,
+        "total_flow": 0.0,
+        "mean_trip_distance_m": 800.0,
+        "vkt_proxy_km": 0.0
+      },
+      "wall_s": 7.067879799986258,
+      "status": "rejected_nonpositive_return"
+    },
+    "king_abdulaziz_grand_mosque": {
+      "config": "configs/city_madina_abha_king_abdulaziz_grand_mosque.yaml",
+      "segments": 87,
+      "max_closures": 2,
+      "min_zone_size": 2,
+      "episode_length": 5,
+      "zone_builder_return": 0.05030143149157354,
+      "accepted_positive_return": true,
+      "actions": [
+        6,
+        7,
+        87,
+        87,
+        87
+      ],
+      "baseline": {
+        "mean_access": 0.8683727202325566,
+        "access_gini": 0.13012278972548175,
+        "total_flow": 52.256616362755345,
+        "mean_trip_distance_m": 550.8913132086235,
+        "vkt_proxy_km": 3.5297826874888627
+      },
+      "final": {
+        "mean_access": 0.2973057385834836,
+        "access_gini": 0.7402823360737008,
+        "total_flow": 16.219462981520678,
+        "mean_trip_distance_m": 718.3501204808208,
+        "vkt_proxy_km": 0.9307673539875938
+      },
+      "wall_s": 4.997230200038757,
+      "status": "accepted_positive_return"
+    },
+    "abu_kheyal_park": {
+      "config": "configs/city_madina_abha_abu_kheyal_park.yaml",
+      "segments": 34,
+      "max_closures": 2,
+      "min_zone_size": 2,
+      "episode_length": 5,
+      "zone_builder_return": 0.95,
+      "accepted_positive_return": false,
+      "actions": [
+        1,
+        0,
+        34,
+        34,
+        34
+      ],
+      "baseline": {
+        "mean_access": 0.0,
+        "access_gini": 0.0,
+        "total_flow": 0.0,
+        "mean_trip_distance_m": 800.0,
+        "vkt_proxy_km": 0.0
+      },
+      "final": {
+        "mean_access": 0.0,
+        "access_gini": 0.0,
+        "total_flow": 0.0,
+        "mean_trip_distance_m": 800.0,
+        "vkt_proxy_km": 0.0
+      },
+      "wall_s": 4.970217099995352,
+      "status": "blocked_zero_baseline_access"
+    },
+    "school_cluster": {
+      "status": "blocked_missing_residential_origins",
+      "config": "configs/city_madina_abha_school_cluster.yaml",
+      "zone_builder_return": null
+    }
+  }
+}

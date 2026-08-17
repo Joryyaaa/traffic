@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"osm_type": "way", "osm_id": 962550374, "type": "hospital", "floor_area": 50.0}, "geometry": {"type": "Point", "coordinates": [42.5243292, 18.1994872]}}]}

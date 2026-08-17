@@ -1,0 +1,45 @@
+# King Abdulaziz Grand Mosque, 2-street temporary post-prayer restriction.
+# Directed return is positive (+0.0503), but accessibility falls substantially;
+# keep Accessibility Gini and accessibility change visible in review.
+seed: 42
+network:
+  backend: madina
+  streets_path: data/raw/abha_hotspots/king_abdulaziz_grand_mosque/streets.geojson
+  origins_path: data/raw/abha_hotspots/king_abdulaziz_grand_mosque/residential.geojson
+  destinations_path: data/raw/abha_hotspots/king_abdulaziz_grand_mosque/amenities.geojson
+  origin_weight: origin_weight
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+  respect_oneway: true
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 2
+  episode_length: 5
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  w_pedestrian_zone: 1.0
+  min_zone_size: 2
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+  reward_mode: delta

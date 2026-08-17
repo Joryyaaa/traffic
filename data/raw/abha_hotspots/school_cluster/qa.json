@@ -1,0 +1,125 @@
+{
+  "scenario": "school_cluster",
+  "selection_key": "school_cluster_location",
+  "center_lat": 18.19905841099252,
+  "center_lon": 42.50706488543333,
+  "requested_radius_m": 300,
+  "selected_radius_m": 250,
+  "radius_attempts": [
+    {
+      "radius_m": 300,
+      "street_segments": 135,
+      "residential_origins": 0,
+      "amenity_destinations": 6
+    },
+    {
+      "radius_m": 325,
+      "street_segments": 146,
+      "residential_origins": 0,
+      "amenity_destinations": 6
+    },
+    {
+      "radius_m": 275,
+      "street_segments": 118,
+      "residential_origins": 0,
+      "amenity_destinations": 5
+    },
+    {
+      "radius_m": 350,
+      "street_segments": 157,
+      "residential_origins": 0,
+      "amenity_destinations": 7
+    },
+    {
+      "radius_m": 250,
+      "street_segments": 94,
+      "residential_origins": 0,
+      "amenity_destinations": 5
+    },
+    {
+      "radius_m": 375,
+      "street_segments": 177,
+      "residential_origins": 0,
+      "amenity_destinations": 7
+    },
+    {
+      "radius_m": 225,
+      "street_segments": 69,
+      "residential_origins": 0,
+      "amenity_destinations": 5
+    },
+    {
+      "radius_m": 400,
+      "street_segments": 190,
+      "residential_origins": 0,
+      "amenity_destinations": 7
+    },
+    {
+      "radius_m": 200,
+      "street_segments": 60,
+      "residential_origins": 0,
+      "amenity_destinations": 5
+    },
+    {
+      "radius_m": 425,
+      "street_segments": 201,
+      "residential_origins": 0,
+      "amenity_destinations": 7
+    },
+    {
+      "radius_m": 175,
+      "street_segments": 35,
+      "residential_origins": 0,
+      "amenity_destinations": 5
+    },
+    {
+      "radius_m": 450,
+      "street_segments": 212,
+      "residential_origins": 0,
+      "amenity_destinations": 7
+    },
+    {
+      "radius_m": 150,
+      "street_segments": 33,
+      "residential_origins": 0,
+      "amenity_destinations": 5
+    },
+    {
+      "radius_m": 475,
+      "street_segments": 224,
+      "residential_origins": 0,
+      "amenity_destinations": 7
+    },
+    {
+      "radius_m": 500,
+      "street_segments": 235,
+      "residential_origins": 0,
+      "amenity_destinations": 8
+    }
+  ],
+  "network_type": "drive",
+  "osm_snapshot": "origin/optimized-abha-jabal-soudah-ibex (mentor-run full-belt snapshot)",
+  "deduplication": "reciprocal OSM rows collapsed by osmid + unordered u/v, matching fetch_osm_data.py",
+  "street_segments": 94,
+  "residential_origins": 0,
+  "amenity_destinations": 5,
+  "minimum_demand_counts": {
+    "origins": 1,
+    "destinations": 1
+  },
+  "runnable": false,
+  "intervention_target_segments": [
+    35,
+    36,
+    38,
+    84
+  ],
+  "target_selection_rule": "nearest non-major OSM drive segments to POI; major through roads remain open",
+  "source": {
+    "lat": 18.19905841099252,
+    "lon": 42.50706488543333,
+    "schools_within_300m": 4,
+    "source": "OpenStreetMap via scripts/fetch_pois.py",
+    "selection_rule": "maximum count of mapped schools within 300 m"
+  }
+}

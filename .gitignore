@@ -8,7 +8,11 @@ env/
 .ipynb_checkpoints/
 
 # Data & outputs (keep small samples only, use DVC/LFS for big files)
-data/raw/
+data/raw/*
+!data/raw/abha_hotspot_pois/
+!data/raw/abha_hotspot_pois/**
+!data/raw/abha_hotspots/
+!data/raw/abha_hotspots/**
 data/interim/
 data/processed/
 Cities/
@@ -32,6 +36,12 @@ wandb/
 
 # osmnx HTTP response cache, created by scripts/fetch_osm_data.py.
 cache/
+
+# Local map-preview cache and QA frame grabs (final MP4s are committed).
+results/abha_hotspot_scenarios/map_preview_videos/_tile_cache/
+results/abha_hotspot_scenarios/map_preview_videos/*_qa.png
+results/abha_hotspot_scenarios/map_preview_videos/*_frame.png
+tmp/park_directed_probe/
 
 # OS / editors
 .DS_Store

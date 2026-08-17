@@ -1,0 +1,47 @@
+# Highest verified OSM school concentration (4 schools within 300 m).
+# DATA-BLOCKED: every crop that contains 30--100 drive segments has zero OSM
+# residential origins. This config preserves the exact current structure for
+# review, but must not be passed to train.py/evaluate.py until a real origin
+# layer is supplied. No synthetic demand is inserted.
+seed: 42
+network:
+  backend: madina
+  streets_path: data/raw/abha_hotspots/school_cluster/streets.geojson
+  origins_path: data/raw/abha_hotspots/school_cluster/residential.geojson
+  destinations_path: data/raw/abha_hotspots/school_cluster/amenities.geojson
+  origin_weight: origin_weight
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+  respect_oneway: true
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 4
+  episode_length: 10
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  w_pedestrian_zone: 1.0
+  min_zone_size: 2
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+  reward_mode: delta
