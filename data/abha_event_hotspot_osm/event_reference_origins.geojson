@@ -1,0 +1,11 @@
+{
+"type": "FeatureCollection",
+"name": "event_reference_origins",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "origin_id": "ref_north", "demand_weight": 1.0, "demand_type": "provisional_reference" }, "geometry": { "type": "Point", "coordinates": [ 42.5060093, 18.2363471 ] } },
+{ "type": "Feature", "properties": { "origin_id": "ref_south", "demand_weight": 1.0, "demand_type": "provisional_reference" }, "geometry": { "type": "Point", "coordinates": [ 42.4773784, 18.1933573 ] } },
+{ "type": "Feature", "properties": { "origin_id": "ref_east", "demand_weight": 1.0, "demand_type": "provisional_reference" }, "geometry": { "type": "Point", "coordinates": [ 42.5191917, 18.2075019 ] } },
+{ "type": "Feature", "properties": { "origin_id": "ref_west", "demand_weight": 1.0, "demand_type": "provisional_reference" }, "geometry": { "type": "Point", "coordinates": [ 42.4728102, 18.2181848 ] } }
+]
+}

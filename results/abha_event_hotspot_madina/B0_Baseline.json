@@ -6,13 +6,13 @@
     {
       "backend": "madina",
       "config": "configs/city_madina_abha_event_b0.yaml",
-      "runtime_seconds": 0.1836969368159771,
-      "n_segments": 90,
-      "mean_accessibility": 0.0,
-      "mean_trip_distance": 3500.0,
-      "unreachable_fraction": 1.0,
-      "n_components": 26,
-      "total_segment_flow": 0.0
+      "runtime_seconds": 4.675943113863468,
+      "n_segments": 7114,
+      "mean_accessibility": 0.04111518180406653,
+      "mean_trip_distance": 4001.798601153082,
+      "unreachable_fraction": 0.0,
+      "n_components": 1,
+      "total_segment_flow": 6.175354666478646
     }
   ]
 }

@@ -14,7 +14,7 @@ CONFIG_MAP={
  "B0":["configs/city_madina_abha_event_b0.yaml"],
  "S1":["configs/city_madina_abha_event_s1.yaml"],
  "S2":["configs/city_madina_abha_event_s2.yaml"],
- "S3":["configs/city_madina_abha_event_s3_entry.yaml","configs/city_madina_abha_event_s3_exit.yaml"],
+ "S3":["configs/city_madina_abha_event_s3.yaml"],
 }
 SCENARIO_NAMES={
  "B0":"B0_Baseline",
@@ -54,7 +54,7 @@ def main():
     runs=[one(x) for x in CONFIG_MAP[args.scenario]]
     payload={"scenario":args.scenario,"scenario_name":SCENARIO_NAMES[args.scenario],"backend":"madina","runs":runs}
     if args.scenario=="S3":
-        payload["note"]="S3 is represented as separate inbound and outbound assignments because the current Madina backend is undirected."
+        payload["note"]="S3 uses one directed assignment with respect_oneway=True."
     (RESULTS/f"{SCENARIO_NAMES[args.scenario]}.json").write_text(json.dumps(payload,indent=2),encoding="utf-8")
     print(json.dumps(payload,indent=2))
 

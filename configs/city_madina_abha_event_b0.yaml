@@ -3,9 +3,9 @@ seed: 42
 
 network:
   backend: madina
-  streets_path: data/abha_event_hotspot/event_baseline_streets.geojson
-  origins_path: data/abha_event_hotspot/event_reference_origins.geojson
-  destinations_path: data/abha_event_hotspot/event_zone_destinations.geojson
+  streets_path: data/abha_event_hotspot_osm/B0_baseline_streets.geojson
+  origins_path: data/abha_event_hotspot_osm/event_reference_origins.geojson
+  destinations_path: data/abha_event_hotspot_osm/event_zone_destination.geojson
   origin_weight: demand_weight
   destination_weight: destination_weight
   weight_attribute: null
@@ -13,7 +13,7 @@ network:
   node_snapping_tolerance: 0.5
 
 simulation:
-  search_radius: 3500
+  search_radius: 6000
   detour_ratio: 1.0
   decay: true
   decay_method: exponent
