@@ -27,6 +27,33 @@ network was built to guarantee.
 `current_full_belt` is context only and is not comparable to the rows above
 it: different origins, different destinations, a 800 m radius against 75 km.
 
+## Coverage against the scenario contracts
+
+`configs/abha_integrated_scenario_contracts.yaml` defines four study scenarios.
+Two were run here; two are excluded by the package itself, not by omission.
+
+| contract scenario | status |
+|---|---|
+| Current Full-Belt Conditions | run, `current_full_belt` |
+| Safe Khamis-Jabal Soudah Viewpoint Corridor | run, both approaches at reference / 1.5x / 2.0x |
+| Khamis-Jabal Soudah Bypass or Bridge | excluded: terrain, drainage, right-of-way and cost inputs do not exist yet, and the contract says not to rank an alignment before they do |
+| Residents and Visitors Travel Experience | excluded: the backend has no traveler-knowledge or signage route-choice model, so the two populations would route identically |
+
+The contract file is a review document and states it "must not trigger a model
+run", so nothing in it was executed directly. Its three `model_decides` fields
+are answered: preferred existing route and resilient alternative were fixed by
+Jory's pre-run geometry search (Route 2120 at 49.657 km, Route 10 at 57.471 km),
+and `selected_khamis_approach` is Route 2120 on every measure above.
+
+All seven `later_evaluation_metrics` are present in every `metrics.json`:
+`mean_access`, `access_gini`, `flow_weighted_vkt_proxy_km`, `flow_entropy`,
+`protected_local_flow_share`, `unreachable_fraction`, `n_components`.
+
+Closure-policy work (`greedy`, `zone_builder_best`) is excluded from this
+package by design. Note from the previous round that `greedy` is not merely
+long but infeasible on a network this size until the `simulate()` leak is
+fixed, see `results/abha_baselines_ibex/PROVENANCE.md`.
+
 ## Runtime
 
 Total compute for the whole package was **under one minute**.
@@ -129,6 +156,16 @@ directed network pays this build once per `simulate()` call.
 - **`access_gini = 0.0000` on the single-route rows is structural**, not a
   finding: one origin cannot be unequal with itself. Only the combined rows
   have a meaningful Gini, and it is computed over two points.
+- **The corridor rows report `n_components = 14`, and that is expected.**
+  `network_connectivity` is one of the seven contract metrics, so the number
+  will be read. The corridor network is a filter of the full belt down to
+  motorway/trunk/primary/secondary/tertiary plus links, which leaves isolated
+  fragments of major road that touch nothing else in the filtered set. It is
+  not a routing failure: both origins reach the viewpoint,
+  `unreachable_fraction` is 0.0 on all three corridor cases, and both
+  accessibilities are positive. The full belt, which is not filtered, reports
+  the expected single component. Read `unreachable_fraction`, not
+  `n_components`, when asking whether the corridor works.
 - **`mean_trip_distance` for derived cases is the plain mean of the two runs'
   own means.** That reproduces a real combined run only while both sources
   contribute the same number of origins, which today is one each. Every other
