@@ -2,10 +2,18 @@
 
 ## Submit
 
-From the repository root on Ibex:
+From the Ibex shell, update the repository and enter the published branch:
 
 ```bash
-conda activate snrl
+cd ~/traffic
+git fetch origin
+git switch codex/abha-hotspot-scenarios
+git pull --ff-only
+```
+
+Then submit from the repository root:
+
+```bash
 mkdir -p logs
 
 BASELINES_JOB=$(sbatch --parsable slurm/abha_hotspot_baselines_array.sbatch)

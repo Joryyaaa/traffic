@@ -8,7 +8,7 @@
 #   cd /home/shiekhmf/Student_Projects/Jory/traffic
 #   sbatch slurm/abha_hotspot_baselines_array.sbatch
 #
-# Each array task runs independently, so the five scenarios run concurrently.
+# Each array task runs independently, so the four scenarios run concurrently.
 # Greedy and zone_builder_best are excluded here and live in the optional job.
 #SBATCH --job-name=snrl-abha-hotspots
 #SBATCH --partition=batch
