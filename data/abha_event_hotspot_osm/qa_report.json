@@ -1,0 +1,23 @@
+{
+  "components": 1,
+  "nodes": 2680,
+  "edges": 3815,
+  "component_node_sizes": [
+    2680
+  ],
+  "required_way_ids": {
+    "closure": 95507294,
+    "entry": 787786457,
+    "exit": 135229579
+  },
+  "required_way_ids_present": {
+    "closure": true,
+    "entry": true,
+    "exit": true
+  },
+  "closed_geometry_rows_after_split": 0,
+  "S3_mode": "single directed run; respect_oneway=True",
+  "B0_segments": 7114,
+  "S1_segments": 7104,
+  "S1_removed_rows": 10
+}

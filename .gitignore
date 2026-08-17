@@ -76,3 +76,9 @@ Thumbs.db
 # configs. The numbers themselves are kept: metrics.json and segment_flows.csv
 # are committed. No results/**/*.geojson has ever been tracked here.
 results/**/segment_flows.geojson
+
+# OSM-built Event Hotspot street layers. 5.3MB, and scripts/build_abha_event_osm_network.py
+# regenerates them in about a minute, validated by the committed qa_report.json.
+# The tiny origin/destination point layers ARE committed: they pin the scenario.
+data/abha_event_hotspot_osm/B0_baseline_streets.geojson
+data/abha_event_hotspot_osm/S1_vehicle_restriction_streets.geojson

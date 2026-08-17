@@ -58,6 +58,47 @@ That is a data-sourcing decision for whoever owns the scenario, so it was not
 made here. `node_snapping_tolerance` was deliberately left at 0.5 m: tuning it
 upward would have produced non-zero numbers that looked like results.
 
+## Update 2026-08-18: the connectivity problem is fixed, one gap remains
+
+Samaher's `scripts/build_abha_event_osm_network.py` sources the network from OSM
+instead of the visualization HTML, exactly as recommended above. Run and
+validated on 2026-08-18:
+
+| | HTML-scraped | OSM-built |
+|---|---:|---:|
+| components | **26** | **1** |
+| B0 segments | 90 | 7,114 |
+| S1 segments | 89 | 7,104 |
+| closed rings remaining | 0 (after the fix below) | 0 (split 6) |
+| required way IDs present | n/a | closure, entry, exit: all 3 |
+
+All four of `scripts/validate_abha_event_osm_network.py`'s checks pass. The
+builder also carries the closed-way split forward and hard-fails on
+`components != 1` with an explicit "do not fix with node snapping", which is the
+right guard.
+
+**What still blocks a rerun: B0, S1 and S2 have no demand layer.** The OSM build
+emits networks and destinations (event zone, parking P) plus an S3 origin and
+destination, but no general origins:
+
+| scenario | network | destination | origins |
+|---|---|---|---|
+| B0 | yes | event zone | **missing** |
+| S1 | yes | event zone | **missing** |
+| S2 | yes | parking P | **missing** |
+| S3 | yes | S3 exit | yes, S3 entry: **complete** |
+
+No configs point at `data/abha_event_hotspot_osm/` yet either. S3 could run
+today as the single directed `respect_oneway` assignment the QA report intends.
+B0, S1 and S2 need an origins decision, and that decision is deliberately not
+made here: the previous demand layer was 3 provisional points placed at a
+bounding box's extremes, and inventing a replacement would manufacture the
+result rather than measure it.
+
+The street layers are gitignored (5.3 MB, regenerate in about a minute from the
+committed script). `qa_report.json` and the point layers are committed, so the
+validation above is reproducible from what is in git.
+
 ## One code bug was found and fixed
 
 The local Madina smoke run the package asks for had never been executed. It
