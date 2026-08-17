@@ -44,7 +44,7 @@ export SNRL_MASK_WORKERS="${SNRL_MASK_WORKERS:-$MASK_CPUS}"
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
 if [ -z "${CONDA_ENV:-}" ]; then
-    for candidate in traffic_env snrl; do
+    for candidate in snrl traffic_env; do
         if conda env list | awk '{print $1}' | grep -qx "$candidate"; then
             CONDA_ENV="$candidate"
             break

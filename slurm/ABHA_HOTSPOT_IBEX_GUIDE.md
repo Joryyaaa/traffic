@@ -11,11 +11,12 @@ git switch codex/abha-hotspot-scenarios
 git pull --ff-only
 ```
 
-Then submit from the repository root:
+Create the Python 3.11 environment once (Madina 0.0.15 uses Python 3.10+
+annotation syntax despite its published metadata), then submit:
 
 ```bash
-conda activate traffic_env
-python -m pip install -i https://pypi.org/simple/ pydeck Rtree psutil ipython ipykernel
+conda env create -f environment.yml
+conda activate snrl
 python -m pip install --no-deps -i https://test.pypi.org/simple/ madina==0.0.15
 python -c "import pydeck, rtree, psutil, IPython, ipykernel; from madina.una.tools import betweenness; print('Madina OK')"
 mkdir -p logs
