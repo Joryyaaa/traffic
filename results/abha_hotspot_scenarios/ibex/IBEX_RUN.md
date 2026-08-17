@@ -1,83 +1,71 @@
-# Ibex run record: Abha named-site scenarios
+# Independent reproduction of the named-site Ibex run
 
-Executed 2026-08-17 from `codex/abha-hotspot-scenarios` at `eb87e85`, exactly as
-`slurm/ABHA_HOTSPOT_IBEX_GUIDE.md` documents. Three arrays, eight tasks, all
-COMPLETED.
+Jory had already run this package (jobs `50634291` / `50634292` / `50634633`,
+recorded in `IBEX_RESULTS.md`). I submitted it again from `eb87e85` without
+having seen her results, on different jobs and different nodes. **Read
+`IBEX_RESULTS.md` for the findings; this file only records that they reproduce
+and adds the sizing for the next run.**
 
-| job | array | tasks | elapsed |
-|---|---|---|---:|
-| 50635294 `snrl-abha-hotspots` | 0-3 | four baseline sites | 5-8 s each |
-| 50635295 `snrl-abha-2048` | 0-1 | two 2,048-step trainings | 1:33 and 1:50 |
-| 50635296 `snrl-abha-eval` | 0-1 | evaluate both saved agents | 16 s and 22 s |
+| | Jory | mine |
+|---|---|---|
+| baselines | `50634291`, 14-17 s | `50635294`, 5-8 s |
+| 2,048-step training | `50634292`, 1:51 / 1:30 | `50635295`, 1:50 / 1:33 |
+| trained evaluation | `50634633`, 22-26 s | `50635296`, 16 s / 22 s |
 
-Total compute across all eight tasks was **under four minutes**. The existing
-`snrl` environment was reused rather than rebuilt from `environment.yml`: it
-already satisfies the guide's import check, and recreating it would have risked
-the environment every other result in this repo was produced with.
+## Every number reproduced exactly
 
-## Baselines, four data-bearing sites
+All 20 policy returns across the four data-bearing sites, both trained-agent
+returns, and all seven reward-breakdown terms match to the printed four decimal
+places:
 
-| Named scenario | segments | random | highest_flow | lowest_flow | zone_builder |
+| Scenario | random | highest_flow | lowest_flow | zone_builder | RL (2,048) |
 |---|---:|---:|---:|---:|---:|
-| Art Street and Al-Muftaha baseline | 57 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
-| Central Al-Muftaha Market | 82 | -0.0500 | -0.4001 | -0.0500 | **+0.8363** |
-| Asir Central Hospital | 96 | -0.0500 | -0.4173 | -0.0500 | -0.4173 |
-| King Abdulaziz Grand Mosque | 87 | -0.1007 | +0.0503 | -0.0500 | +0.0503 |
+| Art Street and Al-Muftaha baseline | 0.0000 | 0.0000 | 0.0000 | 0.0000 | not trained |
+| Asir Central Hospital | -0.0500 | -0.4173 | -0.0500 | -0.4173 | not trained |
+| Central Al-Muftaha Market | -0.0500 | -0.4001 | -0.0500 | **+0.8363** | **-0.1188** |
+| King Abdulaziz Grand Mosque | -0.1007 | +0.0503 | -0.0500 | +0.0503 | **-0.0500** |
 
-Art Street returning 0.0000 across all four policies is the intended behaviour
-of a fully-open comparison case, not a failure. Central Market is the only site
-where the heuristic finds a large positive zone. The hospital's negative
-`zone_builder` matches the "intervention budget is negative" status the package
-already declares for it.
+The fully-open network measurements match too (Art Street accessibility 2.337 /
+Gini 0.070, hospital 0.187 / 0.043, market 1.357 / 0.211, mosque 0.868 / 0.130).
+Training `ep_rew_mean` landed at -0.217 and -0.145.
 
-## The 2,048-step agents lose to the heuristic on both sites
+This matters more than a duplicate run usually would: it shows the directed
+Madina path is deterministic across separate Ibex jobs and nodes, which nothing
+else in this repo had tested. 47 checks trace every figure here to a job log or
+to `sacct`.
 
-| Named scenario | trained agent | zone_builder | training ep_rew_mean |
-|---|---:|---:|---:|
-| Central Al-Muftaha Market | **-0.1188** | +0.8363 | -0.217 |
-| King Abdulaziz Grand Mosque | **-0.0500** | +0.0503 | -0.145 |
+## Sizing the run that would actually test the RL claim
 
-Read this as a **pipeline test that passed, not a training result**. 2,048
-timesteps is roughly 136 episodes of 15 steps. The scale sweep in
-`results/scale_sweep/` needed 100k-300k timesteps before returns became
-meaningful at 26-386 segments, so a 2,048-step run is two orders of magnitude
-short of where learning starts. What it demonstrates is that
-train -> save -> `evaluate.py` -> `reward_breakdown.py` runs end to end on a
-directed drive network and produces a loadable agent and a reward chart.
+Jory's reading is right and worth stating in the strongest form: on the only two
+sites trained, the heuristic beats the agent by **+0.955** and **+0.100**. The
+2,048-step runs establish that train -> save -> `evaluate.py` ->
+`reward_breakdown.py` works end to end on a directed drive network. They
+establish nothing about whether RL beats the heuristic here.
 
-The reward breakdown says the same thing from the other direction. The
-intervention penalty is **42.1%** of Central Market's cumulative return and
-**100.0%** of the mosque's, meaning the agent is paying to close roads and
-earning almost nothing back:
+2,048 timesteps is about 136 episodes of 15 steps.
+`results/scale_sweep/PROVENANCE.md` measured 100k-300k timesteps as where
+returns stop being noise at 26-386 segments, so these runs are two orders of
+magnitude short of where learning starts.
 
-| term | Central Market | Grand Mosque |
-|---|---:|---:|
-| accessibility | -0.0383 (32.3%) | 0.0000 |
-| flow_concentration | -0.0205 (17.2%) | 0.0000 |
-| equity | -0.0057 (4.8%) | 0.0000 |
-| detour | -0.0043 (3.6%) | 0.0000 |
-| intervention | -0.0500 (42.1%) | -0.0500 (100.0%) |
-| disconnection | 0.0000 | 0.0000 |
+From the pace measured here, 2,048 steps in 1:50 on 82 segments:
 
-At the mosque every term except intervention is exactly 0.0000, so that agent
-closed roads and moved no metric at all. Its -0.0500 is the intervention cost
-and nothing else, the same structural signature as `lowest_flow` at -0.0500
-here and in `results/abha_baselines_ibex/PROVENANCE.md`.
+| timesteps | projected per site | fits in one batch job |
+|---:|---:|---|
+| 100,000 | ~1.5 h | yes |
+| 300,000 | ~4.5 h | yes |
 
-## What this run does and does not establish
+Both sites could run as a two-task array. That is the next submission worth
+making, and it is cheap. The projection assumes per-step cost stays flat as the
+policy starts closing more roads; `at_budget` short-circuits the mask once the
+closure budget is spent, so if anything it should get cheaper per step, not
+dearer.
 
-It establishes that the RL path works on these networks and that the two
-blocked sites stayed blocked. It does **not** establish that RL beats the
-heuristic on any Abha site. On the only two sites trained, the heuristic wins
-by +0.955 and +0.100.
+## One caveat on the reward breakdown
 
-The obvious next step is the one the package deliberately did not take: train
-at 100k-300k timesteps, the range `results/scale_sweep/PROVENANCE.md` measured
-as the point where returns stop being noise. At the pace measured here, 2,048
-steps in 1:50 on 82 segments, 100k steps projects to roughly **1.5 hours** per
-site and 300k to roughly **4.5 hours**, comfortably inside a single batch job.
-That is the run worth submitting next, and it is cheap.
-
-Jory's decision to block School cluster (no origins) and Abu Kheyal Park (zero
-baseline accessibility) rather than fabricate demand is the right call and is
-why the four sites above can be read at face value.
+At the mosque every reward term except intervention is exactly 0.0000, so that
+agent closed roads and moved no metric at all; its -0.0500 is the intervention
+cost and nothing else. That is the same structural signature as `lowest_flow` at
+-0.0500 here, in `results/scale_sweep/` at 186 and 386 segments, and in
+`results/abha_baselines_ibex/PROVENANCE.md`. It is worth checking whether the
+mosque crop has enough reachable structure for any closure to register before
+spending 4.5 h training on it.
