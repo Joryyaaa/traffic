@@ -55,3 +55,10 @@ Thumbs.db
 .vscode/
 .idea/
 .mplconfig/
+
+# Per-segment flow geometry from the scenario runners. This is the input
+# streets layer plus two computed columns, it is 19.5MB for one Jabal Soudah
+# package against a 23MB repo, and it regenerates in 13s from the committed
+# configs. The numbers themselves are kept: metrics.json and segment_flows.csv
+# are committed. No results/**/*.geojson has ever been tracked here.
+results/**/segment_flows.geojson

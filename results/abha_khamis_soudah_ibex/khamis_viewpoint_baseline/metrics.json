@@ -1,0 +1,69 @@
+{
+  "street_segments": 3123,
+  "destinations": 1,
+  "search_radius_m": 75000,
+  "detour_ratio": 1.0,
+  "decay_beta_per_m": 3e-05,
+  "respect_oneway": true,
+  "scenario": "khamis_viewpoint_baseline",
+  "config": "configs/city_madina_abha_khamis_soudah_combined_reference.yaml",
+  "origins": 2,
+  "demand_scope": "khamis_to_jabal_soudah_viewpoint",
+  "execution_method": "exact_linear_derivation",
+  "mean_access": 0.20941583176544168,
+  "access_gini": 0.044591462180934904,
+  "total_flow": 94.43425105635413,
+  "flow_entropy": 0.7343047479702172,
+  "mean_trip_distance": 52247.53581008814,
+  "n_components": 14.0,
+  "unreachable_fraction": 0.0,
+  "setup_seconds": 0.0,
+  "simulation_seconds": 0.0,
+  "source_simulation_seconds": 2.278343935497105,
+  "flow_weighted_vkt_proxy_km": 21.88065710531842,
+  "protected_local_flow": 0.0,
+  "protected_local_flow_share": 0.0,
+  "major_road_flow": 81.04910869275605,
+  "major_road_flow_share": 0.8582596651758224,
+  "positive_flow_segments": 389,
+  "approved_destination_access_segment_ids": [
+    129
+  ],
+  "protected_local_highway_classes": [
+    "living_street",
+    "residential",
+    "service",
+    "unclassified"
+  ],
+  "origin_results": [
+    {
+      "origin_index": 0,
+      "endpoint_key": "route10",
+      "name": "Khamis approach candidate: Route 10",
+      "demand_weight": 1.0,
+      "accessibility": 0.19073951548092624,
+      "reachable": true
+    },
+    {
+      "origin_index": 1,
+      "endpoint_key": "route2120",
+      "name": "Khamis approach candidate: Route 2120",
+      "demand_weight": 1.0,
+      "accessibility": 0.22809214804995712,
+      "reachable": true
+    }
+  ],
+  "derived_from": [
+    "route10_reference",
+    "route2120_reference"
+  ],
+  "demand_multiplier": 1.0,
+  "derived_without_new_madina_run": true,
+  "derivation_basis": "Exact linear superposition of static Madina origin flows; no capacity-dependent congestion or queue feedback is enabled.",
+  "interpretation_notes": [
+    "Demand weights are sensitivity units, not observed vehicle counts.",
+    "VKT is a flow-weighted network-distance proxy, not observed traffic VKT.",
+    "Demand multipliers scale assigned load; this Madina run does not model queues or capacity-dependent congestion.",
+    "City accessibility demand and Khamis-Al Soudah corridor demand are intentionally evaluated separately."
+  ]
+}

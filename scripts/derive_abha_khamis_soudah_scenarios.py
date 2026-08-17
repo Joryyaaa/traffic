@@ -112,6 +112,21 @@ def main() -> None:
     if segment_ids_a != segment_ids_b:
         raise ValueError("Source segment ordering differs")
 
+    # mean_trip_distance below is the plain mean of the two runs' own means.
+    # The backend's mean is unweighted over origins, so averaging the averages
+    # only reproduces a real combined run while both sources contribute the
+    # same number of origins -- today one each. Every other derived metric is
+    # exact for any origin count, so an unequal split would leave this single
+    # field quietly wrong in an otherwise-correct file. Refuse instead.
+    origin_counts = [len(rows) for rows in source_origins]
+    if len(set(origin_counts)) != 1:
+        raise ValueError(
+            "Source runs contribute unequal origin counts "
+            f"({dict(zip(SOURCE_CASES, origin_counts))}); mean_trip_distance "
+            "cannot be derived by averaging the per-run means. Weight it by "
+            "origin count, or run the combined case through Madina directly."
+        )
+
     base_flow = np.asarray(
         [float(a["madina_flow"]) + float(b["madina_flow"])
          for a, b in zip(*source_segments)],
