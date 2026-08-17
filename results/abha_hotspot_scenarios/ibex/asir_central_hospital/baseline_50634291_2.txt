@@ -1,0 +1,3 @@
+scenario                                  segments  mean_access    gini  flow_entropy  total_flow  trip_dist_m
+--------------------------------------------------------------------------------------------------------------
+city_madina_abha_asir_central_hospital          96        0.187   0.043         0.522         3.9        560.4
