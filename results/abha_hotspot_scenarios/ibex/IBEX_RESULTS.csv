@@ -1,0 +1,5 @@
+scenario,segments,mean_access,access_gini,flow_entropy,total_flow,mean_trip_distance_m,random_return,highest_flow_return,lowest_flow_return,zone_builder_return,rl_2048_return
+art_street_and_al_muftaha_baseline,57,2.337,0.070,0.536,5.3,296.1,0.0000,0.0000,0.0000,0.0000,
+asir_central_hospital,96,0.187,0.043,0.522,3.9,560.4,-0.0500,-0.4173,-0.0500,-0.4173,
+central_market,82,1.357,0.211,0.650,11.8,554.4,-0.0500,-0.4001,-0.0500,0.8363,-0.1188
+king_abdulaziz_grand_mosque,87,0.868,0.130,0.706,52.3,550.9,-0.1007,0.0503,-0.0500,0.0503,-0.0500

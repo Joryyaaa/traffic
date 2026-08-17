@@ -1,0 +1,19 @@
+step    accessibil  flow_conce      equity  pedestrian      detour  interventi  disconnect     total
+   0        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0250      0.0000   -0.0250
+   1        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0250      0.0000   -0.0250
+   2        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+   3        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+   4        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+
+cumulative return: -0.0500
+
+contribution of each term to the cumulative return:
+  accessibility           0.0000   ( -0.0% of total)
+  flow_concentration      0.0000   ( -0.0% of total)
+  equity                  0.0000   ( -0.0% of total)
+  pedestrian_zone         0.0000   ( -0.0% of total)
+  detour                  0.0000   ( -0.0% of total)
+  intervention           -0.0500   (100.0% of total)
+  disconnection           0.0000   ( -0.0% of total)
+
+Saved chart -> results/abha_hotspot_scenarios/ibex/king_abdulaziz_grand_mosque/trained_reward_breakdown_50634633_1.png

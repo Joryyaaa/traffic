@@ -1,0 +1,10 @@
+config   : configs/city_madina_abha_art_street_baseline.yaml
+segments : 57
+episodes : 1
+policies : random, highest_flow, lowest_flow, zone_builder
+
+policy              mean return      std     wall_s
+random                   0.0000   0.0000        0.0
+highest_flow             0.0000   0.0000        0.0
+lowest_flow              0.0000   0.0000        0.0
+zone_builder             0.0000   0.0000        0.0
