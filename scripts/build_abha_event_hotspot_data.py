@@ -38,12 +38,52 @@ exit_road=object_const(text,"exitRoad")
 Z=point_const(text,"Z")
 P=point_const(text,"P")
 
+def split_closed_rings(features):
+    """Split closed ways so Madina can hold them.
+
+    A LineString whose first coordinate equals its last is one closed way. Madina
+    builds light_graph purely from edge start/end pairs, so a closed way becomes a
+    self-loop, its Network drops it, and the endpoint it left behind is then a
+    street node belonging to no edge -- at which point madina's own create_graph()
+    raises KeyError on nodes[idx]['type']. That is the crash this map hit: 88
+    input segments produced 87 edges and orphaned node 27, an unnamed trunk ring
+    of 29 points at (42.488569, 18.220095).
+
+    Three arcs rather than two: two arcs share both endpoints, and light_graph is
+    a plain nx.Graph, so the second would silently overwrite the first and only
+    one arc's weight would survive. Three gives three distinct node pairs. The
+    coordinates are re-emitted unchanged, so the geometry is identical and the
+    id is preserved -- the S1 closure filter matches on properties.id and must
+    keep treating the ring as one road.
+    """
+    out=[]
+    for f in features:
+        g=f.get("geometry") or {}
+        c=g.get("coordinates")
+        if (g.get("type")!="LineString" or not c or len(c)<4
+                or tuple(c[0])!=tuple(c[-1])):
+            out.append(f); continue
+        n=len(c)-1  # the closing point repeats index 0
+        cuts=[0, n//3, (2*n)//3, n]
+        for a,b in zip(cuts, cuts[1:]):
+            arc=c[a:b+1]
+            if len(arc)<2:
+                continue
+            props=dict(f.get("properties") or {})
+            props["snrl_ring_split"]=True
+            out.append({"type":"Feature","properties":props,
+                        "geometry":{"type":"LineString","coordinates":arc}})
+    return out
+
+
 seen=set(); feats=[]
 for f in roads["features"]+king["features"]:
     fid=f.get("properties",{}).get("id")
     key=("id",fid) if fid is not None else ("geom",json.dumps(f.get("geometry"),sort_keys=True))
     if key not in seen:
         seen.add(key); feats.append(f)
+
+feats=split_closed_rings(feats)
 
 baseline={"type":"FeatureCollection","features":feats}
 closure_ids={f.get("properties",{}).get("id") for f in closure["features"]}
