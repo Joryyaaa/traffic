@@ -18,6 +18,7 @@ Reference API (City-Form-Lab/madina):
 from __future__ import annotations
 
 import contextlib
+import weakref
 from functools import lru_cache
 from pathlib import Path
 from types import MethodType
@@ -90,26 +91,59 @@ def _read_geojson(path):
     return gpd.GeoDataFrame(props, geometry=geoms, crs=crs)
 
 
+# Dropping "the edges that belong to one street chain" used to mean scanning
+# every edge in the graph, once per chain. That made building a directed network
+# O(E^2): the 17,185-segment full belt paid 17,251 rebuilds against a graph
+# growing to 30,344 edges, each rebuild materialising the whole edge list as
+# tuples, and it paid the same scan twice more per origin inside madina's
+# betweenness loop (insert, remove). Measured on the full belt: _build_zonal
+# 149.9s, of which _rebuild_directed_edge was 147.2s.
+#
+# Keeping edge_id -> [(u, v)] per graph makes a rebuild touch only its own chain.
+#
+# A WeakKeyDictionary rather than graph.graph["..."]: networkx's Graph.copy()
+# shallow-updates the graph attribute dict, so an index stored there would be
+# shared with the copy and then corrupted by it -- the same trap the existing
+# code sidesteps by reassigning d_graph's "added_nodes". Keyed on the graph
+# object, a copy is simply a different key and builds its own index on demand.
+_EDGE_INDEX = weakref.WeakKeyDictionary()
+
+
+def _edge_index(graph):
+    """edge_id -> [(u, v), ...] for the edges that chain currently owns."""
+    index = _EDGE_INDEX.get(graph)
+    if index is None:
+        index = {}
+        for u, v, data in graph.edges(data=True):
+            index.setdefault(data.get("id"), []).append((u, v))
+        _EDGE_INDEX[graph] = index
+    return index
+
+
 def _rebuild_directed_edge(network, graph, edge_id: int) -> None:
     """Rebuild one street chain while preserving its allowed directions."""
     edge_id = int(edge_id)
-    edge = network.edges.loc[edge_id]
-    start, end = int(edge["start"]), int(edge["end"])
+    start, end, total = network._snrl_edge_ends[edge_id]
     forward_cost, reverse_cost = network._snrl_direction_costs[edge_id]
 
-    for u, v, data in list(graph.edges(data=True)):
-        if data.get("id") == edge_id:
+    index = _edge_index(graph)
+    for u, v in index.pop(edge_id, ()):
+        data = graph.get_edge_data(u, v)
+        # Two chains can collapse onto one (u, v) pair, in which case the later
+        # add_edge overwrote the earlier chain's id. Only drop edges still ours,
+        # which is exactly what the full scan on data["id"] used to do.
+        if data is not None and data.get("id") == edge_id:
             graph.remove_edge(u, v)
+    owned = index.setdefault(edge_id, [])
 
-    added = set(graph.graph.get("added_nodes", []))
-    nodes = network.nodes
+    nearest_edge = network._snrl_nearest_edge
+    weight_to_start = network._snrl_weight_to_start
     inserted = [
         int(idx)
-        for idx in added
-        if int(nodes.at[idx, "nearest_edge_id"]) == edge_id
+        for idx in set(graph.graph.get("added_nodes", []))
+        if nearest_edge[idx] == edge_id
     ]
-    total = max(float(edge["weight"]), 1e-12)
-    positions = {idx: float(nodes.at[idx, "weight_to_start"]) / total for idx in inserted}
+    positions = {idx: weight_to_start[idx] / total for idx in inserted}
     inserted.sort(key=positions.__getitem__)
     chain = [start, *inserted, end]
     fractions = [0.0, *(positions[idx] for idx in inserted), 1.0]
@@ -119,9 +153,9 @@ def _rebuild_directed_edge(network, graph, edge_id: int) -> None:
         if reverse:
             pairs = [(v, u, left, right) for u, v, left, right in reversed(pairs)]
         for u, v, left, right in pairs:
-            graph.add_edge(
-                int(u), int(v), weight=max((right - left) * cost, 0.0), id=edge_id
-            )
+            u, v = int(u), int(v)
+            graph.add_edge(u, v, weight=max((right - left) * cost, 0.0), id=edge_id)
+            owned.append((u, v))
 
     if forward_cost is not None:
         add_chain(float(forward_cost), reverse=False)
@@ -460,6 +494,26 @@ class MadinaBackend(FlowBackend):
         network._snrl_direction_costs = self._direction_costs(
             network, streets, weight_attribute
         )
+        # Column snapshots for the rebuild hot path. Every rebuild reads one
+        # edge row and one field per candidate inserted node; pandas .loc/.at
+        # scalar access costs ~20x a dict lookup and there are tens of
+        # thousands of rebuilds. Neither frame gains rows once the graph
+        # exists -- node and destination insertion is finished by this point --
+        # so these cannot go stale.
+        edges = network.edges
+        network._snrl_edge_ends = {
+            int(i): (int(s), int(e), max(float(w), 1e-12))
+            for i, s, e, w in zip(
+                edges.index, edges["start"], edges["end"], edges["weight"]
+            )
+        }
+        nodes = network.nodes
+        network._snrl_nearest_edge = {
+            int(i): int(e) for i, e in zip(nodes.index, nodes["nearest_edge_id"])
+        }
+        network._snrl_weight_to_start = {
+            int(i): float(w) for i, w in zip(nodes.index, nodes["weight_to_start"])
+        }
         network.add_node_to_graph = MethodType(_directed_add_node_to_graph, network)
         network.remove_node_to_graph = MethodType(_directed_remove_node_to_graph, network)
 

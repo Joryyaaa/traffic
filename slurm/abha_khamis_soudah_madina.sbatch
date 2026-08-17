@@ -6,7 +6,7 @@
 
 #SBATCH --job-name=abha-ks-corridor
 #SBATCH --partition=batch
-#SBATCH --time=00:10:00
+#SBATCH --time=00:30:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -18,7 +18,6 @@
 set -euo pipefail
 
 PROJECT_DIR="${PROJECT_DIR:-$SLURM_SUBMIT_DIR}"
-CONDA_ENV="${CONDA_ENV:-traffic_env}"
 OUTROOT="${OUTROOT:-results/abha_khamis_soudah_ibex}"
 
 SCENARIOS=(
@@ -45,7 +44,18 @@ export OPENBLAS_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate "$CONDA_ENV"
+# Jory's local env is traffic_env, the Ibex env is snrl. Take whichever exists
+# so one script runs in both places, and fail loudly rather than half-activate.
+if [ -z "${CONDA_ENV:-}" ]; then
+    for candidate in traffic_env snrl; do
+        if conda env list | awk '{print $1}' | grep -qx "$candidate"; then
+            CONDA_ENV="$candidate"
+            break
+        fi
+    done
+fi
+conda activate "${CONDA_ENV:?no traffic_env or snrl conda env found}"
+echo "conda env : $CONDA_ENV"
 
 python scripts/run_abha_khamis_soudah_scenario.py \
   --config "$CONFIG" \
