@@ -1,0 +1,53 @@
+{
+  "scenario": "route10_reference",
+  "config": "configs/city_madina_abha_khamis_soudah_route10.yaml",
+  "street_segments": 3123,
+  "origins": 1,
+  "destinations": 1,
+  "search_radius_m": 75000,
+  "detour_ratio": 1.0,
+  "decay_beta_per_m": 3e-05,
+  "respect_oneway": true,
+  "demand_scope": "khamis_to_jabal_soudah_viewpoint",
+  "execution_method": "madina_simulation",
+  "mean_access": 0.19073951548092624,
+  "access_gini": 0.0,
+  "total_flow": 55.88667803591138,
+  "flow_entropy": 0.7059140951985635,
+  "mean_trip_distance": 55228.21916805159,
+  "n_components": 14.0,
+  "unreachable_fraction": 0.0,
+  "setup_seconds": 7.560608755797148,
+  "simulation_seconds": 1.4519708110019565,
+  "flow_weighted_vkt_proxy_km": 10.554229222329083,
+  "protected_local_flow": 0.0,
+  "protected_local_flow_share": 0.0,
+  "major_road_flow": 43.870088560613276,
+  "major_road_flow_share": 0.7849829351535881,
+  "positive_flow_segments": 293,
+  "approved_destination_access_segment_ids": [
+    129
+  ],
+  "protected_local_highway_classes": [
+    "living_street",
+    "residential",
+    "service",
+    "unclassified"
+  ],
+  "origin_results": [
+    {
+      "origin_index": 0,
+      "endpoint_key": "route10",
+      "name": "Khamis approach candidate: Route 10",
+      "demand_weight": 1.0,
+      "accessibility": 0.19073951548092624,
+      "reachable": true
+    }
+  ],
+  "interpretation_notes": [
+    "Demand weights are sensitivity units, not observed vehicle counts.",
+    "VKT is a flow-weighted network-distance proxy, not observed traffic VKT.",
+    "Demand multipliers scale assigned load; this Madina run does not model queues or capacity-dependent congestion.",
+    "City accessibility demand and Khamis-Al Soudah corridor demand are intentionally evaluated separately."
+  ]
+}

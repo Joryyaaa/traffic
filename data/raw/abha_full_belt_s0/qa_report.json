@@ -1,0 +1,82 @@
+{
+  "generated_from": "mentor-approved Abha_Belt_Validation_Map OSM snapshot",
+  "source_directory": "tmp\\abha_full_ring",
+  "crs": "EPSG:32638",
+  "study_buffer_m": 1000.0,
+  "streets": {
+    "candidate_osm_node_pairs": 95042,
+    "missing_node_pairs": 0,
+    "selected_raw_node_pairs": 42159,
+    "topology_preserving_compression_ratio": 2.424324324324324,
+    "selected_segments_before_component_filter": 17390,
+    "undirected_components_before_filter": 66,
+    "component_node_sizes_before_filter": [
+      12610,
+      37,
+      16,
+      15,
+      13,
+      10,
+      10,
+      8,
+      7,
+      6,
+      4,
+      4,
+      4,
+      4,
+      4,
+      3,
+      3,
+      2,
+      2,
+      2
+    ],
+    "segments_dropped_outside_largest_component": 205,
+    "selected_segments": 17185,
+    "street_nodes": 12610,
+    "undirected_components": 1,
+    "directed_weak_components": 1,
+    "directed_strong_components": 230,
+    "oneway_segments": 3694,
+    "roundabout_segments": 157,
+    "duplicate_directed_rows": 0,
+    "self_loops": 0,
+    "network_length_km": 1600.3586046199152
+  },
+  "belt": {
+    "belt_osm_ways": 25,
+    "belt_components": 1,
+    "belt_nodes": 393,
+    "included_roundabout_ids": [
+      683599895
+    ],
+    "connected_roundabout_683599895": true
+  },
+  "origins": {
+    "count": 740,
+    "median_m": 16.800718809531723,
+    "p95_m": 51.910972615740974,
+    "max_m": 416.1876552212354,
+    "over_500m": 0
+  },
+  "destinations": {
+    "count": 275,
+    "median_m": 19.49152564310282,
+    "p95_m": 65.71159623482735,
+    "max_m": 347.3256324089423,
+    "over_500m": 0
+  },
+  "checks": {
+    "street network is one undirected component": true,
+    "King Abdulaziz belt is connected": true,
+    "mentor-identified roundabout is included": true,
+    "no duplicate directed street rows": true,
+    "no self-loop street rows": true,
+    "origins exist": true,
+    "destinations exist": true,
+    "all origins snap within 500 m": true,
+    "all destinations snap within 500 m": true
+  },
+  "passed": true
+}

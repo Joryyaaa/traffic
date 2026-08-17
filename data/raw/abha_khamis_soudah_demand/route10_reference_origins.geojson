@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          42.728719,
+          18.312801
+        ]
+      },
+      "properties": {
+        "endpoint_key": "route10",
+        "name": "Khamis approach candidate: Route 10",
+        "network_node": 1485191370,
+        "trip_role": "origin",
+        "demand_weight": 1.0,
+        "weight_is_observed_count": false
+      }
+    }
+  ]
+}

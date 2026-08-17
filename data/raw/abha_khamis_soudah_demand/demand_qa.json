@@ -1,0 +1,83 @@
+{
+  "source": "data/raw/abha_full_belt_route_scenarios/scenario_endpoints.geojson",
+  "network_source": "data/raw/abha_full_belt_s0/streets.geojson",
+  "full_network_segments": 17185,
+  "corridor_allowed_segments": 3123,
+  "allowed_highway_classes": [
+    "motorway",
+    "motorway_link",
+    "primary",
+    "primary_link",
+    "secondary",
+    "secondary_link",
+    "tertiary",
+    "tertiary_link",
+    "trunk",
+    "trunk_link"
+  ],
+  "destination_access_segment_ids": [
+    129
+  ],
+  "destination_access_is_only_local_road_exception": true,
+  "excluded_from_external_through_traffic": [
+    "residential",
+    "service",
+    "living_street",
+    "unclassified"
+  ],
+  "directed_endpoint_connectivity": {
+    "route10": true,
+    "route2120": true
+  },
+  "infeasibility_rule_applied": "Disconnected approaches remain in the simulation as unreachable; no residential shortcut or invented connector is added.",
+  "destination": "Jabal Soudah Viewpoint",
+  "destination_osm_node": 7523059174,
+  "destination_count": 1,
+  "demand_units": "unitless sensitivity weights; not observed vehicles",
+  "od_separation_rule": "Corridor-only origins and destination are kept separate from the city accessibility layers to prevent unintended all-to-all OD pairs.",
+  "origin_layers": {
+    "route10_reference_origins.geojson": {
+      "origin_keys": [
+        "route10"
+      ],
+      "origin_count": 1,
+      "weight_per_origin": 1.0,
+      "total_origin_weight": 1.0
+    },
+    "route2120_reference_origins.geojson": {
+      "origin_keys": [
+        "route2120"
+      ],
+      "origin_count": 1,
+      "weight_per_origin": 1.0,
+      "total_origin_weight": 1.0
+    },
+    "combined_reference_origins.geojson": {
+      "origin_keys": [
+        "route10",
+        "route2120"
+      ],
+      "origin_count": 2,
+      "weight_per_origin": 1.0,
+      "total_origin_weight": 2.0
+    },
+    "combined_peak_1_5_origins.geojson": {
+      "origin_keys": [
+        "route10",
+        "route2120"
+      ],
+      "origin_count": 2,
+      "weight_per_origin": 1.5,
+      "total_origin_weight": 3.0
+    },
+    "combined_peak_2_0_origins.geojson": {
+      "origin_keys": [
+        "route10",
+        "route2120"
+      ],
+      "origin_count": 2,
+      "weight_per_origin": 2.0,
+      "total_origin_weight": 4.0
+    }
+  }
+}

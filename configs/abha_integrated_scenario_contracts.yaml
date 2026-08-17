@@ -1,0 +1,88 @@
+# Integrated Abha scenario definitions for geometry/demand review.
+# These are not Madina/RL environment configs and must not trigger a model run.
+
+study: Abha full belt, Khamis Mushait approaches, and Jabal Soudah Viewpoint
+baseline: Current Full-Belt Conditions
+approval_stage: visualization_only_before_simulation
+
+shared_scope:
+  origins:
+    - King Fahd / Route 10 Khamis-side approach
+    - King Abdullah / Route 2120 Khamis-side approach
+  destination: Jabal Soudah Viewpoint via Al Soudah Road / Route 214
+  neighborhood_rule: >-
+    External through traffic must not use residential or service streets as a
+    shortcut. Local, service, and emergency access remains available.
+  later_evaluation_metrics:
+    - mean_accessibility
+    - accessibility_gini
+    - vkt
+    - network_flow_distribution
+    - neighborhood_through_traffic
+    - unreachable_trips
+    - network_connectivity
+
+scenarios:
+  Current Full-Belt Conditions:
+    objective: Keep the approved network unchanged as the comparison baseline.
+    allowed_changes: []
+
+  Safe Khamis-Jabal Soudah Viewpoint Corridor:
+    objective: >-
+      Select a preferred and resilient existing major-road corridor from the
+      Khamis Mushait approaches to Al Soudah under normal and peak demand while
+      protecting residential neighborhoods from external through traffic.
+    model_decides:
+      - preferred_existing_route
+      - resilient_existing_alternative
+      - selected_khamis_approach
+    demand_tests_after_approval:
+      - reference_demand
+      - sensitivity_multiplier_1_5
+      - sensitivity_multiplier_2_0
+    forbidden_changes:
+      - add_roads
+      - remove_or_close_roads
+      - change_road_directions
+      - residential_or_service_shortcuts
+    infeasibility_rule: >-
+      Report infeasible instead of forcing a disconnected route or a
+      residential through-traffic shortcut.
+
+  Khamis-Jabal Soudah Bypass or Bridge:
+    objective: >-
+      If existing roads are insufficient, identify realistic preliminary road,
+      bridge, or combined corridors that reduce dependence on the central belt.
+    feasibility_inputs:
+      - existing_major_road_junctions
+      - terrain_and_slope_required_before_candidate_selection
+      - osm_buildings_and_residential_areas
+      - wadis_and_drainage_required_before_candidate_selection
+      - protected_land_and_right_of_way_required_before_candidate_selection
+      - approximate_engineering_complexity_and_cost
+    candidate_constraints:
+      - connect_to_existing_major_road_junctions_at_both_ends
+      - continuous_and_potentially_constructible_alignment
+      - protect_residential_neighborhoods
+      - identify_bridge_tunnel_earthwork_or_land_requirements
+      - reject_when_essential_engineering_data_are_missing
+    current_preview: >-
+      Show the search area, existing network connections, available building
+      constraints, and missing engineering inputs only. Do not draw or rank a
+      final alignment before terrain, drainage, and right-of-way data exist.
+
+  Residents and Visitors Travel Experience:
+    objective: >-
+      Compare route-choice assumptions for residents and visitors under normal
+      and peak demand, then test whether better directional and incident
+      information distributes traffic without sending it into neighborhoods.
+    behavior_assumptions_for_sensitivity_only:
+      residents: broader knowledge of validated major-road alternatives
+      visitors: initial reliance on the most visible or commonly signed route
+    information_tests_after_approval:
+      - current_information
+      - improved_directional_signage
+      - congestion_or_incident_information_before_the_belt
+    rule: >-
+      Traveler proportions and knowledge levels are sensitivity assumptions,
+      not observed facts, until survey or navigation data are supplied.

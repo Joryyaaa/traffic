@@ -275,3 +275,137 @@ def test_closing_a_duplicated_street_row_has_no_effect(tmp_path):
     # Without it, the same closure genuinely cuts off access.
     assert not np.allclose(open_fixed.origin_access, after_fixed.origin_access)
     assert after_fixed.origin_access[0] == pytest.approx(0.0)
+
+
+def _directional_backend(tmp_path, reverse: bool) -> MadinaBackend:
+    """Two-block one-way street, optionally pointing away from the destination."""
+    if reverse:
+        lines = [
+            LineString([(100, 0), (0, 0)]),
+            LineString([(200, 0), (100, 0)]),
+        ]
+        u, v = [1, 2], [0, 1]
+    else:
+        lines = [
+            LineString([(0, 0), (100, 0)]),
+            LineString([(100, 0), (200, 0)]),
+        ]
+        u, v = [0, 1], [1, 2]
+
+    streets = gpd.GeoDataFrame(
+        {"u": u, "v": v, "oneway": [True, True], "geometry": lines},
+        crs="EPSG:32638",
+    )
+    origins = gpd.GeoDataFrame(
+        {"geometry": [Point(10, 0)], "residents": [50.0]}, crs="EPSG:32638"
+    )
+    destinations = gpd.GeoDataFrame(
+        {"geometry": [Point(190, 0)], "floor_area": [100.0]}, crs="EPSG:32638"
+    )
+    streets.to_file(tmp_path / "streets.geojson", driver="GeoJSON")
+    origins.to_file(tmp_path / "origins.geojson", driver="GeoJSON")
+    destinations.to_file(tmp_path / "destinations.geojson", driver="GeoJSON")
+
+    return MadinaBackend(
+        EnvConfig(
+            network=NetworkConfig(
+                backend="madina",
+                streets_path=str(tmp_path / "streets.geojson"),
+                origins_path=str(tmp_path / "origins.geojson"),
+                destinations_path=str(tmp_path / "destinations.geojson"),
+                origin_weight="residents",
+                destination_weight="floor_area",
+                crs="EPSG:32638",
+                node_snapping_tolerance=0.5,
+                respect_oneway=True,
+            ),
+            simulation=SimulationConfig(
+                search_radius=1000,
+                detour_ratio=1.0,
+                decay=False,
+                closest_destination=False,
+                turn_penalty=False,
+                num_cores=1,
+            ),
+            action=ActionConfig(closure_mode="penalize", forbid_disconnection=False),
+            reward=RewardConfig(),
+        )
+    )
+
+
+def test_directed_routing_respects_oneway_orientation(tmp_path):
+    forward_dir = tmp_path / "forward"
+    reverse_dir = tmp_path / "reverse"
+    forward_dir.mkdir()
+    reverse_dir.mkdir()
+
+    forward = _directional_backend(forward_dir, reverse=False)
+    reverse = _directional_backend(reverse_dir, reverse=True)
+    forward_result = forward.simulate(np.zeros(forward.n_segments, dtype=bool))
+    reverse_result = reverse.simulate(np.zeros(reverse.n_segments, dtype=bool))
+
+    assert forward_result.origin_access[0] > 0
+    assert forward_result.mean_trip_distance == pytest.approx(180.0, abs=1e-6)
+    assert reverse_result.origin_access[0] == pytest.approx(0.0)
+    assert reverse_result.mean_trip_distance == pytest.approx(1000.0, abs=1e-6)
+
+
+def test_directed_closure_only_penalizes_selected_direction(tmp_path):
+    streets = gpd.GeoDataFrame(
+        {
+            "u": [0, 1],
+            "v": [1, 0],
+            "oneway": [True, True],
+            "geometry": [
+                LineString([(0, 0), (100, 0)]),
+                LineString([(100, 0), (0, 0)]),
+            ],
+        },
+        crs="EPSG:32638",
+    )
+    origins = gpd.GeoDataFrame(
+        {"geometry": [Point(10, 0)], "residents": [50.0]}, crs="EPSG:32638"
+    )
+    destinations = gpd.GeoDataFrame(
+        {"geometry": [Point(90, 0)], "floor_area": [100.0]}, crs="EPSG:32638"
+    )
+    streets.to_file(tmp_path / "streets.geojson", driver="GeoJSON")
+    origins.to_file(tmp_path / "origins.geojson", driver="GeoJSON")
+    destinations.to_file(tmp_path / "destinations.geojson", driver="GeoJSON")
+
+    backend = MadinaBackend(
+        EnvConfig(
+            network=NetworkConfig(
+                backend="madina",
+                streets_path=str(tmp_path / "streets.geojson"),
+                origins_path=str(tmp_path / "origins.geojson"),
+                destinations_path=str(tmp_path / "destinations.geojson"),
+                origin_weight="residents",
+                destination_weight="floor_area",
+                crs="EPSG:32638",
+                node_snapping_tolerance=0.5,
+                respect_oneway=True,
+            ),
+            simulation=SimulationConfig(
+                search_radius=1000,
+                detour_ratio=1.0,
+                decay=False,
+                closest_destination=False,
+                turn_penalty=False,
+                num_cores=1,
+            ),
+            action=ActionConfig(
+                closure_mode="penalize", closure_penalty=1000.0,
+                forbid_disconnection=False,
+            ),
+            reward=RewardConfig(),
+        )
+    )
+
+    open_result = backend.simulate(np.array([False, False]))
+    close_forward = backend.simulate(np.array([True, False]))
+    close_reverse = backend.simulate(np.array([False, True]))
+
+    assert open_result.origin_access[0] > 0
+    assert close_forward.origin_access[0] == pytest.approx(0.0)
+    assert close_reverse.origin_access[0] == pytest.approx(open_result.origin_access[0])
