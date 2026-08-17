@@ -29,4 +29,4 @@ imageio-ffmpeg>=0.5  # bundled ffmpeg binary used by FFMpegWriter MP4 scenario r
 
 # --- flow simulation backend ---
 # Madina is on TestPyPI:
-#   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple madina
+#   python -m pip install --no-deps -i https://test.pypi.org/simple/ madina==0.0.15

@@ -14,12 +14,19 @@ git pull --ff-only
 Then submit from the repository root:
 
 ```bash
+conda activate traffic_env
+python -m pip install --no-deps -i https://test.pypi.org/simple/ madina==0.0.15
+python -c "from madina.una.tools import betweenness; print('Madina OK')"
 mkdir -p logs
 
 BASELINES_JOB=$(sbatch --parsable slurm/abha_hotspot_baselines_array.sbatch)
 MODELS_JOB=$(sbatch --parsable slurm/abha_hotspot_train_2048_array.sbatch)
 echo "baselines=$BASELINES_JOB models=$MODELS_JOB"
 ```
+
+The `--no-deps` flag is intentional: the environment already supplies the
+geospatial stack, and it prevents pip from resolving unrelated packages from
+TestPyPI.
 
 The four baseline tasks run concurrently:
 
