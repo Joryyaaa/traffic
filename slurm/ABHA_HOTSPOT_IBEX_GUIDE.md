@@ -15,8 +15,9 @@ Then submit from the repository root:
 
 ```bash
 conda activate traffic_env
+python -m pip install -i https://pypi.org/simple/ pydeck Rtree psutil ipython ipykernel
 python -m pip install --no-deps -i https://test.pypi.org/simple/ madina==0.0.15
-python -c "from madina.una.tools import betweenness; print('Madina OK')"
+python -c "import pydeck, rtree, psutil, IPython, ipykernel; from madina.una.tools import betweenness; print('Madina OK')"
 mkdir -p logs
 
 BASELINES_JOB=$(sbatch --parsable slurm/abha_hotspot_baselines_array.sbatch)

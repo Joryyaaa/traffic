@@ -28,5 +28,11 @@ matplotlib>=3.8    # scripts/plot_closures.py, plot_flow.py, record_episode.py, 
 imageio-ffmpeg>=0.5  # bundled ffmpeg binary used by FFMpegWriter MP4 scenario recordings
 
 # --- flow simulation backend ---
+# Runtime dependencies omitted by the safe --no-deps Madina install below.
+pydeck
+Rtree
+psutil
+ipython
+ipykernel
 # Madina is on TestPyPI:
 #   python -m pip install --no-deps -i https://test.pypi.org/simple/ madina==0.0.15
