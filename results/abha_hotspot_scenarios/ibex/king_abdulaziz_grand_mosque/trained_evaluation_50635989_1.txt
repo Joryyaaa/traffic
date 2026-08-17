@@ -1,0 +1,8 @@
+config   : configs/city_madina_abha_king_abdulaziz_grand_mosque.yaml
+segments : 87
+episodes : 1
+policies : rl_agent, zone_builder
+
+policy              mean return      std     wall_s
+rl_agent                 0.0000   0.0000        0.2
+zone_builder             0.0503   0.0000        0.2

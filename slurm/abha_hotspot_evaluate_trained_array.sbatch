@@ -24,7 +24,12 @@ NAMES=("central_market" "king_abdulaziz_grand_mosque")
 IDX="${SLURM_ARRAY_TASK_ID}"
 CONFIG="${CONFIGS[$IDX]}"
 SCENARIO="${NAMES[$IDX]}"
-MODEL="runs/abha_hotspot_2048/${SCENARIO}_seed42_2048/model.zip"
+# Same TIMESTEPS override the training array already takes, so a longer run can
+# be evaluated without editing this file: the training script names its output
+# ${SCENARIO}_seed42_${TIMESTEPS}, and the default keeps the 2,048-step
+# behaviour exactly as before.
+TIMESTEPS="${TIMESTEPS:-2048}"
+MODEL="runs/abha_hotspot_2048/${SCENARIO}_seed42_${TIMESTEPS}/model.zip"
 
 cd "$PROJECT_DIR"
 RESULT_DIR="results/abha_hotspot_scenarios/ibex/$SCENARIO"
