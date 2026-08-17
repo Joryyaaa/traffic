@@ -1,11 +1,11 @@
-# B0 — Baseline. Provisional reference demand; not measured traffic counts.
+# S3 Entry — inbound assignment to the managed-entry approach.
 seed: 42
 
 network:
   backend: madina
   streets_path: data/abha_event_hotspot/event_baseline_streets.geojson
   origins_path: data/abha_event_hotspot/event_reference_origins.geojson
-  destinations_path: data/abha_event_hotspot/event_zone_destinations.geojson
+  destinations_path: data/abha_event_hotspot/event_s3_entry_destination.geojson
   origin_weight: demand_weight
   destination_weight: destination_weight
   weight_attribute: null

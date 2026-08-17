@@ -1,9 +1,9 @@
-# B0 — Baseline. Provisional reference demand; not measured traffic counts.
+# S1 — Event Zone Vehicle Restriction. Same OD basis as B0.
 seed: 42
 
 network:
   backend: madina
-  streets_path: data/abha_event_hotspot/event_baseline_streets.geojson
+  streets_path: data/abha_event_hotspot/event_s1_restricted_streets.geojson
   origins_path: data/abha_event_hotspot/event_reference_origins.geojson
   destinations_path: data/abha_event_hotspot/event_zone_destinations.geojson
   origin_weight: demand_weight
