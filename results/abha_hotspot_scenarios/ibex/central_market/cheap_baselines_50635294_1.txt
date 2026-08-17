@@ -1,0 +1,10 @@
+config   : configs/city_madina_abha_central_market.yaml
+segments : 82
+episodes : 1
+policies : random, highest_flow, lowest_flow, zone_builder
+
+policy              mean return      std     wall_s
+random                  -0.0500   0.0000        0.6
+highest_flow            -0.4001   0.0000        0.5
+lowest_flow             -0.0500   0.0000        0.5
+zone_builder             0.8363   0.0000        0.5

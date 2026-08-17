@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "clinics",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "مركز الرعاية الصحية الأولية وسط أبها" }, "geometry": { "type": "Point", "coordinates": [ 42.507971049530894, 18.227320133357711 ] } },
+{ "type": "Feature", "properties": { "name": "مركز الرعاية الصحية الأولية بالعزيزية" }, "geometry": { "type": "Point", "coordinates": [ 42.497764466714131, 18.208855300599208 ] } },
+{ "type": "Feature", "properties": { "name": "مركز الرعاية الصحية الأولية المنهل" }, "geometry": { "type": "Point", "coordinates": [ 42.51492819998424, 18.207344850035906 ] } }
+]
+}

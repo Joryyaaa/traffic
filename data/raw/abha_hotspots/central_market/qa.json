@@ -1,0 +1,42 @@
+{
+  "scenario": "central_market",
+  "selection_key": "central_market_location",
+  "center_lat": 18.2147407,
+  "center_lon": 42.4967046,
+  "requested_radius_m": 300,
+  "selected_radius_m": 300,
+  "radius_attempts": [
+    {
+      "radius_m": 300,
+      "street_segments": 82,
+      "residential_origins": 5,
+      "amenity_destinations": 6
+    }
+  ],
+  "network_type": "drive",
+  "osm_snapshot": "origin/optimized-abha-jabal-soudah-ibex (mentor-run full-belt snapshot)",
+  "deduplication": "reciprocal OSM rows collapsed by osmid + unordered u/v, matching fetch_osm_data.py",
+  "street_segments": 82,
+  "residential_origins": 5,
+  "amenity_destinations": 6,
+  "minimum_demand_counts": {
+    "origins": 1,
+    "destinations": 1
+  },
+  "runnable": true,
+  "intervention_target_segments": [
+    31,
+    42,
+    26,
+    41
+  ],
+  "target_selection_rule": "nearest non-major OSM drive segments to POI; major through roads remain open",
+  "source": {
+    "lat": 18.2147407,
+    "lon": 42.4967046,
+    "osm_type": "way",
+    "osm_id": 358377281,
+    "source": "OpenStreetMap",
+    "description": "mapped marketplace beside the central Al-Muftaha/Tuesday-market area; OSM name is blank"
+  }
+}

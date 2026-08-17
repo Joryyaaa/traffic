@@ -1,0 +1,12 @@
+{
+"type": "FeatureCollection",
+"name": "hospitals",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "مجمع المركزي الدولي للسكري العام" }, "geometry": { "type": "Point", "coordinates": [ 42.5609892, 18.2115123 ] } },
+{ "type": "Feature", "properties": { "name": "مستشفى عسير المركزي" }, "geometry": { "type": "Point", "coordinates": [ 42.524329064808185, 18.19949628195922 ] } },
+{ "type": "Feature", "properties": { "name": null }, "geometry": { "type": "Point", "coordinates": [ 42.527560602233635, 18.201267888018933 ] } },
+{ "type": "Feature", "properties": { "name": "مستشفى أبها الخاص" }, "geometry": { "type": "Point", "coordinates": [ 42.505131832408914, 18.232245517881342 ] } },
+{ "type": "Feature", "properties": { "name": "مركز الأمير فيصل بن خالد لأمراض وجراحة القلب" }, "geometry": { "type": "Point", "coordinates": [ 42.498162723882018, 18.209853130842301 ] } }
+]
+}

@@ -1,0 +1,10 @@
+config   : configs/city_madina_abha_king_abdulaziz_grand_mosque.yaml
+segments : 87
+episodes : 1
+policies : random, highest_flow, lowest_flow, zone_builder
+
+policy              mean return      std     wall_s
+random                  -0.1007   0.0000        0.2
+highest_flow             0.0503   0.0000        0.1
+lowest_flow             -0.0500   0.0000        0.2
+zone_builder             0.0503   0.0000        0.2

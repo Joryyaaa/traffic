@@ -1,0 +1,42 @@
+{
+  "scenario": "king_abdulaziz_grand_mosque",
+  "selection_key": "king_abdulaziz_grand_mosque_location",
+  "center_lat": 18.216697151399377,
+  "center_lon": 42.499768583372045,
+  "requested_radius_m": 250,
+  "selected_radius_m": 250,
+  "radius_attempts": [
+    {
+      "radius_m": 250,
+      "street_segments": 87,
+      "residential_origins": 16,
+      "amenity_destinations": 4
+    }
+  ],
+  "network_type": "drive",
+  "osm_snapshot": "origin/optimized-abha-jabal-soudah-ibex (mentor-run full-belt snapshot)",
+  "deduplication": "reciprocal OSM rows collapsed by osmid + unordered u/v, matching fetch_osm_data.py",
+  "street_segments": 87,
+  "residential_origins": 16,
+  "amenity_destinations": 4,
+  "minimum_demand_counts": {
+    "origins": 1,
+    "destinations": 1
+  },
+  "runnable": true,
+  "intervention_target_segments": [
+    8,
+    72
+  ],
+  "target_selection_rule": "nearest non-major OSM drive segments to POI; major through roads remain open",
+  "source": {
+    "lat": 18.216697151399377,
+    "lon": 42.499768583372045,
+    "name": "King Abdulaziz Grand Mosque",
+    "footprint_area_m2": 5315.041009534874,
+    "osm_type": "way",
+    "osm_id": 358397304,
+    "source": "OpenStreetMap",
+    "selection_rule": "largest mapped mosque polygon footprint within 6 km of Abha centre"
+  }
+}

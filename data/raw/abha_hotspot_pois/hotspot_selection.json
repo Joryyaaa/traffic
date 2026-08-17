@@ -1,0 +1,58 @@
+{
+  "discovery_center_lat_lon": [
+    18.2164282,
+    42.5043596
+  ],
+  "discovery_radius_m": 6000.0,
+  "school_cluster_radius_m": 300.0,
+  "scenarios": {
+    "art_street_baseline_location": {
+      "lat": 18.21385,
+      "lon": 42.49445,
+      "source": "data/abha_baseline/abha_event_hotspot_baseline2_scenarios.html",
+      "description": "existing Baseline-2 event-zone centre: Art Street + Al-Muftaha"
+    },
+    "central_market_location": {
+      "lat": 18.2147407,
+      "lon": 42.4967046,
+      "osm_type": "way",
+      "osm_id": 358377281,
+      "source": "OpenStreetMap",
+      "description": "mapped marketplace beside the central Al-Muftaha/Tuesday-market area; OSM name is blank"
+    },
+    "asir_central_hospital_location": {
+      "lat": 18.1995204,
+      "lon": 42.5243259,
+      "osm_type": "way",
+      "osm_id": 962550374,
+      "source": "OpenStreetMap",
+      "description": "Asir Central Hospital",
+      "data_limit": "OSM has no emergency-entrance tag at this hospital; do not claim an exact ER door"
+    },
+    "school_cluster_location": {
+      "lat": 18.19905841099252,
+      "lon": 42.50706488543333,
+      "schools_within_300m": 4,
+      "source": "OpenStreetMap via scripts/fetch_pois.py",
+      "selection_rule": "maximum count of mapped schools within 300 m"
+    },
+    "king_abdulaziz_grand_mosque_location": {
+      "lat": 18.216697151399377,
+      "lon": 42.499768583372045,
+      "name": "King Abdulaziz Grand Mosque",
+      "footprint_area_m2": 5315.041009534874,
+      "osm_type": "way",
+      "osm_id": 358397304,
+      "source": "OpenStreetMap",
+      "selection_rule": "largest mapped mosque polygon footprint within 6 km of Abha centre"
+    },
+    "abu_kheyal_park_location": {
+      "lat": 18.200972,
+      "lon": 42.4999554,
+      "osm_type": "way",
+      "osm_id": 1180194802,
+      "source": "OpenStreetMap",
+      "description": "Abu Kheyal Park"
+    }
+  }
+}

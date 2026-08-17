@@ -1,0 +1,15 @@
+{
+"type": "FeatureCollection",
+"name": "government",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "الإدارة العامة للتعليم بمنطقة عسير" }, "geometry": { "type": "Point", "coordinates": [ 42.52001262568912, 18.198774116706229 ] } },
+{ "type": "Feature", "properties": { "name": "المديرية العامة للشؤون الصحية بمنطقة عسير" }, "geometry": { "type": "Point", "coordinates": [ 42.523586959091624, 18.202581018121069 ] } },
+{ "type": "Feature", "properties": { "name": null }, "geometry": { "type": "Point", "coordinates": [ 42.556156072333295, 18.253898601587984 ] } },
+{ "type": "Feature", "properties": { "name": null }, "geometry": { "type": "Point", "coordinates": [ 42.556602448108407, 18.254195867839044 ] } },
+{ "type": "Feature", "properties": { "name": null }, "geometry": { "type": "Point", "coordinates": [ 42.554120892022006, 18.25233766781346 ] } },
+{ "type": "Feature", "properties": { "name": null }, "geometry": { "type": "Point", "coordinates": [ 42.555197283237852, 18.252795255015389 ] } },
+{ "type": "Feature", "properties": { "name": null }, "geometry": { "type": "Point", "coordinates": [ 42.555387177883453, 18.251956233748526 ] } },
+{ "type": "Feature", "properties": { "name": null }, "geometry": { "type": "Point", "coordinates": [ 42.5007914406495, 18.216093613981528 ] } }
+]
+}

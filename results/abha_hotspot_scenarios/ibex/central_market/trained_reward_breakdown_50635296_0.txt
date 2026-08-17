@@ -1,0 +1,24 @@
+step    accessibil  flow_conce      equity  pedestrian      detour  interventi  disconnect     total
+   0        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0125      0.0000   -0.0125
+   1        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0125      0.0000   -0.0125
+   2       -0.0128     -0.0082     -0.0039      0.0000     -0.0016     -0.0125      0.0000   -0.0391
+   3       -0.0255     -0.0122     -0.0018      0.0000     -0.0027     -0.0125      0.0000   -0.0547
+   4        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+   5        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+   6        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+   7        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+   8        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+   9        0.0000     -0.0000     -0.0000      0.0000     -0.0000     -0.0000      0.0000    0.0000
+
+cumulative return: -0.1188
+
+contribution of each term to the cumulative return:
+  accessibility          -0.0383   ( 32.3% of total)
+  flow_concentration     -0.0205   ( 17.2% of total)
+  equity                 -0.0057   (  4.8% of total)
+  pedestrian_zone         0.0000   ( -0.0% of total)
+  detour                 -0.0043   (  3.6% of total)
+  intervention           -0.0500   ( 42.1% of total)
+  disconnection           0.0000   ( -0.0% of total)
+
+Saved chart -> results/abha_hotspot_scenarios/ibex/central_market/trained_reward_breakdown_50635296_0.png
