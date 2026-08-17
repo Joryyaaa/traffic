@@ -1,0 +1,18 @@
+{
+  "scenario": "S1",
+  "scenario_name": "S1_Event_Zone_Vehicle_Restriction",
+  "backend": "madina",
+  "runs": [
+    {
+      "backend": "madina",
+      "config": "configs/city_madina_abha_event_s1.yaml",
+      "runtime_seconds": 0.1838072668761015,
+      "n_segments": 89,
+      "mean_accessibility": 0.0,
+      "mean_trip_distance": 3500.0,
+      "unreachable_fraction": 1.0,
+      "n_components": 25,
+      "total_segment_flow": 0.0
+    }
+  ]
+}

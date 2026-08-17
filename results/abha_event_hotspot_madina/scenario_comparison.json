@@ -1,0 +1,130 @@
+{
+  "scenarios": {
+    "B0": {
+      "scenario": "B0",
+      "scenario_name": "B0_Baseline",
+      "backend": "madina",
+      "runs": [
+        {
+          "backend": "madina",
+          "config": "configs/city_madina_abha_event_b0.yaml",
+          "runtime_seconds": 0.1836969368159771,
+          "n_segments": 90,
+          "mean_accessibility": 0.0,
+          "mean_trip_distance": 3500.0,
+          "unreachable_fraction": 1.0,
+          "n_components": 26,
+          "total_segment_flow": 0.0
+        }
+      ]
+    },
+    "S1": {
+      "scenario": "S1",
+      "scenario_name": "S1_Event_Zone_Vehicle_Restriction",
+      "backend": "madina",
+      "runs": [
+        {
+          "backend": "madina",
+          "config": "configs/city_madina_abha_event_s1.yaml",
+          "runtime_seconds": 0.1838072668761015,
+          "n_segments": 89,
+          "mean_accessibility": 0.0,
+          "mean_trip_distance": 3500.0,
+          "unreachable_fraction": 1.0,
+          "n_components": 25,
+          "total_segment_flow": 0.0
+        }
+      ]
+    },
+    "S2": {
+      "scenario": "S2",
+      "scenario_name": "S2_Main_Parking_Hub",
+      "backend": "madina",
+      "runs": [
+        {
+          "backend": "madina",
+          "config": "configs/city_madina_abha_event_s2.yaml",
+          "runtime_seconds": 0.1836720947176218,
+          "n_segments": 90,
+          "mean_accessibility": 0.0,
+          "mean_trip_distance": 3500.0,
+          "unreachable_fraction": 1.0,
+          "n_components": 26,
+          "total_segment_flow": 0.0
+        }
+      ]
+    },
+    "S3": {
+      "scenario": "S3",
+      "scenario_name": "S3_Managed_Entry_Exit",
+      "backend": "madina",
+      "runs": [
+        {
+          "backend": "madina",
+          "config": "configs/city_madina_abha_event_s3_entry.yaml",
+          "runtime_seconds": 0.10402044281363487,
+          "n_segments": 90,
+          "mean_accessibility": 0.0,
+          "mean_trip_distance": 3500.0,
+          "unreachable_fraction": 1.0,
+          "n_components": 26,
+          "total_segment_flow": 0.0
+        },
+        {
+          "backend": "madina",
+          "config": "configs/city_madina_abha_event_s3_exit.yaml",
+          "runtime_seconds": 0.04490225203335285,
+          "n_segments": 90,
+          "mean_accessibility": 0.0,
+          "mean_trip_distance": 3500.0,
+          "unreachable_fraction": 1.0,
+          "n_components": 26,
+          "total_segment_flow": 0.0
+        }
+      ],
+      "note": "S3 is represented as separate inbound and outbound assignments because the current Madina backend is undirected."
+    }
+  },
+  "summary": [
+    {
+      "scenario": "B0",
+      "scenario_name": "B0_Baseline",
+      "runtime_seconds": 0.1836969368159771,
+      "mean_accessibility": 0.0,
+      "mean_trip_distance": 3500.0,
+      "unreachable_fraction": 1.0,
+      "n_components_max": 26,
+      "total_segment_flow": 0.0
+    },
+    {
+      "scenario": "S1",
+      "scenario_name": "S1_Event_Zone_Vehicle_Restriction",
+      "runtime_seconds": 0.1838072668761015,
+      "mean_accessibility": 0.0,
+      "mean_trip_distance": 3500.0,
+      "unreachable_fraction": 1.0,
+      "n_components_max": 25,
+      "total_segment_flow": 0.0
+    },
+    {
+      "scenario": "S2",
+      "scenario_name": "S2_Main_Parking_Hub",
+      "runtime_seconds": 0.1836720947176218,
+      "mean_accessibility": 0.0,
+      "mean_trip_distance": 3500.0,
+      "unreachable_fraction": 1.0,
+      "n_components_max": 26,
+      "total_segment_flow": 0.0
+    },
+    {
+      "scenario": "S3",
+      "scenario_name": "S3_Managed_Entry_Exit",
+      "runtime_seconds": 0.14892269484698772,
+      "mean_accessibility": 0.0,
+      "mean_trip_distance": 3500.0,
+      "unreachable_fraction": 1.0,
+      "n_components_max": 26,
+      "total_segment_flow": 0.0
+    }
+  ]
+}

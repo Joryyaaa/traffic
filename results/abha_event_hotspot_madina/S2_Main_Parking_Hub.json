@@ -1,0 +1,18 @@
+{
+  "scenario": "S2",
+  "scenario_name": "S2_Main_Parking_Hub",
+  "backend": "madina",
+  "runs": [
+    {
+      "backend": "madina",
+      "config": "configs/city_madina_abha_event_s2.yaml",
+      "runtime_seconds": 0.1836720947176218,
+      "n_segments": 90,
+      "mean_accessibility": 0.0,
+      "mean_trip_distance": 3500.0,
+      "unreachable_fraction": 1.0,
+      "n_components": 26,
+      "total_segment_flow": 0.0
+    }
+  ]
+}

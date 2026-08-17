@@ -1,0 +1,30 @@
+{
+  "scenario": "S3",
+  "scenario_name": "S3_Managed_Entry_Exit",
+  "backend": "madina",
+  "runs": [
+    {
+      "backend": "madina",
+      "config": "configs/city_madina_abha_event_s3_entry.yaml",
+      "runtime_seconds": 0.10402044281363487,
+      "n_segments": 90,
+      "mean_accessibility": 0.0,
+      "mean_trip_distance": 3500.0,
+      "unreachable_fraction": 1.0,
+      "n_components": 26,
+      "total_segment_flow": 0.0
+    },
+    {
+      "backend": "madina",
+      "config": "configs/city_madina_abha_event_s3_exit.yaml",
+      "runtime_seconds": 0.04490225203335285,
+      "n_segments": 90,
+      "mean_accessibility": 0.0,
+      "mean_trip_distance": 3500.0,
+      "unreachable_fraction": 1.0,
+      "n_components": 26,
+      "total_segment_flow": 0.0
+    }
+  ],
+  "note": "S3 is represented as separate inbound and outbound assignments because the current Madina backend is undirected."
+}
