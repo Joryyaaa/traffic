@@ -14,11 +14,34 @@ CORRIDOR = ROOT / "data/makkah_ibrahim_scenarios/ibrahim_al_khalil_corridor.geoj
 OUT = ROOT / "results/makkah_ibrahim_osm/makkah_ibrahim_geometry_preview.html"
 
 
+def geometry_only(gdf: gpd.GeoDataFrame) -> dict:
+    """Return a GeoJSON FeatureCollection with geometry only.
+
+    OSM attributes can contain numpy arrays/lists that Folium cannot JSON-serialize.
+    The map only needs street geometry for the B0 background layer.
+    """
+    return {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {},
+                "geometry": geom.__geo_interface__,
+            }
+            for geom in gdf.geometry
+            if geom is not None and not geom.is_empty
+        ],
+    }
+
+
 def main():
     if not B0.exists():
         raise SystemExit(f"Missing B0 baseline: {B0}")
     if not CORRIDOR.exists():
-        raise SystemExit(f"Missing reviewed corridor: {CORRIDOR}. Run scripts/build_makkah_ibrahim_scenarios.py first.")
+        raise SystemExit(
+            f"Missing reviewed corridor: {CORRIDOR}. "
+            "Run scripts/build_makkah_ibrahim_scenarios.py first."
+        )
 
     streets = gpd.read_file(B0).to_crs("EPSG:4326")
     corridor = gpd.read_file(CORRIDOR).to_crs("EPSG:4326")
@@ -26,21 +49,46 @@ def main():
     center = [(bounds[1] + bounds[3]) / 2, (bounds[0] + bounds[2]) / 2]
 
     m = folium.Map(location=center, zoom_start=14, tiles="OpenStreetMap")
+
     folium.GeoJson(
-        streets[["geometry"]],
+        geometry_only(streets),
         name="B0 OSM drive network",
-        style_function=lambda _: {"color": "#3568a8", "weight": 1.4, "opacity": 0.35},
+        style_function=lambda _: {
+            "color": "#3568a8",
+            "weight": 1.4,
+            "opacity": 0.35,
+        },
     ).add_to(m)
+
+    # Keep only simple, JSON-safe properties for corridor tooltips.
+    corridor_preview = corridor[["corridor_group", "name", "highway", "length", "geometry"]].copy()
+    for col in ["corridor_group", "name", "highway", "length"]:
+        corridor_preview[col] = corridor_preview[col].map(
+            lambda value: value.item() if hasattr(value, "item") else str(value) if isinstance(value, (list, tuple)) else value
+        )
+
     folium.GeoJson(
-        corridor,
+        corridor_preview,
         name="Reviewed Ibrahim Al Khalil corridor",
-        tooltip=folium.GeoJsonTooltip(fields=["corridor_group", "name", "highway", "length"], aliases=["Group", "Name", "Highway", "Length (m)"]),
-        style_function=lambda _: {"color": "#d7191c", "weight": 5.5, "opacity": 1.0},
+        tooltip=folium.GeoJsonTooltip(
+            fields=["corridor_group", "name", "highway", "length"],
+            aliases=["Group", "Name", "Highway", "Length (m)"],
+        ),
+        style_function=lambda _: {
+            "color": "#d7191c",
+            "weight": 5.5,
+            "opacity": 1.0,
+        },
     ).add_to(m)
-    m.fit_bounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]], padding=(35, 35))
+
+    m.fit_bounds(
+        [[bounds[1], bounds[0]], [bounds[3], bounds[2]]],
+        padding=(35, 35),
+    )
     folium.LayerControl(collapsed=False).add_to(m)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     m.save(OUT)
+
     print("PRE-RUN GEOMETRY PREVIEW — no model result")
     print("B0 segments:", len(streets))
     print("Reviewed corridor segments:", len(corridor))
