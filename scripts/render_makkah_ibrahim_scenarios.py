@@ -14,7 +14,6 @@ The map is for visual scenario validation before simulation/model runs.
 """
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import folium
@@ -30,26 +29,10 @@ MAKKAH_CENTER_LAT = 21.4177
 MAKKAH_CENTER_LON = 39.8228
 
 SCENARIOS = [
-    (
-        "S1 — Ibrahim Al Khalil Partial Closure",
-        "S1_partial_closure_targets.geojson",
-        True,
-    ),
-    (
-        "S2 — Network-Safe Corridor Restriction",
-        "S2_corridor_restriction_targets.geojson",
-        False,
-    ),
-    (
-        "S3 Entry — Direction Management",
-        "S3_entry_direction_targets.geojson",
-        False,
-    ),
-    (
-        "S3 Exit — Direction Management",
-        "S3_exit_direction_targets.geojson",
-        False,
-    ),
+    ("S1 — Ibrahim Al Khalil Partial Closure", "S1_partial_closure_targets.geojson", True),
+    ("S2 — Network-Safe Corridor Restriction", "S2_corridor_restriction_targets.geojson", False),
+    ("S3 Entry — Direction Management", "S3_entry_direction_targets.geojson", False),
+    ("S3 Exit — Direction Management", "S3_exit_direction_targets.geojson", False),
 ]
 
 
@@ -60,14 +43,25 @@ def read_geojson(name: str) -> gpd.GeoDataFrame:
     return gpd.read_file(path).to_crs("EPSG:4326")
 
 
-def folium_data(gdf: gpd.GeoDataFrame) -> dict:
-    """Convert GeoDataFrame to plain JSON-safe GeoJSON for Folium.
+def geometry_only(gdf: gpd.GeoDataFrame) -> dict:
+    """Return JSON-safe GeoJSON using only geometry.
 
-    Some OSM attributes are loaded as numpy arrays. Passing the GeoDataFrame
-    directly to Folium can therefore fail with 'ndarray is not JSON serializable'.
-    GeoPandas' to_json normalizes those values first.
+    OSM attributes such as osmid may be numpy arrays, which Folium/JSON cannot
+    serialize directly. The Abha-style validation map only needs geometry for
+    these layers, so properties are intentionally omitted.
     """
-    return json.loads(gdf.to_json())
+    return {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {},
+                "geometry": geom.__geo_interface__,
+            }
+            for geom in gdf.geometry
+            if geom is not None and not geom.is_empty
+        ],
+    }
 
 
 def add_closure_layer(m: folium.Map, name: str, filename: str, show: bool) -> None:
@@ -75,7 +69,7 @@ def add_closure_layer(m: folium.Map, name: str, filename: str, show: bool) -> No
     group = FeatureGroup(name=name, show=show)
     if not targets.empty:
         folium.GeoJson(
-            folium_data(targets),
+            geometry_only(targets),
             style_function=lambda _: {
                 "color": "#d73027",
                 "weight": 6,
@@ -99,23 +93,15 @@ def create_comparison_map() -> folium.Map:
 
     base = FeatureGroup(name="B0 — Full Network", show=True)
     folium.GeoJson(
-        folium_data(streets),
-        style_function=lambda _: {
-            "color": "#8c8c8c",
-            "weight": 1,
-            "opacity": 0.20,
-        },
+        geometry_only(streets),
+        style_function=lambda _: {"color": "#8c8c8c", "weight": 1, "opacity": 0.20},
     ).add_to(base)
     base.add_to(m)
 
     study = FeatureGroup(name="B0 — Reviewed Ibrahim Corridor", show=True)
     folium.GeoJson(
-        folium_data(corridor),
-        style_function=lambda _: {
-            "color": "#ff7f00",
-            "weight": 3,
-            "opacity": 0.65,
-        },
+        geometry_only(corridor),
+        style_function=lambda _: {"color": "#ff7f00", "weight": 3, "opacity": 0.65},
     ).add_to(study)
     study.add_to(m)
 
