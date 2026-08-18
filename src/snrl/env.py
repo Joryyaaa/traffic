@@ -10,14 +10,18 @@ Reward  r_t : change in the multi-objective planning score (see rewards.py).
 Episode     : `episode_length` interventions, subject to a budget of
               `max_closures` simultaneously closed segments.
 
-Observation layout (per segment, `N_FEATURES` channels):
-    0  is_closed          {0,1}
-    1  normalized flow    betweenness / baseline max
-    2  normalized length  length / max length
-    3  flow delta         (current flow - baseline flow) / baseline max
-    4  degree centrality  of the segment in the segment-adjacency graph
+Observation layout (per segment, channels):
+    0  is_closed               {0,1}
+    1  normalized flow         betweenness / baseline max
+    2  normalized length       length / max length
+    3  flow delta              (current flow - baseline flow) / baseline max
+    4  degree centrality       of the segment in the segment-adjacency graph
+  [when include_adjacency_state is True, two more channels follow:]
+    5  closed_neighbour_count  number of currently-closed adjacent segments
+    6  touches_closed          {0,1} whether any neighbour is closed
 plus a small global vector appended as a final row:
-    [budget_used, step_fraction, mean_access_ratio, access_gini, 0]
+    5-feature mode: [budget_used, step_fraction, mean_access_ratio, access_gini, 0]
+    7-feature mode: [budget_used, step_fraction, mean_access_ratio, access_gini, 0, 0, 0]
 """
 
 from __future__ import annotations
@@ -49,7 +53,8 @@ from .backends import build_backend
 from .config import EnvConfig
 from .rewards import RewardFunction, simulation_stats
 
-N_FEATURES = 5
+N_FEATURES_BASE = 5
+N_FEATURES_ADJACENCY = 7
 
 
 class StreetNetworkEnv(gym.Env):
@@ -59,6 +64,9 @@ class StreetNetworkEnv(gym.Env):
         super().__init__()
         self.cfg = config or EnvConfig()
         self.render_mode = render_mode
+        self._n_features = (
+            N_FEATURES_ADJACENCY if self.cfg.include_adjacency_state else N_FEATURES_BASE
+        )
 
         self.backend = build_backend(self.cfg)
         self.n_segments = self.backend.n_segments
@@ -85,7 +93,7 @@ class StreetNetworkEnv(gym.Env):
         self.observation_space = spaces.Box(
             low=-np.inf,
             high=np.inf,
-            shape=(self.n_segments + 1, N_FEATURES),
+            shape=(self.n_segments + 1, self._n_features),
             dtype=np.float32,
         )
 
@@ -219,7 +227,8 @@ class StreetNetworkEnv(gym.Env):
 
     def _observation(self) -> np.ndarray:
         sim = self._last_sim
-        obs = np.zeros((self.n_segments + 1, N_FEATURES), dtype=np.float32)
+        nf = self._n_features
+        obs = np.zeros((self.n_segments + 1, nf), dtype=np.float32)
         obs[: self.n_segments, 0] = self.closed_mask.astype(np.float32)
         obs[: self.n_segments, 1] = sim.segment_flow / self._flow_scale
         obs[: self.n_segments, 2] = self.backend.segment_lengths / self._length_scale
@@ -228,17 +237,24 @@ class StreetNetworkEnv(gym.Env):
         ) / self._flow_scale
         obs[: self.n_segments, 4] = self._seg_degree
 
+        if self.cfg.include_adjacency_state:
+            adj_arr = np.asarray(self._adjacency, dtype=np.float32)
+            closed_f = self.closed_mask.astype(np.float32)
+            closed_neighbour_count = adj_arr @ closed_f
+            obs[: self.n_segments, 5] = closed_neighbour_count
+            obs[: self.n_segments, 6] = (closed_neighbour_count > 0).astype(np.float32)
+
         base_access = self._baseline_stats["mean_access"] or 1.0
-        obs[self.n_segments] = np.array(
-            [
-                self.closed_mask.sum() / max(self.cfg.action.max_closures, 1),
-                self._step_count / max(self.cfg.action.episode_length, 1),
-                self._prev_stats["mean_access"] / base_access,
-                self._prev_stats["access_gini"],
-                0.0,
-            ],
-            dtype=np.float32,
-        )
+        global_row = [
+            self.closed_mask.sum() / max(self.cfg.action.max_closures, 1),
+            self._step_count / max(self.cfg.action.episode_length, 1),
+            self._prev_stats["mean_access"] / base_access,
+            self._prev_stats["access_gini"],
+            0.0,
+        ]
+        if self.cfg.include_adjacency_state:
+            global_row.extend([0.0, 0.0])
+        obs[self.n_segments] = np.array(global_row, dtype=np.float32)
         return np.nan_to_num(obs, nan=0.0, posinf=0.0, neginf=0.0)
 
     def _info(self) -> dict[str, Any]:
