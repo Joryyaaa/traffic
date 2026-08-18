@@ -62,7 +62,37 @@ def greedy_policy(env_unused=None):
     return choose
 
 
-def zone_builder_policy(env):
+def _closed_group_size(closed_mask, adjacency, qualifying_mask):
+    """Effective (qualifying) size of the connected group of closed segments.
+
+    zone_builder only ever grows a single cluster, so any closed segment
+    identifies the whole group -- this is the same flood-fill + qualifying-count
+    definition as src/snrl/metrics.py::zone_score's `effective_size`, kept in sync
+    deliberately: "zone size" must mean the same thing here as it does in the
+    reward, or a size restriction wouldn't be measuring what it claims to.
+    """
+    closed = np.flatnonzero(closed_mask)
+    if closed.size == 0:
+        return 0
+    start = int(closed[0])
+    seen = {start}
+    stack = [start]
+    group = [start]
+    while stack:
+        u = stack.pop()
+        for v in np.flatnonzero(adjacency[u]):
+            v = int(v)
+            if v in seen or not closed_mask[v]:
+                continue
+            seen.add(v)
+            stack.append(v)
+            group.append(v)
+    if qualifying_mask is None:
+        return len(group)
+    return sum(1 for seg in group if qualifying_mask[seg])
+
+
+def zone_builder_policy(env, max_zone_size: int | None = None):
     """Hand-coded planner: pick a seed, then always extend the same cluster.
 
     This baseline is *told* that contiguity matters. It exists to measure the
@@ -77,14 +107,29 @@ def zone_builder_policy(env):
     "best hand-coded effort" once the reward requires real usage -- it would
     just keep building on the same unused corridor it always did and score
     worse than doing nothing, which measures a stale baseline, not headroom.
+
+    max_zone_size (optional): caps the connected group's *qualifying* size
+    (same definition as metrics.zone_score) this policy is allowed to grow to
+    -- once reached, returns no-op for the rest of the episode instead of
+    extending further. This is independent of env.action_masks()/max_closures
+    (a global, policy-agnostic per-episode budget) -- a policy-level
+    restriction added for the zone-size-vs-return ablation, touching no
+    config/env/reward code. None (default) reproduces the original,
+    unrestricted behavior exactly -- this parameter is additive only.
     """
     def choose(env, obs):
         mask = env.action_masks()
         closed = np.flatnonzero(env.closed_mask)
+        qualifying_mask = env.reward_fn._qualifying_mask
+
+        if max_zone_size is not None and closed.size > 0:
+            current_size = _closed_group_size(env.closed_mask, env._adjacency, qualifying_mask)
+            if current_size >= max_zone_size:
+                return env.n_segments  # restriction reached -- stop extending
+
         valid = np.flatnonzero(mask[: env.n_segments])
         if valid.size == 0:
             return env.n_segments
-        qualifying_mask = env.reward_fn._qualifying_mask
         if closed.size == 0:
             # seed on the best-connected segment we are allowed to close,
             # preferring one that qualifies for the zone bonus if that
