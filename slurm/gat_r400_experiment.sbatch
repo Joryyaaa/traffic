@@ -10,6 +10,7 @@
 #
 # Submit (5 array tasks):
 #   cd /home/alblueja/traffic
+export PYTHONPATH="$PWD/src:${PYTHONPATH:-}"
 #   sbatch --array=1-5 slurm/gat_r400_experiment.sbatch
 #
 # Aggregate after completion:
@@ -23,7 +24,7 @@
 #
 #SBATCH --job-name=snrl-gat-r400
 #SBATCH --partition=batch
-#SBATCH --time=04:00:00
+#SBATCH --time=02:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
