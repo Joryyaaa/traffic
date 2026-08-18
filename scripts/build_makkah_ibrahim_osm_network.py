@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Build the Makkah Ibrahim Al Khalil package directly from OpenStreetMap.
+"""Build the Makkah Ibrahim Al Khalil OSM package.
 
-This follows the Abha event OSM pattern:
-OSM drive network -> clean B0 -> reviewed intervention-target geometry -> QA.
-No traffic scenario, synthetic demand, closure, or reward assumption is added here.
+Pattern follows the repository's Abha event workflow:
+OSM drive network -> clean B0 -> scenario derived from the same B0 -> QA.
+
+S1 is intentionally narrow and reproducible: remove only the already-validated
+Ibrahim Al Khalil OSM way 263016253. No synthetic demand or reward change is
+introduced here.
 """
 from __future__ import annotations
 import argparse
@@ -19,7 +22,6 @@ from shapely.geometry import LineString
 
 CENTER = (21.4177, 39.8228)
 DEFAULT_RADIUS_M = 1800
-METRIC_CRS = "EPSG:32637"
 IBRAHIM_AL_KHALIL_WAY_ID = 263016253
 REQUIRED_NODE_IDS = (5129445142, 5077724339)
 
@@ -44,14 +46,14 @@ def normalize_osmid(value):
 
 def split_closed_rows(edges):
     rows = []
-    n = 0
+    count = 0
     for _, row in edges.iterrows():
         geom = row.geometry
         if geom is None or geom.is_empty or geom.geom_type != "LineString":
             continue
         coords = list(geom.coords)
         if len(coords) >= 4 and coords[0] == coords[-1]:
-            n += 1
+            count += 1
             for i in range(len(coords) - 1):
                 if coords[i] == coords[i + 1]:
                     continue
@@ -63,7 +65,7 @@ def split_closed_rows(edges):
             r = row.copy()
             r["closed_way_split"] = False
             rows.append(r)
-    print("Closed/ring geometries split:", n)
+    print("Closed/ring geometries split:", count)
     return gpd.GeoDataFrame(rows, crs=edges.crs).reset_index(drop=True)
 
 
@@ -71,12 +73,12 @@ def component_check(edges):
     graph = nx.Graph()
     for _, row in edges.iterrows():
         graph.add_edge(int(row["u"]), int(row["v"]))
-    comps = list(nx.connected_components(graph))
+    components = list(nx.connected_components(graph))
     return {
-        "components": len(comps),
+        "components": len(components),
         "nodes": graph.number_of_nodes(),
         "edges": graph.number_of_edges(),
-        "component_node_sizes": sorted((len(c) for c in comps), reverse=True)[:20],
+        "component_node_sizes": sorted((len(c) for c in components), reverse=True)[:20],
     }
 
 
@@ -127,16 +129,8 @@ def main():
     edges = edges.reset_index()
 
     keep = [
-        "u",
-        "v",
-        "key",
-        "osmid",
-        "oneway",
-        "junction",
-        "name",
-        "highway",
-        "length",
-        "geometry",
+        "u", "v", "key", "osmid", "oneway", "junction",
+        "name", "highway", "length", "geometry",
     ]
     for col in keep:
         if col not in edges.columns:
@@ -152,11 +146,10 @@ def main():
             "Adjust crop/builder; do not fix with node snapping."
         )
 
-    way_present = bool(
-        edges["osmid"].map(
-            lambda x: contains_osmid(x, IBRAHIM_AL_KHALIL_WAY_ID)
-        ).any()
+    way_mask = edges["osmid"].map(
+        lambda x: contains_osmid(x, IBRAHIM_AL_KHALIL_WAY_ID)
     )
+    way_present = bool(way_mask.any())
     node_presence = {str(n): bool(n in graph.nodes) for n in REQUIRED_NODE_IDS}
     if not way_present:
         raise RuntimeError(
@@ -172,17 +165,22 @@ def main():
     if len(groups) < 2:
         raise RuntimeError("Expected two main connected Ibrahim Al Khalil carriageway groups")
 
-    # The two largest named connected groups are the reviewed paired carriageways.
-    # Smaller disconnected same-name fragments are retained in B0 but excluded
-    # from the intervention-target geometry.
     corridor = gpd.GeoDataFrame(
         pd.concat([groups[0], groups[1]], ignore_index=True), crs=edges.crs
     )
     corridor["corridor_group"] = [1] * len(groups[0]) + [2] * len(groups[1])
 
+    # B0: unchanged OSM network.
     edges.to_file(out / "B0_baseline_streets.geojson", driver="GeoJSON")
     edges.to_file(out / "road_metadata.geojson", driver="GeoJSON")
     corridor.to_file(out / "intervention_targets.geojson", driver="GeoJSON")
+
+    # S1: partial closure of one exact, validated OSM way only.
+    s1_targets = edges.loc[way_mask].copy()
+    s1_streets = edges.loc[~way_mask].copy()
+    s1_streets.to_file(out / "S1_partial_closure_streets.geojson", driver="GeoJSON")
+    s1_targets.to_file(out / "S1_partial_closure_targets.geojson", driver="GeoJSON")
+    s1_qa = component_check(s1_streets)
 
     qa.update(
         {
@@ -211,8 +209,19 @@ def main():
                 for i, group in enumerate(groups[2:], start=2)
             ],
             "baseline": "B0 clean OSM drive network; no scenario modifications",
-            "target_status": "reviewed geometry only; red roads are candidate intervention targets, not model results",
-            "scenario_status": "not defined in this builder; no synthetic demand or intervention policy added",
+            "S1": {
+                "name": "Ibrahim Al Khalil Partial Closure",
+                "definition": "remove only OSM way 263016253 from B0",
+                "removed_osm_way_id": IBRAHIM_AL_KHALIL_WAY_ID,
+                "removed_segments": int(len(s1_targets)),
+                "removed_length_m": float(s1_targets["length"].sum()),
+                "remaining_segments": int(len(s1_streets)),
+                "remaining_components": int(s1_qa["components"]),
+                "remaining_component_node_sizes": s1_qa["component_node_sizes"],
+                "status": "geometry scenario only until demand/config validation is added",
+            },
+            "target_status": "reviewed Ibrahim corridor geometry; not a model result",
+            "demand_status": "no synthetic demand added",
         }
     )
     (out / "qa_report.json").write_text(
