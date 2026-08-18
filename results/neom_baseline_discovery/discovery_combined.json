@@ -1,0 +1,224 @@
+{
+  "osm_timestamp": "2026-08-18T14:53:22Z",
+  "overpass_mirror": "maps.mail.ru",
+  "query_date": "2026-08-18",
+  "A_r1km": {
+    "candidate": "A_sharma_camp26",
+    "center": [28.03066, 35.24203],
+    "radius_km": 1,
+    "graph": {
+      "segment_count": 459, "node_count": 441, "way_count": 52,
+      "connected_components": 3, "largest_component": 222,
+      "component_sizes_top5": [222, 185, 34],
+      "highway_classes": {"service":14,"residential":25,"unclassified":1,"track":3,"secondary":3,"trunk":4,"trunk_link":2},
+      "named_roads": [], "named_road_count": 0
+    },
+    "features": {
+      "building_count": 132, "building_types": {"yes":131,"commercial":1},
+      "residential_building_count": 0,
+      "amenity_count": 0, "amenity_types": {},
+      "landuse_count": 2, "landuse_types": {"residential":1,"construction":1},
+      "construction_count": 1,
+      "places": [{"name":"شرما","place":"village","lat":28.0306558,"lon":35.242029,"id":5796927641}]
+    },
+    "anchors_found": ["Sharma","Camp26","ConstCampW1","ConstCampW2"],
+    "raw_element_count": 1266
+  },
+  "A_r2km": {
+    "candidate": "A_sharma_camp26",
+    "center": [28.03066, 35.24203],
+    "radius_km": 2,
+    "graph": {
+      "segment_count": 789, "node_count": 748, "way_count": 93,
+      "connected_components": 2, "largest_component": 450,
+      "component_sizes_top5": [450, 298],
+      "highway_classes": {"service":45,"residential":26,"unclassified":2,"track":4,"secondary":3,"trunk":10,"trunk_link":3},
+      "named_roads": [], "named_road_count": 0
+    },
+    "features": {
+      "building_count": 176, "building_types": {"yes":160,"commercial":5,"industrial":6,"hospital":5},
+      "residential_building_count": 0,
+      "amenity_count": 6, "amenity_types": {"fuel":1,"hospital":2,"parking":3},
+      "landuse_count": 12, "landuse_types": {"residential":1,"orchard":2,"industrial":2,"construction":4,"grass":3},
+      "construction_count": 4,
+      "places": [{"name":"شرما","place":"village","lat":28.0306558,"lon":35.242029,"id":5796927641}]
+    },
+    "anchors_found": ["Sharma","Camp26","ConstCampW1","ConstCampW2"],
+    "raw_element_count": 2032
+  },
+  "A_r3km": {
+    "candidate": "A_sharma_camp26",
+    "center": [28.03066, 35.24203],
+    "radius_km": 3,
+    "graph": {
+      "segment_count": 1230, "node_count": 1175, "way_count": 139,
+      "connected_components": 4, "largest_component": 818,
+      "component_sizes_top5": [818, 298, 41, 18],
+      "highway_classes": {"service":72,"residential":26,"unclassified":3,"track":7,"trunk":21,"secondary":3,"trunk_link":7},
+      "named_roads": [], "named_road_count": 0
+    },
+    "features": {
+      "building_count": 247, "building_types": {"yes":231,"commercial":5,"industrial":6,"hospital":5},
+      "residential_building_count": 0,
+      "amenity_count": 70, "amenity_types": {"parking":5,"shelter":61,"fuel":1,"car_rental":1,"hospital":2},
+      "landuse_count": 14, "landuse_types": {"residential":1,"orchard":2,"industrial":2,"construction":5,"grass":3,"quarry":1},
+      "construction_count": 5,
+      "places": [
+        {"name":"شرما","place":"hamlet","lat":28.024444,"lon":35.269444,"id":1237953031},
+        {"name":"شرما","place":"village","lat":28.0306558,"lon":35.242029,"id":5796927641}
+      ]
+    },
+    "anchors_found": ["Sharma","Camp26","ConstCampW1","ConstCampW2"],
+    "raw_element_count": 3055
+  },
+  "A_r5km": {
+    "candidate": "A_sharma_camp26",
+    "center": [28.03066, 35.24203],
+    "radius_km": 5,
+    "graph": {
+      "segment_count": 2620, "node_count": 2450, "way_count": 306,
+      "connected_components": 3, "largest_component": 1910,
+      "component_sizes_top5": [1910, 343, 197],
+      "highway_classes": {"tertiary":7,"service":182,"residential":45,"unclassified":9,"track":20,"trunk":27,"secondary":3,"trunk_link":12,"tertiary_link":1},
+      "named_roads": [], "named_road_count": 0
+    },
+    "features": {
+      "building_count": 370, "building_types": {"warehouse":1,"yes":321,"dormitory":22,"industrial":7,"service":2,"apartments":2,"detached":4,"house":1,"commercial":5,"hospital":5},
+      "residential_building_count": 29,
+      "amenity_count": 99, "amenity_types": {"place_of_worship":1,"parking":32,"shelter":61,"fuel":2,"car_rental":1,"hospital":2},
+      "landuse_count": 47, "landuse_types": {"residential":5,"construction":16,"orchard":2,"military":1,"industrial":12,"grass":4,"meadow":5,"forest":1,"quarry":1},
+      "construction_count": 16,
+      "places": [
+        {"name":"شرما","place":"hamlet","lat":28.024444,"lon":35.269444,"id":1237953031},
+        {"name":"شرما","place":"village","lat":28.0306558,"lon":35.242029,"id":5796927641},
+        {"name":"نيوم","place":"city","lat":28.0058861,"lon":35.2027014,"id":8428377321}
+      ]
+    },
+    "anchors_found": ["Sharma","Camp26","ConstCampW1","ConstCampW2"],
+    "raw_element_count": 5815
+  },
+  "A_mid_r5km": {
+    "candidate": "A_sharma_camp26",
+    "center": [28.035, 35.21],
+    "center_label": "midpoint_all_anchors",
+    "radius_km": 5,
+    "graph": {
+      "segment_count": 4309, "node_count": 4037, "way_count": 533,
+      "connected_components": 2, "largest_component": 3739,
+      "component_sizes_top5": [3739, 298],
+      "highway_classes": {"residential":110,"tertiary":12,"service":304,"unclassified":9,"track":21,"trunk":29,"secondary":3,"trunk_link":12,"living_street":31,"tertiary_link":2},
+      "named_roads": [], "named_road_count": 0
+    },
+    "features": {
+      "building_count": 556, "building_types": {"warehouse":1,"yes":462,"dormitory":22,"industrial":7,"service":11,"detached":35,"house":6,"apartments":2,"commercial":5,"hospital":5},
+      "residential_building_count": 65,
+      "amenity_count": 154, "amenity_types": {"place_of_worship":3,"parking":74,"parking_entrance":2,"shelter":69,"fuel":2,"drinking_water":1,"car_rental":1,"hospital":2},
+      "landuse_count": 119, "landuse_types": {"residential":13,"industrial":17,"construction":16,"orchard":3,"military":1,"grass":42,"meadow":26,"quarry":1},
+      "construction_count": 16,
+      "places": [
+        {"name":"الخريبة","place":"village","lat":28.0670636,"lon":35.1767769,"id":1237953124},
+        {"name":"شرما","place":"village","lat":28.0306558,"lon":35.242029,"id":5796927641},
+        {"name":"نيوم","place":"city","lat":28.0058861,"lon":35.2027014,"id":8428377321}
+      ]
+    },
+    "anchors_found": ["Sharma","Camp26","ConstCampW1","ConstCampW2"],
+    "raw_element_count": 9875
+  },
+  "B_r1km": {
+    "candidate": "B_trojena",
+    "center": [28.67381, 35.30361],
+    "radius_km": 1,
+    "graph": {
+      "segment_count": 194, "node_count": 195, "way_count": 1,
+      "connected_components": 1, "largest_component": 195,
+      "component_sizes_top5": [195],
+      "highway_classes": {"unclassified":1},
+      "named_roads": [], "named_road_count": 0
+    },
+    "features": {
+      "building_count": 0, "building_types": {},
+      "residential_building_count": 0,
+      "amenity_count": 0, "amenity_types": {},
+      "landuse_count": 1, "landuse_types": {"construction":1},
+      "construction_count": 1,
+      "places": []
+    },
+    "anchors_found": ["Trojena"],
+    "raw_element_count": 309
+  },
+  "B_r2km": {
+    "candidate": "B_trojena",
+    "center": [28.67381, 35.30361],
+    "radius_km": 2,
+    "graph": {
+      "segment_count": 246, "node_count": 248, "way_count": 7,
+      "connected_components": 2, "largest_component": 195,
+      "component_sizes_top5": [195, 53],
+      "highway_classes": {"residential":4,"service":2,"unclassified":1},
+      "named_roads": [], "named_road_count": 0
+    },
+    "features": {
+      "building_count": 4, "building_types": {"bunker":4},
+      "residential_building_count": 0,
+      "amenity_count": 0, "amenity_types": {},
+      "landuse_count": 6, "landuse_types": {"military":5,"construction":1},
+      "construction_count": 1,
+      "places": []
+    },
+    "anchors_found": ["Trojena"],
+    "raw_element_count": 425
+  },
+  "B_r3km": {
+    "candidate": "B_trojena",
+    "center": [28.67381, 35.30361],
+    "radius_km": 3,
+    "graph": {
+      "segment_count": 318, "node_count": 319, "way_count": 9,
+      "connected_components": 2, "largest_component": 195,
+      "component_sizes_top5": [195, 124],
+      "highway_classes": {"residential":5,"service":2,"secondary":1,"unclassified":1},
+      "named_roads": ["طريق جبل اللوز"],
+      "named_road_count": 1
+    },
+    "features": {
+      "building_count": 4, "building_types": {"bunker":4},
+      "residential_building_count": 0,
+      "amenity_count": 0, "amenity_types": {},
+      "landuse_count": 6, "landuse_types": {"military":5,"construction":1},
+      "construction_count": 1,
+      "places": []
+    },
+    "anchors_found": ["Trojena"],
+    "raw_element_count": 498
+  },
+  "B_r5km": {
+    "candidate": "B_trojena",
+    "center": [28.67381, 35.30361],
+    "radius_km": 5,
+    "graph": {
+      "segment_count": 686, "node_count": 686, "way_count": 13,
+      "connected_components": 2, "largest_component": 491,
+      "component_sizes_top5": [491, 195],
+      "highway_classes": {"residential":5,"service":4,"secondary":3,"unclassified":1},
+      "named_roads": ["طريق جبل اللوز"],
+      "named_road_count": 1
+    },
+    "features": {
+      "building_count": 25, "building_types": {"bunker":4,"yes":21},
+      "residential_building_count": 0,
+      "amenity_count": 0, "amenity_types": {},
+      "landuse_count": 8, "landuse_types": {"residential":1,"military":5,"construction":2},
+      "construction_count": 2,
+      "places": [{"name":"","place":"hamlet","lat":28.7173766,"lon":35.3142668,"id":5513837434}]
+    },
+    "anchors_found": ["Trojena"],
+    "raw_element_count": 1049
+  },
+  "anchor_tags": {
+    "Sharma_node_5796927641": {"name":"شرما","name:en":"Sharma","place":"village","wikidata":"Q16123277"},
+    "Camp26_node_12390325515": {"name":"Neom Residential Camp 26","place":"village","ref":"NRC-26"},
+    "ConstCampW1_way_849104049": {"landuse":"residential","name":"Construction Camp Housing","residential":"apartments"},
+    "ConstCampW2_way_849118868": {"landuse":"residential","name":"Construction Camp Housing","residential":"apartments"},
+    "Trojena_way_1216974546": {"landuse":"construction","name":"Trojena"}
+  }
+}
