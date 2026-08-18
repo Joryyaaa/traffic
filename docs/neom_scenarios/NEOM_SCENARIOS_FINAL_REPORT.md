@@ -14,7 +14,7 @@
 | `0ac7a86` | add NEOM B0 baseline map, config, and documentation |
 | `a055c7f` | add existing scenario methodology inspection report |
 | `68c9665` | add NEOM B0/S1/S2/S3 scenario data and configs |
-| *(pending)* | add validation, maps, docs, and final report |
+| `2fe6b66` | add validation, scenario maps, documentation, and final report |
 
 ---
 
