@@ -14,6 +14,7 @@ The map is for visual scenario validation before simulation/model runs.
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import folium
@@ -59,24 +60,28 @@ def read_geojson(name: str) -> gpd.GeoDataFrame:
     return gpd.read_file(path).to_crs("EPSG:4326")
 
 
+def folium_data(gdf: gpd.GeoDataFrame) -> dict:
+    """Convert GeoDataFrame to plain JSON-safe GeoJSON for Folium.
+
+    Some OSM attributes are loaded as numpy arrays. Passing the GeoDataFrame
+    directly to Folium can therefore fail with 'ndarray is not JSON serializable'.
+    GeoPandas' to_json normalizes those values first.
+    """
+    return json.loads(gdf.to_json())
+
+
 def add_closure_layer(m: folium.Map, name: str, filename: str, show: bool) -> None:
     targets = read_geojson(filename)
     group = FeatureGroup(name=name, show=show)
     if not targets.empty:
         folium.GeoJson(
-            targets,
+            folium_data(targets),
             style_function=lambda _: {
                 "color": "#d73027",
                 "weight": 6,
                 "opacity": 0.95,
                 "dashArray": "8,6",
             },
-            tooltip=folium.GeoJsonTooltip(
-                fields=[f for f in ["name", "osmid", "highway", "length"] if f in targets.columns],
-                aliases=[f for f in ["Road", "OSM ID", "Highway", "Length (m)"][: len([f for f in ["name", "osmid", "highway", "length"] if f in targets.columns])]],
-                localize=True,
-                sticky=False,
-            ) if any(f in targets.columns for f in ["name", "osmid", "highway", "length"]) else None,
         ).add_to(group)
     group.add_to(m)
 
@@ -94,7 +99,7 @@ def create_comparison_map() -> folium.Map:
 
     base = FeatureGroup(name="B0 — Full Network", show=True)
     folium.GeoJson(
-        streets,
+        folium_data(streets),
         style_function=lambda _: {
             "color": "#8c8c8c",
             "weight": 1,
@@ -105,7 +110,7 @@ def create_comparison_map() -> folium.Map:
 
     study = FeatureGroup(name="B0 — Reviewed Ibrahim Corridor", show=True)
     folium.GeoJson(
-        corridor,
+        folium_data(corridor),
         style_function=lambda _: {
             "color": "#ff7f00",
             "weight": 3,
