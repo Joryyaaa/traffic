@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the Makkah Ibrahim Al Khalil OSM package before any scenario run."""
+"""Validate Makkah Ibrahim B0 and all geometry scenarios before model runs."""
 from pathlib import Path
 import json
 import geopandas as gpd
@@ -11,9 +11,16 @@ REQUIRED = [
     "B0_baseline_streets.geojson",
     "road_metadata.geojson",
     "intervention_targets.geojson",
+    "S1_partial_closure_streets.geojson",
+    "S1_partial_closure_targets.geojson",
+    "S2_full_corridor_closure_streets.geojson",
+    "S2_full_corridor_closure_targets.geojson",
+    "S3_entry_direction_streets.geojson",
+    "S3_entry_direction_targets.geojson",
+    "S3_exit_direction_streets.geojson",
+    "S3_exit_direction_targets.geojson",
     "qa_report.json",
 ]
-
 missing = [name for name in REQUIRED if not (D / name).exists()]
 if missing:
     raise SystemExit("Missing files:\n" + "\n".join(missing))
@@ -25,21 +32,44 @@ assert all(qa["required_node_ids_present"].values()), qa
 assert qa["closed_geometry_rows_after_split"] == 0, qa
 assert qa["intervention_target_segments"] == 34, qa
 assert qa["selected_target_groups"] == [1, 2], qa
+assert qa["demand_status"] == "no synthetic demand added", qa
 
-streets = gpd.read_file(D / "B0_baseline_streets.geojson")
+b0 = gpd.read_file(D / "B0_baseline_streets.geojson")
 targets = gpd.read_file(D / "intervention_targets.geojson")
-graph = nx.Graph()
-for _, row in streets.iterrows():
-    graph.add_edge(int(row["u"]), int(row["v"]))
-assert nx.number_connected_components(graph) == 1
-assert len(streets) == qa["B0_segments"]
+assert len(b0) == qa["B0_segments"]
 assert len(targets) == qa["intervention_target_segments"]
 
-print("PASS: one connected Makkah OSM component")
-print("PASS: Ibrahim Al Khalil OSM way present:", qa["required_way_id"])
-print("PASS: required Makkah OSM nodes present:", qa["required_node_ids"])
-print("PASS: no closed street geometries remain")
-print("PASS: clean B0 baseline only; no scenario modifications")
-print("PASS: reviewed Ibrahim intervention target geometry:", len(targets), "segments")
-print("PASS: no synthetic demand or scenario policy introduced")
+def components(gdf):
+    graph = nx.Graph()
+    for _, row in gdf.iterrows():
+        graph.add_edge(int(row["u"]), int(row["v"]))
+    return nx.number_connected_components(graph)
+
+assert components(b0) == 1
+print("PASS: B0 connected and unchanged:", len(b0), "segments")
+print("PASS: reviewed Ibrahim target geometry:", len(targets), "segments")
+
+checks = [
+    ("S1", "S1_partial_closure"),
+    ("S2", "S2_full_corridor_closure"),
+    ("S3_entry", "S3_entry_direction"),
+    ("S3_exit", "S3_exit_direction"),
+]
+for qa_key, stem in checks:
+    streets = gpd.read_file(D / f"{stem}_streets.geojson")
+    removed = gpd.read_file(D / f"{stem}_targets.geojson")
+    expected = qa[qa_key]
+    assert len(removed) == expected["removed_segments"], (qa_key, len(removed), expected)
+    assert len(streets) == expected["remaining_segments"], (qa_key, len(streets), expected)
+    assert len(streets) + len(removed) == len(b0), (qa_key, len(streets), len(removed), len(b0))
+    actual_components = components(streets)
+    assert actual_components == expected["remaining_components"], (qa_key, actual_components, expected)
+    print(
+        f"PASS: {qa_key} {expected['name']} — removed {len(removed)} segments; "
+        f"remaining components={actual_components}"
+    )
+
+assert qa["S3_entry"]["removed_segments"] + qa["S3_exit"]["removed_segments"] == qa["intervention_target_segments"], qa
+print("PASS: S3 entry + exit partition the reviewed 34-segment corridor")
+print("PASS: no synthetic demand introduced")
 print(json.dumps(qa, indent=2, ensure_ascii=False))
