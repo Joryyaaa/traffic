@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.22165,
+          28.00453
+        ]
+      },
+      "properties": {
+        "destination_id": "managed_entry_gate",
+        "destination_weight": 1.0,
+        "entry_way_osm_id": 1447890028,
+        "description": "Trunk road junction nearest to construction cluster"
+      }
+    }
+  ]
+}

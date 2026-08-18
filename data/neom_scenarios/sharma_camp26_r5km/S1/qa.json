@@ -1,0 +1,20 @@
+{
+  "scenario": "S1",
+  "scenario_name": "S1_Construction_Zone_Vehicle_Restriction",
+  "description": "Vehicle access to the main construction compound internal roads is restricted. Workers/vehicles must use alternative routes around the compound.",
+  "streets_source": "data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson",
+  "streets_modified": true,
+  "closure_way_ids": [
+    849103822,
+    996697456,
+    849103837,
+    849103835,
+    849103823
+  ],
+  "removed_ways": 5,
+  "removed_segments": 9,
+  "remaining_ways": 269,
+  "remaining_segments": 2389,
+  "origin_count": 21,
+  "destination_count": 12
+}

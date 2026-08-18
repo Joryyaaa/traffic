@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.27476,
+          27.97053
+        ]
+      },
+      "properties": {
+        "destination_id": "managed_exit_gate",
+        "destination_weight": 1.0,
+        "exit_way_osm_id": 849104008,
+        "description": "Far end of trunk road heading south from construction area"
+      }
+    }
+  ]
+}

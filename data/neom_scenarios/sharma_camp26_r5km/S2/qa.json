@@ -1,0 +1,15 @@
+{
+  "scenario": "S2",
+  "scenario_name": "S2_Parking_Hub_Camp26",
+  "description": "Vehicles are routed to Camp 26 (NRC-26) as a parking/staging hub instead of directly to construction sites. Last-mile transport is separate (shuttle/pedestrian, not modeled).",
+  "streets_source": "data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson",
+  "streets_modified": false,
+  "parking_hub": {
+    "name": "Camp 26 (NRC-26)",
+    "osm_id": 12390325515,
+    "lat": 28.0809225,
+    "lon": 35.214663
+  },
+  "origin_count": 21,
+  "destination_count": 1
+}

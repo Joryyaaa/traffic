@@ -1,0 +1,146 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            35.2027979,
+            28.0052958
+          ],
+          [
+            35.2028806,
+            28.0051535
+          ],
+          [
+            35.2029309,
+            28.004967
+          ],
+          [
+            35.2029542,
+            28.0051586
+          ],
+          [
+            35.2030217,
+            28.0053129
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103822,
+        "highway": "service",
+        "name": "",
+        "segments": 4,
+        "oneway": "yes",
+        "surface": "",
+        "lanes": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            35.2023512,
+            28.0052617
+          ],
+          [
+            35.2023301,
+            28.0053649
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103823,
+        "highway": "service",
+        "name": "",
+        "segments": 1,
+        "oneway": "no",
+        "surface": "",
+        "lanes": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            35.202946,
+            28.0048089
+          ],
+          [
+            35.2023632,
+            28.0047765
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103835,
+        "highway": "service",
+        "name": "",
+        "segments": 1,
+        "oneway": "no",
+        "surface": "",
+        "lanes": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            35.2029309,
+            28.004967
+          ],
+          [
+            35.2035043,
+            28.0050121
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103837,
+        "highway": "service",
+        "name": "",
+        "segments": 1,
+        "oneway": "no",
+        "surface": "",
+        "lanes": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            35.2029309,
+            28.004967
+          ],
+          [
+            35.202946,
+            28.0048089
+          ],
+          [
+            35.2031447,
+            28.002928
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 996697456,
+        "highway": "service",
+        "name": "",
+        "segments": 2,
+        "oneway": "no",
+        "surface": "",
+        "lanes": ""
+      }
+    }
+  ]
+}

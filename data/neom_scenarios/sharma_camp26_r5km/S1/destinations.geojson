@@ -1,0 +1,197 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20233772,
+          28.00205224
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_849103852",
+        "destination_weight": 1.0,
+        "osm_id": 849103852,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20718594,
+          28.0024302
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_849103853",
+        "destination_weight": 1.0,
+        "osm_id": 849103853,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.199485800000005,
+          28.007365099999998
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_849103881",
+        "destination_weight": 1.0,
+        "osm_id": 849103881,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20172254,
+          28.0075305
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_849103882",
+        "destination_weight": 1.0,
+        "osm_id": 849103882,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.203261,
+          28.0076408
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_849103883",
+        "destination_weight": 1.0,
+        "osm_id": 849103883,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.207075939999996,
+          28.00790642
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_849103884",
+        "destination_weight": 1.0,
+        "osm_id": 849103884,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.209257799999996,
+          28.004917499999998
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_849103885",
+        "destination_weight": 1.0,
+        "osm_id": 849103885,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.22094121111111,
+          28.048645155555555
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_849189795",
+        "destination_weight": 1.0,
+        "osm_id": 849189795,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.26817913333334,
+          27.994309
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_1216978080",
+        "destination_weight": 1.0,
+        "osm_id": 1216978080,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.211993505882354,
+          28.06140319411765
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_1249142095",
+        "destination_weight": 1.0,
+        "osm_id": 1249142095,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.25153134285714,
+          28.048595731428566
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_1249996637",
+        "destination_weight": 1.0,
+        "osm_id": 1249996637,
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.31021096111111,
+          27.973764611111115
+        ]
+      },
+      "properties": {
+        "destination_id": "construction_1253346815",
+        "destination_weight": 1.0,
+        "osm_id": 1253346815,
+        "name": ""
+      }
+    }
+  ]
+}

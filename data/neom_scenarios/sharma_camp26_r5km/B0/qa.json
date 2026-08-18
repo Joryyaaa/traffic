@@ -1,0 +1,11 @@
+{
+  "scenario": "B0",
+  "scenario_name": "B0_Baseline",
+  "description": "No intervention. Full network, all worker origins, all construction destinations.",
+  "streets_source": "data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson",
+  "streets_modified": false,
+  "origin_count": 21,
+  "destination_count": 12,
+  "closure_way_ids": [],
+  "removed_segments": 0
+}

@@ -1,0 +1,30 @@
+{
+  "scenario": "S3",
+  "scenario_name": "S3_Managed_Entry_Exit",
+  "description": "Traffic flow managed at entry/exit gates. Entry: workers from camps/dormitories to trunk junction gate. Exit: construction area to trunk road heading south. Two separate Madina runs (undirected backend).",
+  "streets_source": "data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson",
+  "streets_modified": false,
+  "entry": {
+    "origins": "same as B0 (21 worker origins)",
+    "destination": "trunk junction gate",
+    "gate_coords": {
+      "lat": 28.00453,
+      "lon": 35.22165
+    },
+    "entry_way_osm_id": 1447890028
+  },
+  "exit": {
+    "origin": "construction cluster center",
+    "origin_coords": {
+      "lat": 28.005,
+      "lon": 35.203
+    },
+    "destination": "trunk road far south gate",
+    "gate_coords": {
+      "lat": 27.97053,
+      "lon": 35.27476
+    },
+    "exit_way_osm_id": 849104008
+  },
+  "note": "S3 uses two separate Madina runs because the backend is undirected."
+}

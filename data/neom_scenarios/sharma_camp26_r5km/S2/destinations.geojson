@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.214663,
+          28.0809225
+        ]
+      },
+      "properties": {
+        "destination_id": "camp26_parking_hub",
+        "destination_weight": 1.0,
+        "osm_id": 12390325515,
+        "name": "Neom Residential Camp 26 (NRC-26)"
+      }
+    }
+  ]
+}
