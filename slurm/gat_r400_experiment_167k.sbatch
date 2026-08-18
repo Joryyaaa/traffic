@@ -55,7 +55,7 @@
 
 set -euo pipefail
 
-PROJECT_DIR="${PROJECT_DIR:-/home/alblueja/traffic}"
+PROJECT_DIR="${PROJECT_DIR:-$SLURM_SUBMIT_DIR}"
 CONFIG="${CONFIG:-configs/city_madina_ablation_r400_gat.yaml}"
 TIMESTEPS="${TIMESTEPS:-167000}"
 OUTROOT="${OUTROOT:-runs/r400_gat_167k}"
@@ -65,6 +65,7 @@ CONDA_ENV="${CONDA_ENV:-snrl}"
 SEED="${SLURM_ARRAY_TASK_ID}"
 
 cd "$PROJECT_DIR"
+export PYTHONPATH="$PWD/src:${PYTHONPATH:-}"
 mkdir -p logs "$OUTROOT"
 
 unset SLURM_CPU_BIND SLURM_CPU_BIND_LIST SLURM_CPU_BIND_TYPE SLURM_CPU_BIND_VERBOSE
