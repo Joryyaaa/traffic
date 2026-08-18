@@ -1,0 +1,59 @@
+# GAT experiment on Al Nakheel r=400m.
+# Identical environment to the MLP adjacency treatment arm — 7-feature
+# observation (is_closed, flow, length, flow_delta, degree,
+# closed_neighbour_count, touches_closed). The GAT feature extractor is
+# wired in by the training script, not by this config.
+#
+# MaskablePPO + GATFeaturesExtractor, 30k steps, seeds 1-5.
+# zone_builder reference on this config: +0.6863
+#
+# See results/gat_r400_experiment/PROVENANCE.md for full protocol.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_r400/streets.geojson
+  origins_path: data/raw/riyadh_r400/residential.geojson
+  destinations_path: data/raw/riyadh_r400/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 9
+  episode_length: 22
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 4
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta
+
+include_adjacency_state: true
