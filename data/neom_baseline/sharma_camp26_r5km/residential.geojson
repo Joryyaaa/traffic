@@ -1,0 +1,621 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2009048,
+              28.0038221
+            ],
+            [
+              35.2009183,
+              28.0036776
+            ],
+            [
+              35.2013052,
+              28.0037058
+            ],
+            [
+              35.2012917,
+              28.0038503
+            ],
+            [
+              35.2009048,
+              28.0038221
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103808,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2017117,
+              28.0038723
+            ],
+            [
+              35.2017252,
+              28.0037278
+            ],
+            [
+              35.2021121,
+              28.0037559
+            ],
+            [
+              35.2020986,
+              28.0039005
+            ],
+            [
+              35.2017117,
+              28.0038723
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103809,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2024326,
+              28.0041329
+            ],
+            [
+              35.2024461,
+              28.0039884
+            ],
+            [
+              35.2028331,
+              28.0040166
+            ],
+            [
+              35.2028196,
+              28.0041611
+            ],
+            [
+              35.2024326,
+              28.0041329
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103810,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2024639,
+              28.0039199
+            ],
+            [
+              35.2024774,
+              28.0037754
+            ],
+            [
+              35.2028643,
+              28.0038035
+            ],
+            [
+              35.2028508,
+              28.0039481
+            ],
+            [
+              35.2024639,
+              28.0039199
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103811,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2024525,
+              28.0037119
+            ],
+            [
+              35.202466,
+              28.0035674
+            ],
+            [
+              35.2028529,
+              28.0035955
+            ],
+            [
+              35.2028394,
+              28.0037401
+            ],
+            [
+              35.2024525,
+              28.0037119
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103812,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2024752,
+              28.0035089
+            ],
+            [
+              35.2024887,
+              28.0033644
+            ],
+            [
+              35.2028756,
+              28.0033925
+            ],
+            [
+              35.2028621,
+              28.0035371
+            ],
+            [
+              35.2024752,
+              28.0035089
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103813,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2019955,
+              28.0034788
+            ],
+            [
+              35.202009,
+              28.0033343
+            ],
+            [
+              35.2023959,
+              28.0033624
+            ],
+            [
+              35.2023824,
+              28.003507
+            ],
+            [
+              35.2019955,
+              28.0034788
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103814,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2023383,
+              28.0039182
+            ],
+            [
+              35.2021746,
+              28.0039063
+            ],
+            [
+              35.2022064,
+              28.0035647
+            ],
+            [
+              35.2023702,
+              28.0035766
+            ],
+            [
+              35.2023383,
+              28.0039182
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103815,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2046691,
+              28.004091
+            ],
+            [
+              35.2045066,
+              28.0040771
+            ],
+            [
+              35.2045504,
+              28.0036768
+            ],
+            [
+              35.204713,
+              28.0036907
+            ],
+            [
+              35.2046691,
+              28.004091
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103828,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2044151,
+              28.0040789
+            ],
+            [
+              35.2042526,
+              28.004065
+            ],
+            [
+              35.2042964,
+              28.0036647
+            ],
+            [
+              35.204459,
+              28.0036786
+            ],
+            [
+              35.2044151,
+              28.0040789
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103829,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2041767,
+              28.0040613
+            ],
+            [
+              35.2040142,
+              28.0040475
+            ],
+            [
+              35.204058,
+              28.0036471
+            ],
+            [
+              35.2042206,
+              28.003661
+            ],
+            [
+              35.2041767,
+              28.0040613
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103830,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2042477,
+              28.0033295
+            ],
+            [
+              35.2040852,
+              28.0033157
+            ],
+            [
+              35.2041289,
+              28.0029153
+            ],
+            [
+              35.2042915,
+              28.0029292
+            ],
+            [
+              35.2042477,
+              28.0033295
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103831,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.204506,
+              28.0033446
+            ],
+            [
+              35.2043435,
+              28.0033307
+            ],
+            [
+              35.2043872,
+              28.0029304
+            ],
+            [
+              35.2045498,
+              28.0029443
+            ],
+            [
+              35.204506,
+              28.0033446
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103832,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2047501,
+              28.0033596
+            ],
+            [
+              35.2045876,
+              28.0033457
+            ],
+            [
+              35.2046313,
+              28.0029454
+            ],
+            [
+              35.2047939,
+              28.0029593
+            ],
+            [
+              35.2047501,
+              28.0033596
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103833,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2077621,
+              28.0046152
+            ],
+            [
+              35.2077756,
+              28.0044706
+            ],
+            [
+              35.2081625,
+              28.0044988
+            ],
+            [
+              35.208149,
+              28.0046434
+            ],
+            [
+              35.2077621,
+              28.0046152
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103912,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2076849,
+              28.004598
+            ],
+            [
+              35.2075212,
+              28.0045861
+            ],
+            [
+              35.207553,
+              28.0042445
+            ],
+            [
+              35.2077168,
+              28.0042564
+            ],
+            [
+              35.2076849,
+              28.004598
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103913,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.2081713,
+              28.0044275
+            ],
+            [
+              35.2080076,
+              28.0044156
+            ],
+            [
+              35.2080394,
+              28.004074
+            ],
+            [
+              35.2082032,
+              28.0040859
+            ],
+            [
+              35.2081713,
+              28.0044275
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "osm_id": 849103914,
+        "building": "dormitory",
+        "name": "",
+        "is_residential": true
+      }
+    }
+  ],
+  "properties": {
+    "description": "Residential buildings (apartments, detached, house, dormitory)",
+    "count": 17
+  }
+}

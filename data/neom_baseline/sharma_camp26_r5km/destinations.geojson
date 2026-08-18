@@ -1,0 +1,1773 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20233772,
+          28.00205224
+        ]
+      },
+      "properties": {
+        "osm_id": 849103852,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20718594,
+          28.0024302
+        ]
+      },
+      "properties": {
+        "osm_id": 849103853,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.199485800000005,
+          28.007365099999998
+        ]
+      },
+      "properties": {
+        "osm_id": 849103881,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20172254,
+          28.0075305
+        ]
+      },
+      "properties": {
+        "osm_id": 849103882,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.203261,
+          28.0076408
+        ]
+      },
+      "properties": {
+        "osm_id": 849103883,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.207075939999996,
+          28.00790642
+        ]
+      },
+      "properties": {
+        "osm_id": 849103884,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.209257799999996,
+          28.004917499999998
+        ]
+      },
+      "properties": {
+        "osm_id": 849103885,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.22094121111111,
+          28.048645155555555
+        ]
+      },
+      "properties": {
+        "osm_id": 849189795,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.26817913333334,
+          27.994309
+        ]
+      },
+      "properties": {
+        "osm_id": 1216978080,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.211993505882354,
+          28.06140319411765
+        ]
+      },
+      "properties": {
+        "osm_id": 1249142095,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.25153134285714,
+          28.048595731428566
+        ]
+      },
+      "properties": {
+        "osm_id": 1249996637,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.31021096111111,
+          27.973764611111115
+        ]
+      },
+      "properties": {
+        "osm_id": 1253346815,
+        "dest_type": "construction_site",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2069068,
+          28.0052306
+        ]
+      },
+      "properties": {
+        "osm_id": 7922123682,
+        "dest_type": "amenity",
+        "amenity": "place_of_worship",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2201462,
+          28.0482555
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859767,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2189251,
+          28.0506653
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859768,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2170588,
+          28.0486958
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859781,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2171647,
+          28.0487017
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859782,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172052,
+          28.0487733
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859783,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2173427,
+          28.0488131
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859784,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174103,
+          28.0487495
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859785,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2173269,
+          28.0487375
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859786,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172638,
+          28.0487196
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859787,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172368,
+          28.0486699
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859788,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172323,
+          28.0486182
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859789,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2171985,
+          28.0485705
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859790,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2171196,
+          28.0485964
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859791,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2173314,
+          28.048654
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859792,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174035,
+          28.0486799
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859793,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2175026,
+          28.0489224
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859794,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2175747,
+          28.048833
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859795,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.217613,
+          28.0487296
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859796,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2180118,
+          28.0481251
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859797,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2181199,
+          28.0480675
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859798,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2182236,
+          28.0480436
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859799,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2178969,
+          28.0481569
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859800,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.217809,
+          28.0481927
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859801,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2177257,
+          28.0481947
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859802,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2176063,
+          28.0482106
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859803,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2176153,
+          28.0482544
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859804,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2176784,
+          28.0482882
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859805,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2176491,
+          28.0483379
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859806,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2175792,
+          28.04831
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859807,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174914,
+          28.0482723
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859808,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174193,
+          28.048312
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859809,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174666,
+          28.0483339
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859810,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174553,
+          28.0483796
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859811,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2175432,
+          28.0483598
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859812,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.217568,
+          28.0484095
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859813,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.217568,
+          28.0484711
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859814,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174891,
+          28.0484433
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859815,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174283,
+          28.0484333
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859816,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.217372,
+          28.0484333
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859817,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2173877,
+          28.0483737
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859818,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2173246,
+          28.0483617
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859819,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172999,
+          28.0484353
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859820,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172458,
+          28.0484453
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859821,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172097,
+          28.0485109
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859822,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172841,
+          28.048493
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859823,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2172954,
+          28.0485646
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859824,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2173584,
+          28.0485765
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859825,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2173855,
+          28.0486302
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859826,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174193,
+          28.0485904
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859827,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174914,
+          28.0486222
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859828,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2175094,
+          28.0485248
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859829,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2174418,
+          28.0484969
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859830,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2173787,
+          28.0485089
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859831,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2165451,
+          28.0491591
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859832,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2164798,
+          28.0491412
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859833,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2164618,
+          28.0492167
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859834,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2164055,
+          28.0491809
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859835,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2163874,
+          28.0492446
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859836,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2165429,
+          28.0490875
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859837,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2166105,
+          28.0491133
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859838,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2166555,
+          28.0490616
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859839,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2167411,
+          28.0490696
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859840,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2163491,
+          28.0492823
+        ]
+      },
+      "properties": {
+        "osm_id": 7922859841,
+        "dest_type": "amenity",
+        "amenity": "shelter",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2578846,
+          28.0469885
+        ]
+      },
+      "properties": {
+        "osm_id": 11289484079,
+        "dest_type": "amenity",
+        "amenity": "fuel",
+        "name": "الدريس"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2185866,
+          28.051109
+        ]
+      },
+      "properties": {
+        "osm_id": 12555983950,
+        "dest_type": "amenity",
+        "amenity": "car_rental",
+        "name": "لومي"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23323596,
+          27.98721592
+        ]
+      },
+      "properties": {
+        "osm_id": 334178616,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.233556480000004,
+          27.987488239999998
+        ]
+      },
+      "properties": {
+        "osm_id": 334178617,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20290842,
+          28.0045644
+        ]
+      },
+      "properties": {
+        "osm_id": 849103838,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.203025159999996,
+          28.003879599999998
+        ]
+      },
+      "properties": {
+        "osm_id": 849103839,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.202556939999994,
+          28.00479788
+        ]
+      },
+      "properties": {
+        "osm_id": 849103840,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20152418,
+          28.003456
+        ]
+      },
+      "properties": {
+        "osm_id": 849103850,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20785402,
+          28.00393272
+        ]
+      },
+      "properties": {
+        "osm_id": 849103984,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20658948,
+          28.005310520000002
+        ]
+      },
+      "properties": {
+        "osm_id": 849103991,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2043204,
+          28.004246039999998
+        ]
+      },
+      "properties": {
+        "osm_id": 849103992,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2074176,
+          28.003362300000003
+        ]
+      },
+      "properties": {
+        "osm_id": 849103993,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.20898862,
+          28.00637514
+        ]
+      },
+      "properties": {
+        "osm_id": 849103997,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.232102311111106,
+          28.019176700000003
+        ]
+      },
+      "properties": {
+        "osm_id": 849104037,
+        "dest_type": "amenity",
+        "amenity": "hospital",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2384944,
+          28.06719094
+        ]
+      },
+      "properties": {
+        "osm_id": 913408080,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.231688989999995,
+          28.01923865
+        ]
+      },
+      "properties": {
+        "osm_id": 1342718082,
+        "dest_type": "amenity",
+        "amenity": "hospital",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23123034,
+          28.019791220000002
+        ]
+      },
+      "properties": {
+        "osm_id": 1342718085,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2306649,
+          28.01895205
+        ]
+      },
+      "properties": {
+        "osm_id": 1342718095,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.231706599999995,
+          28.02044958
+        ]
+      },
+      "properties": {
+        "osm_id": 1342718099,
+        "dest_type": "amenity",
+        "amenity": "parking",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.231931599999996,
+          28.021305840000004
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234256,
+        "dest_type": "workplace",
+        "building": "commercial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23244968,
+          28.021527759999998
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234257,
+        "dest_type": "workplace",
+        "building": "commercial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23233702,
+          28.021299640000002
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234258,
+        "dest_type": "workplace",
+        "building": "commercial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23205662,
+          28.02090156
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234259,
+        "dest_type": "workplace",
+        "building": "commercial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23218968,
+          28.021676479999996
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234260,
+        "dest_type": "workplace",
+        "building": "commercial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.232931099999995,
+          28.0180742
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234264,
+        "dest_type": "workplace",
+        "building": "industrial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23314294000001,
+          28.018367800000004
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234265,
+        "dest_type": "workplace",
+        "building": "industrial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23332534,
+          28.018621200000002
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234266,
+        "dest_type": "workplace",
+        "building": "industrial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23352924,
+          28.018912399999998
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234267,
+        "dest_type": "workplace",
+        "building": "industrial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.233714299999995,
+          28.019156300000002
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234268,
+        "dest_type": "workplace",
+        "building": "industrial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23393224,
+          28.0194624
+        ]
+      },
+      "properties": {
+        "osm_id": 1255234269,
+        "dest_type": "workplace",
+        "building": "industrial",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.231688989999995,
+          28.01923865
+        ]
+      },
+      "properties": {
+        "osm_id": 1342718082,
+        "dest_type": "workplace",
+        "building": "hospital",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23246848,
+          28.018410340000003
+        ]
+      },
+      "properties": {
+        "osm_id": 1342718103,
+        "dest_type": "workplace",
+        "building": "hospital",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.232742460000004,
+          28.01879654
+        ]
+      },
+      "properties": {
+        "osm_id": 1342718104,
+        "dest_type": "workplace",
+        "building": "hospital",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2330242,
+          28.01918814
+        ]
+      },
+      "properties": {
+        "osm_id": 1342718105,
+        "dest_type": "workplace",
+        "building": "hospital",
+        "name": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.23178766,
+          28.018280169999997
+        ]
+      },
+      "properties": {
+        "osm_id": 1342719371,
+        "dest_type": "workplace",
+        "building": "hospital",
+        "name": ""
+      }
+    }
+  ],
+  "properties": {
+    "description": "Trip destinations: construction sites + amenities + commercial/industrial",
+    "count": 111
+  }
+}

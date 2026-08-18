@@ -1,0 +1,152 @@
+{
+  "baseline": "NEOM_B0_sharma_camp26_r5km",
+  "frozen_date": "2026-08-18T22:59:30Z",
+  "osm_timestamp": "2026-08-18T22:55:19Z",
+  "center": [
+    28.03066,
+    35.24203
+  ],
+  "radius_m": 5000,
+  "network": {
+    "way_count": 278,
+    "segment_count": 2424,
+    "node_count": 2274,
+    "connected_components": 5,
+    "component_sizes": [
+      2247,
+      12,
+      7,
+      6,
+      2
+    ],
+    "largest_component_nodes": 2247,
+    "largest_component_pct": 98.8,
+    "highway_class_counts": {
+      "construction": 36,
+      "footway": 4,
+      "residential": 34,
+      "rest_area": 1,
+      "secondary": 3,
+      "service": 134,
+      "tertiary": 5,
+      "track": 15,
+      "trunk": 27,
+      "trunk_link": 10,
+      "unclassified": 9
+    }
+  },
+  "simulation_ready_network": {
+    "way_count": 274,
+    "segment_count": 2398,
+    "derivation": "largest connected component only"
+  },
+  "features": {
+    "building_count": 303,
+    "building_types": {
+      "commercial": 5,
+      "dormitory": 17,
+      "hospital": 5,
+      "industrial": 6,
+      "yes": 270
+    },
+    "residential_building_count": 17,
+    "amenity_count": 83,
+    "amenity_types": {
+      "car_rental": 1,
+      "fuel": 1,
+      "hospital": 2,
+      "parking": 17,
+      "place_of_worship": 1,
+      "shelter": 61
+    },
+    "construction_count": 12,
+    "landuse_count": 34,
+    "landuse_types": {
+      "construction": 12,
+      "grass": 4,
+      "industrial": 10,
+      "military": 1,
+      "orchard": 2,
+      "quarry": 1,
+      "residential": 4
+    },
+    "place_count": 3
+  },
+  "origins": {
+    "count": 21,
+    "types": {
+      "residential_building": 17,
+      "village": 1,
+      "camp": 1,
+      "construction_camp": 2
+    }
+  },
+  "destinations": {
+    "count": 111,
+    "types": {
+      "construction_site": 12,
+      "amenity": 83,
+      "workplace": 16
+    }
+  },
+  "anchors": {
+    "Sharma": {
+      "lat": 28.0306558,
+      "lon": 35.242029,
+      "osm_id": 5796927641
+    },
+    "Camp26": {
+      "lat": 28.0809225,
+      "lon": 35.214663,
+      "osm_id": 12390325515
+    },
+    "ConstCampW1": {
+      "lat": 28.019137,
+      "lon": 35.188786,
+      "osm_id": 849104049
+    },
+    "ConstCampW2": {
+      "lat": 28.006535,
+      "lon": 35.188342,
+      "osm_id": 849118868
+    }
+  },
+  "important_osm_ids": {
+    "anchor_nodes": {
+      "Sharma": 5796927641,
+      "Camp26": 12390325515,
+      "ConstCampW1": 849104049,
+      "ConstCampW2": 849118868
+    },
+    "sample_way_ids_first10": [
+      131685204,
+      131685212,
+      131685220,
+      131685223,
+      131685243,
+      167516514,
+      167516516,
+      167516517,
+      167516540,
+      267542668
+    ],
+    "total_way_ids": 278
+  },
+  "files": {
+    "streets": "data/neom_baseline/sharma_camp26_r5km/streets.geojson",
+    "streets_largest_component": "data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson",
+    "buildings": "data/neom_baseline/sharma_camp26_r5km/buildings.geojson",
+    "residential": "data/neom_baseline/sharma_camp26_r5km/residential.geojson",
+    "construction": "data/neom_baseline/sharma_camp26_r5km/construction.geojson",
+    "amenities": "data/neom_baseline/sharma_camp26_r5km/amenities.geojson",
+    "landuse": "data/neom_baseline/sharma_camp26_r5km/landuse.geojson",
+    "origins": "data/neom_baseline/sharma_camp26_r5km/origins.geojson",
+    "destinations": "data/neom_baseline/sharma_camp26_r5km/destinations.geojson",
+    "places": "data/neom_baseline/sharma_camp26_r5km/places.geojson",
+    "qa": "data/neom_baseline/sharma_camp26_r5km/qa.json",
+    "provenance": "data/neom_baseline/sharma_camp26_r5km/provenance.json",
+    "baseline_map": "results/neom_baseline/sharma_camp26_r5km/baseline_map.html",
+    "config": "configs/neom_baseline/city_madina_neom_b0.yaml",
+    "doc": "docs/neom_baseline/NEOM_BASELINE_B0.md"
+  }
+}

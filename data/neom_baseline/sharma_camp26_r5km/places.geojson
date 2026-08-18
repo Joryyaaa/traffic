@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.269444,
+          28.024444
+        ]
+      },
+      "properties": {
+        "osm_id": 1237953031,
+        "name": "شرما",
+        "name_en": "Ash Sharmah",
+        "place": "hamlet"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.242029,
+          28.0306558
+        ]
+      },
+      "properties": {
+        "osm_id": 5796927641,
+        "name": "شرما",
+        "name_en": "Sharma",
+        "place": "village"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2027014,
+          28.0058861
+        ]
+      },
+      "properties": {
+        "osm_id": 8428377321,
+        "name": "نيوم",
+        "name_en": "Neom",
+        "place": "city"
+      }
+    }
+  ]
+}

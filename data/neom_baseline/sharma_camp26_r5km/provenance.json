@@ -1,0 +1,23 @@
+{
+  "baseline_id": "NEOM_B0_sharma_camp26_r5km",
+  "candidate": "A_sharma_camp26",
+  "selection_reason": "User-selected from discovery comparison on 2026-08-18",
+  "osm_source": {
+    "api": "Overpass API",
+    "endpoint": "https://overpass-api.de/api/interpreter",
+    "osm_base_timestamp": "2026-08-18T22:55:19Z",
+    "query_date": "2026-08-18",
+    "road_query": "way[\"highway\"](around:5000,28.03066,35.24203);out body;>;out skel qt;",
+    "feature_query": "(way[\"building\"](around:5000,...);node[\"amenity\"](around:5000,...);way[\"amenity\"](around:5000,...);way[\"landuse\"](around:5000,...);node[\"place\"](around:5000,...););out body;>;out skel qt;"
+  },
+  "center": {
+    "lat": 28.03066,
+    "lon": 35.24203
+  },
+  "radius_m": 5000,
+  "frozen_by": "build_b0.py",
+  "frozen_date": "2026-08-18T22:59:30Z",
+  "discovery_branch": "neom-baseline-discovery",
+  "discovery_json": "results/neom_baseline_discovery/discovery_combined.json",
+  "immutability_note": "This B0 baseline must remain unchanged. Future scenarios (S1, S2, ...) operate on sub-areas within this fixed extent."
+}
