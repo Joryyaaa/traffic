@@ -1,0 +1,292 @@
+[
+  {
+    "check": "branch derives from frozen B0 commit",
+    "status": "PASS",
+    "detail": "ancestry from 0ac7a86"
+  },
+  {
+    "check": "baseline streets.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline streets_largest_component.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline buildings.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline residential.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline construction.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline amenities.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline landuse.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline origins.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline destinations.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline places.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline qa.json exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "baseline provenance.json exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "no osmnx/overpass import in scenario data",
+    "status": "PASS",
+    "detail": "scenario data built from frozen GeoJSON, no network fetch"
+  },
+  {
+    "check": "config B0 exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "config S1 exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "config S2 exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "config S3_entry exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "config S3_exit exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "config B0 loads successfully",
+    "status": "PASS",
+    "detail": "SKIP: snrl not importable locally"
+  },
+  {
+    "check": "config S1 loads successfully",
+    "status": "PASS",
+    "detail": "SKIP: snrl not importable locally"
+  },
+  {
+    "check": "config S2 loads successfully",
+    "status": "PASS",
+    "detail": "SKIP: snrl not importable locally"
+  },
+  {
+    "check": "config S3_entry loads successfully",
+    "status": "PASS",
+    "detail": "SKIP: snrl not importable locally"
+  },
+  {
+    "check": "config S3_exit loads successfully",
+    "status": "PASS",
+    "detail": "SKIP: snrl not importable locally"
+  },
+  {
+    "check": "B0 streets not modified",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "B0 origin count",
+    "status": "PASS",
+    "detail": "got 21"
+  },
+  {
+    "check": "B0 destination count",
+    "status": "PASS",
+    "detail": "got 12"
+  },
+  {
+    "check": "B0 no closure way IDs",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "B0 origins have demand_weight",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "B0 destinations have destination_weight",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S1 streets modified",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S1 closure way IDs correct",
+    "status": "PASS",
+    "detail": "got [849103822, 996697456, 849103837, 849103835, 849103823]"
+  },
+  {
+    "check": "S1 removed ways",
+    "status": "PASS",
+    "detail": "got 5"
+  },
+  {
+    "check": "S1 same origins as B0",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S1 same destinations as B0",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S1 closure ways absent from restricted network",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S1 closure ways exist in frozen B0",
+    "status": "PASS",
+    "detail": "missing: set()"
+  },
+  {
+    "check": "S1 only removes intended ways",
+    "status": "PASS",
+    "detail": "extra removed: set()"
+  },
+  {
+    "check": "S2 streets not modified",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S2 same origins as B0",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S2 single destination (parking hub)",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S2 parking hub is Camp 26",
+    "status": "PASS",
+    "detail": "got 12390325515"
+  },
+  {
+    "check": "S3 streets not modified",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S3 entry way ID recorded",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S3 exit way ID recorded",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S3 entry destination is single point",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S3 exit origin is single point",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S3 exit destination is single point",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S1 origins match B0",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S2 origins match B0",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S3 entry origins match B0",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "simulation.search_radius matches Abha",
+    "status": "PASS",
+    "detail": "abha=3500, neom=3500"
+  },
+  {
+    "check": "simulation.detour_ratio matches Abha",
+    "status": "PASS",
+    "detail": "abha=1.0, neom=1.0"
+  },
+  {
+    "check": "simulation.beta matches Abha",
+    "status": "PASS",
+    "detail": "abha=0.0008, neom=0.0008"
+  },
+  {
+    "check": "action.closure_mode matches Abha",
+    "status": "PASS",
+    "detail": "abha=rebuild, neom=rebuild"
+  },
+  {
+    "check": "action.max_closures matches Abha",
+    "status": "PASS",
+    "detail": "abha=0, neom=0"
+  },
+  {
+    "check": "action.episode_length matches Abha",
+    "status": "PASS",
+    "detail": "abha=1, neom=1"
+  },
+  {
+    "check": "no changes to data/neom_baseline/",
+    "status": "PASS",
+    "detail": "scenario files in data/neom_scenarios/ only"
+  }
+]
