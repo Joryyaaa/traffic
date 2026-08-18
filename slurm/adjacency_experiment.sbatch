@@ -10,7 +10,7 @@
 # See results/adjacency_experiment/PROVENANCE.md for full protocol.
 #
 # Submit BOTH conditions (5 array tasks each, 10 total):
-#   cd /home/shiekhmf/Student_Projects/Jory/traffic
+#   cd /home/alblueja/traffic
 #
 #   sbatch --array=1-5 \
 #          --export=ALL,CONFIG=configs/city_madina_ablation_r400_mlp_baseline.yaml,OUTROOT=runs/r400_mlp_baseline_30k \
@@ -42,7 +42,7 @@
 
 set -euo pipefail
 
-PROJECT_DIR="${PROJECT_DIR:-/home/shiekhmf/Student_Projects/Jory/traffic}"
+PROJECT_DIR="${PROJECT_DIR:-/home/alblueja/traffic}"
 CONFIG="${CONFIG:-configs/city_madina_ablation_r400_mlp_baseline.yaml}"
 TIMESTEPS="${TIMESTEPS:-30000}"
 OUTROOT="${OUTROOT:-runs/r400_mlp_baseline_30k}"
@@ -62,7 +62,7 @@ export MKL_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 export TOKENIZERS_PARALLELISM=false
-export MPLCONFIGDIR="${MPLCONFIGDIR:-/ibex/user/$USER/mplconfig}"
+export MPLCONFIGDIR="${MPLCONFIGDIR:-/home/$USER/.cache/matplotlib}"
 mkdir -p "$MPLCONFIGDIR"
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
