@@ -393,6 +393,29 @@ class MadinaBackend(FlowBackend):
         if nc.respect_oneway:
             self._create_directed_graphs(zonal, streets, weight_attribute)
         else:
+            # Madina can occasionally retain street_node rows that are not
+            # referenced by any network edge. Its create_graph() assumes every
+            # street_node already exists in the graph and raises KeyError for
+            # such orphan nodes. Prune only those unused street nodes before
+            # graph construction; origins/destinations and all connected
+            # street nodes remain untouched.
+            nodes = zonal.network.nodes
+            edges = zonal.network.edges
+            street_nodes = set(
+                nodes[nodes["type"] == "street_node"].index.astype(int)
+            )
+            edge_nodes = set(edges["start"].astype(int)) | set(
+                edges["end"].astype(int)
+            )
+            orphan_street_nodes = sorted(street_nodes - edge_nodes)
+
+            if orphan_street_nodes:
+                self._debug(
+                    f"  pruning {len(orphan_street_nodes)} orphan street nodes "
+                    f"before create_graph: {orphan_street_nodes}"
+                )
+                zonal.network.nodes = nodes.drop(index=orphan_street_nodes)
+
             zonal.create_graph()
         return zonal
 
