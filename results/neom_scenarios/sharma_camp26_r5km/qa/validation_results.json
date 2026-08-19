@@ -205,9 +205,14 @@
     "detail": ""
   },
   {
-    "check": "S2 parking hub is Camp 26",
+    "check": "S2 parking hub is Camp 26 road-access",
     "status": "PASS",
-    "detail": "got 12390325515"
+    "detail": "got 1217357053"
+  },
+  {
+    "check": "S2 hub on network (snap 0.0m)",
+    "status": "PASS",
+    "detail": ""
   },
   {
     "check": "S3 streets not modified",
@@ -236,6 +241,16 @@
   },
   {
     "check": "S3 exit destination is single point",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S3 exit gate within search_radius of origin",
+    "status": "PASS",
+    "detail": "got 3106m"
+  },
+  {
+    "check": "S3 exit gate on network (snap 0.0m)",
     "status": "PASS",
     "detail": ""
   },

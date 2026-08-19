@@ -6,15 +6,15 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          35.27476,
-          27.97053
+          35.230284,
+          27.990861
         ]
       },
       "properties": {
         "destination_id": "managed_exit_gate",
         "destination_weight": 1.0,
         "exit_way_osm_id": 849104008,
-        "description": "Far end of trunk road heading south from construction area"
+        "description": "Trunk road managed exit gate, 3106m from construction center (within search_radius=3500)"
       }
     }
   ]

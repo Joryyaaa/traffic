@@ -19,12 +19,14 @@
       "lat": 28.005,
       "lon": 35.203
     },
-    "destination": "trunk road far south gate",
+    "destination": "trunk road managed exit gate (within search_radius)",
     "gate_coords": {
-      "lat": 27.97053,
-      "lon": 35.27476
+      "lat": 27.990861,
+      "lon": 35.230284
     },
-    "exit_way_osm_id": 849104008
+    "exit_way_osm_id": 849104008,
+    "gate_distance_from_origin_m": 3106,
+    "network_snap_distance_m": 0.0
   },
   "note": "S3 uses two separate Madina runs because the backend is undirected."
 }

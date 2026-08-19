@@ -6,15 +6,17 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          35.214663,
-          28.0809225
+          35.221245,
+          28.063278
         ]
       },
       "properties": {
-        "destination_id": "camp26_parking_hub",
+        "destination_id": "camp26_road_access_hub",
         "destination_weight": 1.0,
-        "osm_id": 12390325515,
-        "name": "Neom Residential Camp 26 (NRC-26)"
+        "osm_id": 1217357053,
+        "name": "Camp 26 road-access point (service road, way 1217357053)",
+        "camp26_osm_id": 12390325515,
+        "camp26_distance_m": 2066
       }
     }
   ]

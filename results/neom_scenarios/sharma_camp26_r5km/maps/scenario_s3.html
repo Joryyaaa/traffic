@@ -47,7 +47,7 @@ var exitOrig = L.geoJSON({"type": "FeatureCollection", "features": [{"type": "Fe
   return '<b>Exit Origin (construction center)</b>';
 });
 
-var exitDest = L.geoJSON({"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [35.27476, 27.97053]}, "properties": {"destination_id": "managed_exit_gate", "destination_weight": 1.0, "exit_way_osm_id": 849104008, "description": "Far end of trunk road heading south from construction area"}}]}, {
+var exitDest = L.geoJSON({"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [35.230284, 27.990861]}, "properties": {"destination_id": "managed_exit_gate", "destination_weight": 1.0, "exit_way_osm_id": 849104008, "description": "Trunk road managed exit gate, 3106m from construction center (within search_radius=3500)"}}]}, {
   pointToLayer: function(f,ll){
     return L.circleMarker(ll, {radius:10,color:'#8e44ad',fillColor:'#8e44ad',fillOpacity:0.8,weight:1});
   }

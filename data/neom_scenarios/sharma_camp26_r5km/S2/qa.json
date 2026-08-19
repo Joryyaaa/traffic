@@ -5,10 +5,13 @@
   "streets_source": "data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson",
   "streets_modified": false,
   "parking_hub": {
-    "name": "Camp 26 (NRC-26)",
-    "osm_id": 12390325515,
-    "lat": 28.0809225,
-    "lon": 35.214663
+    "name": "Camp 26 road-access point (service road)",
+    "osm_id": 1217357053,
+    "lat": 28.063278,
+    "lon": 35.221245,
+    "camp26_osm_id": 12390325515,
+    "camp26_distance_m": 2066,
+    "network_snap_distance_m": 0.0
   },
   "origin_count": 21,
   "destination_count": 1
