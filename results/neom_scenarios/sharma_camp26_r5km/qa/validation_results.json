@@ -285,8 +285,73 @@
     "detail": "abha=1, neom=1"
   },
   {
-    "check": "no changes to data/neom_baseline/",
+    "check": "streets_madina_ready.geojson exists",
     "status": "PASS",
-    "detail": "scenario files in data/neom_scenarios/ only"
+    "detail": ""
+  },
+  {
+    "check": "Madina-ready segment count matches B0",
+    "status": "PASS",
+    "detail": "got 2398"
+  },
+  {
+    "check": "all segments are 2-point LineStrings",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "all segments have parent_osm_id",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "Madina-ready parent IDs match B0 ways",
+    "status": "PASS",
+    "detail": "diff: set()"
+  },
+  {
+    "check": "S1 streets_restricted_madina_ready.geojson exists",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "S1 Madina-ready removes correct segment count",
+    "status": "PASS",
+    "detail": "got 2389"
+  },
+  {
+    "check": "S1 Madina-ready has no closure way segments",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "config B0 uses Madina-ready streets",
+    "status": "PASS",
+    "detail": "path: data/neom_scenarios/sharma_camp26_r5km/streets_madina_ready.geojson"
+  },
+  {
+    "check": "config S1 uses Madina-ready streets",
+    "status": "PASS",
+    "detail": "path: data/neom_scenarios/sharma_camp26_r5km/S1/streets_restricted_madina_ready.geojson"
+  },
+  {
+    "check": "config S2 uses Madina-ready streets",
+    "status": "PASS",
+    "detail": "path: data/neom_scenarios/sharma_camp26_r5km/streets_madina_ready.geojson"
+  },
+  {
+    "check": "config S3_entry uses Madina-ready streets",
+    "status": "PASS",
+    "detail": "path: data/neom_scenarios/sharma_camp26_r5km/streets_madina_ready.geojson"
+  },
+  {
+    "check": "config S3_exit uses Madina-ready streets",
+    "status": "PASS",
+    "detail": "path: data/neom_scenarios/sharma_camp26_r5km/streets_madina_ready.geojson"
+  },
+  {
+    "check": "scenario files only in data/neom_scenarios/",
+    "status": "PASS",
+    "detail": "frozen baseline untouched"
   }
 ]

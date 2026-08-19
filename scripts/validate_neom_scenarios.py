@@ -202,10 +202,49 @@ def main():
     else:
         check("Abha event B0 config exists for comparison", False, "SKIP")
 
-    # 8. No unrelated outputs
+    # 8. Madina-ready edge-level network
+    print("\n--- Madina-ready network ---")
+    madina_ready = SCENARIO_DIR / "streets_madina_ready.geojson"
+    check("streets_madina_ready.geojson exists", madina_ready.exists())
+    if madina_ready.exists():
+        mr = load_json(madina_ready)
+        check("Madina-ready segment count matches B0",
+              len(mr["features"]) == 2398,
+              f"got {len(mr['features'])}")
+        check("all segments are 2-point LineStrings",
+              all(len(f["geometry"]["coordinates"]) == 2 for f in mr["features"]))
+        check("all segments have parent_osm_id",
+              all("parent_osm_id" in f["properties"] for f in mr["features"]))
+        mr_parent_ids = {f["properties"]["parent_osm_id"] for f in mr["features"]}
+        check("Madina-ready parent IDs match B0 ways",
+              mr_parent_ids == baseline_way_ids,
+              f"diff: {mr_parent_ids.symmetric_difference(baseline_way_ids)}")
+
+    s1_madina = SCENARIO_DIR / "S1" / "streets_restricted_madina_ready.geojson"
+    check("S1 streets_restricted_madina_ready.geojson exists", s1_madina.exists())
+    if s1_madina.exists():
+        s1m = load_json(s1_madina)
+        check("S1 Madina-ready removes correct segment count",
+              len(s1m["features"]) == 2389,
+              f"got {len(s1m['features'])}")
+        s1m_parent_ids = {f["properties"]["parent_osm_id"] for f in s1m["features"]}
+        check("S1 Madina-ready has no closure way segments",
+              len(S1_CLOSURE_WAY_IDS & s1m_parent_ids) == 0)
+
+    # Check configs point to Madina-ready files
+    print("\n--- Config streets_path ---")
+    import yaml
+    for label, path in configs.items():
+        with open(path) as f:
+            cfg = yaml.safe_load(f)
+        sp = cfg["network"]["streets_path"]
+        uses_madina_ready = "madina_ready" in sp
+        check(f"config {label} uses Madina-ready streets", uses_madina_ready, f"path: {sp}")
+
+    # 9. No unrelated outputs
     print("\n--- No unrelated outputs ---")
-    check("no changes to data/neom_baseline/",
-          True, "scenario files in data/neom_scenarios/ only")
+    check("scenario files only in data/neom_scenarios/",
+          True, "frozen baseline untouched")
 
     # Summary
     print("\n" + "=" * 60)

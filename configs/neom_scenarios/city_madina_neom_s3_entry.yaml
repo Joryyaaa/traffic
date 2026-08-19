@@ -3,7 +3,7 @@ seed: 42
 
 network:
   backend: madina
-  streets_path: data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson
+  streets_path: data/neom_scenarios/sharma_camp26_r5km/streets_madina_ready.geojson
   origins_path: data/neom_scenarios/sharma_camp26_r5km/S3/entry_origins.geojson
   destinations_path: data/neom_scenarios/sharma_camp26_r5km/S3/entry_destination.geojson
   origin_weight: demand_weight

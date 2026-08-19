@@ -1,0 +1,35 @@
+{
+  "source": "data\\neom_baseline\\sharma_camp26_r5km\\streets_largest_component.geojson",
+  "output": "data\\neom_scenarios\\sharma_camp26_r5km\\streets_madina_ready.geojson",
+  "input_ways": 274,
+  "output_segments": 2398,
+  "b0_topology": {
+    "n_nodes": 2247,
+    "n_edges": 2398,
+    "n_components": 1,
+    "largest_component_nodes": 2247,
+    "component_sizes": [
+      2247
+    ]
+  },
+  "s1_topology": {
+    "n_nodes": 2242,
+    "n_edges": 2389,
+    "n_components": 2,
+    "largest_component_nodes": 2229,
+    "component_sizes": [
+      2229,
+      13
+    ]
+  },
+  "s1_removed_segments": 9,
+  "s1_closure_way_ids": [
+    849103822,
+    849103823,
+    849103835,
+    849103837,
+    996697456
+  ],
+  "origin_max_dist_deg": 0.01883250986591871,
+  "dest_max_dist_deg": 0.0351659485343025
+}

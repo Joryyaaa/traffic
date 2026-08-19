@@ -13,6 +13,16 @@ All four scenarios (B0, S1, S2, S3) are ported from the Abha event-hotspot metho
 
 **Key principle**: identical simulation/action/reward parameters across all scenarios; only the network topology and OD pairs change.
 
+### Madina-ready edge-level network
+
+The frozen B0 stores 274 OSM ways as multi-vertex LineStrings. Madina builds graph nodes
+from LineString endpoints only (`_build_topology` line 971), so intersections at interior
+vertices don't create connections. The derived `streets_madina_ready.geojson` splits each
+way into consecutive 2-point segments (2398 total), producing a fully connected graph
+(1 component, 2247 nodes). All configs point to this derived file.
+
+The frozen baseline (`streets_largest_component.geojson`) is **not modified**.
+
 ### Shared parameters (from Abha event-hotspot configs)
 
 | Parameter | Value |
@@ -99,13 +109,15 @@ The "8 workers" is **SNRL_MASK_WORKERS**, a performance optimization for paralle
 
 ```
 data/neom_scenarios/sharma_camp26_r5km/
+  streets_madina_ready.geojson  (2398 edge-level segments, derived from frozen B0)
   B0/
     origins.geojson          (21 worker origins, demand_weight=1.0)
     destinations.geojson     (12 construction centroids, destination_weight=1.0)
     qa.json
   S1/
-    streets_restricted.geojson  (269 ways, closure roads removed)
-    closure_reference.geojson   (5 removed roads)
+    streets_restricted.geojson             (269 ways, closure roads removed)
+    streets_restricted_madina_ready.geojson (2389 segments, edge-level)
+    closure_reference.geojson              (5 removed roads)
     origins.geojson             (same 21)
     destinations.geojson        (same 12)
     qa.json
@@ -187,4 +199,4 @@ Run:
 python scripts/validate_neom_scenarios.py
 ```
 
-Last result: **58 PASS, 0 FAIL, 5 SKIP** (skips are snrl import on local machine).
+Last result: **71 PASS, 0 FAIL, 5 SKIP** (skips are snrl import on local machine).
