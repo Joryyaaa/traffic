@@ -1,0 +1,18 @@
+{
+  "scenario": "B0",
+  "scenario_name": "B0_Baseline",
+  "backend": "madina",
+  "runs": [
+    {
+      "backend": "madina",
+      "config": "configs/neom_scenarios/city_madina_neom_b0.yaml",
+      "runtime_seconds": 0.7157620470970869,
+      "n_segments": 2398,
+      "mean_accessibility": 1.5151395760691522,
+      "mean_trip_distance": 2900.975140549406,
+      "unreachable_fraction": 0.047619047619047616,
+      "n_components": 1,
+      "total_segment_flow": 251.98650491397007
+    }
+  ]
+}

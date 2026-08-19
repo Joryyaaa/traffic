@@ -1,0 +1,18 @@
+{
+  "scenario": "S2",
+  "scenario_name": "S2_Parking_Hub",
+  "backend": "madina",
+  "runs": [
+    {
+      "backend": "madina",
+      "config": "configs/neom_scenarios/city_madina_neom_s2.yaml",
+      "runtime_seconds": 0.7352831158787012,
+      "n_segments": 2398,
+      "mean_accessibility": 0.07819690935559691,
+      "mean_trip_distance": 3089.7297049311333,
+      "unreachable_fraction": 0.14285714285714285,
+      "n_components": 1,
+      "total_segment_flow": 73.2189878322466
+    }
+  ]
+}

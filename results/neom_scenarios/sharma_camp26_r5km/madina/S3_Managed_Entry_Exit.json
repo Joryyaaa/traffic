@@ -1,0 +1,30 @@
+{
+  "scenario": "S3",
+  "scenario_name": "S3_Managed_Entry_Exit",
+  "backend": "madina",
+  "runs": [
+    {
+      "backend": "madina",
+      "config": "configs/neom_scenarios/city_madina_neom_s3_entry.yaml",
+      "runtime_seconds": 0.7394843399524689,
+      "n_segments": 2398,
+      "mean_accessibility": 0.10566757685739975,
+      "mean_trip_distance": 2747.68754945189,
+      "unreachable_fraction": 0.19047619047619047,
+      "n_components": 1,
+      "total_segment_flow": 83.63797934974173
+    },
+    {
+      "backend": "madina",
+      "config": "configs/neom_scenarios/city_madina_neom_s3_exit.yaml",
+      "runtime_seconds": 0.6571754403412342,
+      "n_segments": 2398,
+      "mean_accessibility": 0.06654418402222045,
+      "mean_trip_distance": 3387.3614132046528,
+      "unreachable_fraction": 0.0,
+      "n_components": 1,
+      "total_segment_flow": 3.5933859371999044
+    }
+  ],
+  "note": "S3 is represented as separate inbound and outbound assignments because the current Madina backend is undirected."
+}

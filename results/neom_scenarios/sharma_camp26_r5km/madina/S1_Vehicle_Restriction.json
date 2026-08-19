@@ -1,0 +1,18 @@
+{
+  "scenario": "S1",
+  "scenario_name": "S1_Vehicle_Restriction",
+  "backend": "madina",
+  "runs": [
+    {
+      "backend": "madina",
+      "config": "configs/neom_scenarios/city_madina_neom_s1.yaml",
+      "runtime_seconds": 0.7395754773169756,
+      "n_segments": 2389,
+      "mean_accessibility": 0.9549759449050084,
+      "mean_trip_distance": 3107.575797380852,
+      "unreachable_fraction": 0.047619047619047616,
+      "n_components": 2,
+      "total_segment_flow": 192.59825191098184
+    }
+  ]
+}
