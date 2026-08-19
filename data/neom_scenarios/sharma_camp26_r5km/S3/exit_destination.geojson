@@ -6,15 +6,16 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          35.230284,
-          27.990861
+          35.226976,
+          27.993823
         ]
       },
       "properties": {
         "destination_id": "managed_exit_gate",
         "destination_weight": 1.0,
         "exit_way_osm_id": 849104008,
-        "description": "Trunk road managed exit gate, 3106m from construction center (within search_radius=3500)"
+        "description": "Trunk road managed exit gate, 3380m network distance from exit origin (network-validated, within search_radius=3500)",
+        "network_distance_m": 3380
       }
     }
   ]

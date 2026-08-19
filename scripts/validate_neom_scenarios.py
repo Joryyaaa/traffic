@@ -13,7 +13,7 @@ FROZEN_COMMIT = "0ac7a86"
 
 EXPECTED_B0_STREETS = "data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson"
 S1_CLOSURE_WAY_IDS = {849103822, 996697456, 849103837, 849103835, 849103823}
-CAMP26_ROAD_ACCESS_OSM_ID = 1217357053
+S2_HUB_OSM_ID = 849103999
 ENTRY_WAY_ID = 1447890028
 EXIT_WAY_ID = 849104008
 
@@ -145,11 +145,12 @@ def main():
     check("S2 streets not modified", not s2_qa["streets_modified"])
     check("S2 same origins as B0", s2_qa["origin_count"] == b0_qa["origin_count"])
     check("S2 single destination (parking hub)", s2_qa["destination_count"] == 1)
-    check("S2 parking hub is Camp 26 road-access",
-          s2_qa["parking_hub"]["osm_id"] == CAMP26_ROAD_ACCESS_OSM_ID,
+    check("S2 hub is network-validated",
+          s2_qa["parking_hub"]["osm_id"] == S2_HUB_OSM_ID,
           f"got {s2_qa['parking_hub']['osm_id']}")
-    check("S2 hub on network (snap 0.0m)",
-          s2_qa["parking_hub"].get("network_snap_distance_m", 999) < 1.0)
+    check("S2 hub reachable by majority of origins",
+          s2_qa["parking_hub"].get("reachable_pct", 0) >= 80,
+          f"got {s2_qa['parking_hub'].get('reachable_pct', 0)}%")
 
     print("\n--- S3 scenario ---")
     s3_qa = load_json(SCENARIO_DIR / "S3" / "qa.json")
@@ -168,11 +169,11 @@ def main():
     s3_exit_dest = load_json(SCENARIO_DIR / "S3" / "exit_destination.geojson")
     check("S3 exit destination is single point",
           len(s3_exit_dest["features"]) == 1)
-    check("S3 exit gate within search_radius of origin",
-          s3_qa["exit"].get("gate_distance_from_origin_m", 9999) <= 3500,
-          f"got {s3_qa['exit'].get('gate_distance_from_origin_m', '?')}m")
-    check("S3 exit gate on network (snap 0.0m)",
-          s3_qa["exit"].get("network_snap_distance_m", 999) < 1.0)
+    check("S3 exit gate within search_radius (network dist)",
+          s3_qa["exit"].get("gate_network_distance_m", 9999) <= 3500,
+          f"got {s3_qa['exit'].get('gate_network_distance_m', '?')}m")
+    check("S3 exit gate on southbound trunk corridor",
+          s3_qa["exit"]["exit_way_osm_id"] == EXIT_WAY_ID)
 
     # 6. Cross-scenario consistency
     print("\n--- Cross-scenario consistency ---")

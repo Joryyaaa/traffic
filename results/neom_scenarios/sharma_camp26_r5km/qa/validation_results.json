@@ -205,14 +205,14 @@
     "detail": ""
   },
   {
-    "check": "S2 parking hub is Camp 26 road-access",
+    "check": "S2 hub is network-validated",
     "status": "PASS",
-    "detail": "got 1217357053"
+    "detail": "got 849103999"
   },
   {
-    "check": "S2 hub on network (snap 0.0m)",
+    "check": "S2 hub reachable by majority of origins",
     "status": "PASS",
-    "detail": ""
+    "detail": "got 90.5%"
   },
   {
     "check": "S3 streets not modified",
@@ -245,12 +245,12 @@
     "detail": ""
   },
   {
-    "check": "S3 exit gate within search_radius of origin",
+    "check": "S3 exit gate within search_radius (network dist)",
     "status": "PASS",
-    "detail": "got 3106m"
+    "detail": "got 3380m"
   },
   {
-    "check": "S3 exit gate on network (snap 0.0m)",
+    "check": "S3 exit gate on southbound trunk corridor",
     "status": "PASS",
     "detail": ""
   },

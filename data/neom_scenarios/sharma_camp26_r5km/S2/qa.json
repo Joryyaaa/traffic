@@ -1,17 +1,20 @@
 {
   "scenario": "S2",
   "scenario_name": "S2_Parking_Hub_Camp26",
-  "description": "Vehicles are routed to Camp 26 (NRC-26) as a parking/staging hub instead of directly to construction sites. Last-mile transport is separate (shuttle/pedestrian, not modeled).",
+  "description": "Vehicles are routed to a parking/staging hub serving the Sharma/Camp 26 activity area. Hub selected by network shortest-path analysis: maximizes origin reachability within search_radius=3500m.",
   "streets_source": "data/neom_baseline/sharma_camp26_r5km/streets_largest_component.geojson",
   "streets_modified": false,
   "parking_hub": {
-    "name": "Camp 26 road-access point (service road)",
-    "osm_id": 1217357053,
-    "lat": 28.063278,
-    "lon": 35.221245,
-    "camp26_osm_id": 12390325515,
-    "camp26_distance_m": 2066,
-    "network_snap_distance_m": 0.0
+    "name": "Sharma/Camp26 activity-area hub (network-validated)",
+    "osm_id": 849103999,
+    "lat": 28.008358,
+    "lon": 35.222209,
+    "reachable_origins": 19,
+    "reachable_pct": 90.5,
+    "mean_network_dist_m": 3130,
+    "max_network_dist_m": 3456,
+    "unreachable_origins": [12390325515, 849104049],
+    "selection_method": "network shortest-path Dijkstra from all 21 origins, maximizing reachable count within search_radius=3500"
   },
   "origin_count": 21,
   "destination_count": 1
