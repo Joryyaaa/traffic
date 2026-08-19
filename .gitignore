@@ -33,6 +33,16 @@ data/raw/abha_khamis_soudah_demand/*
 !data/raw/abha_hotspot_pois/**
 !data/raw/abha_hotspots/
 !data/raw/abha_hotspots/**
+# GAT scale-up Riyadh study (gat-scaleup-riyadh): frozen datasets behind the
+# documented Stage 2/3 budgets and zone_builder benchmarks (176/290/599
+# segments). Committed as-is so Ibex clones of this branch don't need a
+# refetch that could silently produce a different network.
+!data/raw/riyadh_r445/
+!data/raw/riyadh_r445/**
+!data/raw/riyadh_r630/
+!data/raw/riyadh_r630/**
+!data/raw/riyadh_r850/
+!data/raw/riyadh_r850/**
 data/interim/
 data/processed/
 Cities/
