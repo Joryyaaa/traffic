@@ -1,0 +1,60 @@
+# King Abdulaziz Grand Mosque, COMBINED GAT setting (min_zone_size=1 +
+# include_adjacency_state, matching configs/city_madina_ablation_r400_gat_mzs1.yaml).
+# Derived from city_madina_abha_king_abdulaziz_grand_mosque.yaml -- network/OD
+# paths, CRS, origin_weight column, respect_oneway, and all non-size
+# reward/action fields are byte-identical to the original scenario config.
+# Only min_zone_size (2 -> 1), include_adjacency_state (added), and the
+# action budget (re-measured fresh under mzs=1) differ.
+#
+# 87 segments (confirmed by direct feature count, matches the reported 87).
+# Original directed return was positive (+0.0503) but with accessibility
+# falling substantially -- keep accessibility Gini/change visible in review.
+#
+# Measured (2026-08-20): max_closures=2, episode_length=5 -> zone_builder = +0.0503
+# (3/8 gives the identical +0.0503; 2/5 kept as the smallest budget that
+# reaches the plateau, unchanged from the original mzs=2 value -- re-confirmed
+# independently under mzs=1, not reused).
+seed: 42
+network:
+  backend: madina
+  streets_path: data/raw/abha_hotspots/king_abdulaziz_grand_mosque/streets.geojson
+  origins_path: data/raw/abha_hotspots/king_abdulaziz_grand_mosque/residential.geojson
+  destinations_path: data/raw/abha_hotspots/king_abdulaziz_grand_mosque/amenities.geojson
+  origin_weight: origin_weight
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+  respect_oneway: true
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 2
+  episode_length: 5
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  w_pedestrian_zone: 1.0
+  min_zone_size: 1
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+  reward_mode: delta
+
+include_adjacency_state: true

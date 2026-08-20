@@ -1,0 +1,64 @@
+# Asir Central Hospital, COMBINED GAT setting (min_zone_size=1 +
+# include_adjacency_state, matching configs/city_madina_ablation_r400_gat_mzs1.yaml).
+# Derived from city_madina_abha_asir_central_hospital.yaml -- network/OD paths,
+# CRS, origin_weight column, respect_oneway, and all non-size reward/action
+# fields are byte-identical to the original scenario config. Only
+# min_zone_size (2 -> 1), include_adjacency_state (added), and the action
+# budget (re-measured fresh under mzs=1) differ.
+#
+# 96 segments (confirmed by direct feature count, matches the reported 96).
+# OSM has no emergency-entrance tag: intervention targets protect the
+# perimeter and leave major through roads open; no exact ER-door claim.
+#
+# Measured (2026-08-20), budget search under mzs=1 (original 3/8 budget
+# reproduces the original scenario's negative -0.4173 -- NOT reused as-is):
+#   max_closures=1, episode_length=3 -> +0.1383
+#   max_closures=2, episode_length=5 -> +0.1383  (accepted: same value, gives
+#     the agent one extra legal move to explore during training)
+#   max_closures=3, episode_length=6 -> -0.4173  (rejected -- negative, same
+#     failure point as the original budget)
+# Accepted: max_closures=2, episode_length=5 -> zone_builder = +0.1383
+seed: 42
+network:
+  backend: madina
+  streets_path: data/raw/abha_hotspots/asir_central_hospital/streets.geojson
+  origins_path: data/raw/abha_hotspots/asir_central_hospital/residential.geojson
+  destinations_path: data/raw/abha_hotspots/asir_central_hospital/amenities.geojson
+  origin_weight: origin_weight
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+  respect_oneway: true
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 2
+  episode_length: 5
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  w_pedestrian_zone: 1.0
+  min_zone_size: 1
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+  reward_mode: delta
+
+include_adjacency_state: true

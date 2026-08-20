@@ -1,0 +1,63 @@
+# Art Street and Al-Muftaha, COMBINED GAT setting (min_zone_size=1 +
+# include_adjacency_state, matching configs/city_madina_ablation_r400_gat_mzs1.yaml).
+# Derived from city_madina_abha_art_street_baseline.yaml -- network/OD paths,
+# CRS, origin_weight column, respect_oneway, and all non-size reward fields
+# are byte-identical to the original scenario config.
+#
+# The original config used max_closures=0/episode_length=1 -- a deliberate
+# fully-open no-intervention comparison case, not an RL training budget.
+# For COMBINED training a real closure budget is required (an agent with
+# zero legal closures cannot learn anything), so the budget below was
+# measured fresh against zone_builder under mzs=1, same methodology as every
+# other budget in this project's lineage -- see
+# results/abha_combined_scaleup/STAGE2_STAGE3.md for the search record.
+#
+# Measured (2026-08-20): max_closures=6, episode_length=15 -> zone_builder = +0.4657
+# (5/12 gives the identical +0.4657; 8/20 drops to +0.2313 -- 6/15 kept as the
+# smallest budget that reaches the plateau).
+#
+# 57 segments (confirmed by direct feature count, matches the reported 57).
+seed: 42
+network:
+  backend: madina
+  streets_path: data/raw/abha_hotspots/art_street_baseline/streets.geojson
+  origins_path: data/raw/abha_hotspots/art_street_baseline/residential.geojson
+  destinations_path: data/raw/abha_hotspots/art_street_baseline/amenities.geojson
+  origin_weight: origin_weight
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+  respect_oneway: true
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+  w_pedestrian_zone: 1.0
+  min_zone_size: 1
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+  reward_mode: delta
+
+include_adjacency_state: true
