@@ -1,0 +1,3 @@
+segments,n,mean,std,min,max,benchmark,benchmark_source,success,train_min_mean
+176,5,0.9307585221755413,5.9449190544078075e-12,0.9307585221659626,0.9307585221821885,0.8111,"r445, Stage 2 (max_closures=10, episode_length=25)",5,254.83733333333333
+290,5,0.8118878262712282,0.17347206885566602,0.5100947638367062,0.942573441637002,0.6115,"r630, Stage 2 (max_closures=8, episode_length=20, corrected from a negative first candidate)",4,689.16
