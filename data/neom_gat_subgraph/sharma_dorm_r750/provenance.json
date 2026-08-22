@@ -1,0 +1,29 @@
+{
+  "source_branch": "origin/neom-scenarios-existing-methodology",
+  "source_commit": "a816369cb1485746c91d39b58da63aba1aca74ed",
+  "source_streets_path": "data/neom_scenarios/sharma_camp26_r5km/streets_madina_ready.geojson",
+  "source_origins_path": "data/neom_scenarios/sharma_camp26_r5km/B0/origins.geojson",
+  "source_destinations_path": "data/neom_scenarios/sharma_camp26_r5km/B0/destinations.geojson",
+  "source_total_segments": 2398,
+  "anchor": {
+    "method": "centroid of the 17 real dormitory-building B0 origins",
+    "lon": 35.2039997482353,
+    "lat": 28.003792944705882
+  },
+  "radius_m": 750.0,
+  "clip_crs": "EPSG:32636",
+  "segments_intersecting_buffer": 318,
+  "connected_components_in_clip": 5,
+  "component_sizes_by_segment_count": [
+    273,
+    39,
+    4,
+    1,
+    1
+  ],
+  "dropped_components": 4,
+  "dropped_segments_not_in_largest_component": 45,
+  "final_segment_count": 273,
+  "final_origin_count": 17,
+  "final_destination_count": 7
+}

@@ -1,0 +1,24 @@
+{
+"type": "FeatureCollection",
+"name": "origins",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103808, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20106496, 28.00377558 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103809, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20187186, 28.00382576 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103810, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.2025928, 28.00408638 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103811, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20262406, 28.00387336 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103812, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20261266, 28.00366536 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103813, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20263536, 28.00346236 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103814, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20215566, 28.00343226 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103815, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20228556, 28.0037768 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103828, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20462164, 28.00392532 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103829, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20436764, 28.00391322 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103830, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20412924, 28.00389564 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103831, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.2042002, 28.00316384 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103832, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.2044585, 28.00317892 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103833, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.2047026, 28.00319392 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103912, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20792226, 28.00456864 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103913, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20763216, 28.0044566 ] } },
+{ "type": "Feature", "properties": { "anchor": null, "osm_id": 849103914, "origin_type": "residential_building", "building": "dormitory", "name": "", "demand_weight": 1.0 }, "geometry": { "type": "Point", "coordinates": [ 35.20811856, 28.0042861 ] } }
+]
+}
