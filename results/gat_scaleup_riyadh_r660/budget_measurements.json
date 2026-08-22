@@ -1,0 +1,46 @@
+{
+  "config": "configs/city_madina_ablation_r660_gat_mzs1.yaml",
+  "segments": 338,
+  "policy": "zone_builder (scripts/evaluate.py), one deterministic episode",
+  "seed": 42,
+  "method": "Current config held constant; only action.max_closures and action.episode_length varied per candidate.",
+  "measured_at_utc": "2026-08-22T14:41:27.251307+00:00",
+  "measurements": [
+    {
+      "max_closures": 8,
+      "episode_length": 20,
+      "zone_builder_return": 0.3586685709,
+      "wall_seconds": 7.998
+    },
+    {
+      "max_closures": 9,
+      "episode_length": 22,
+      "zone_builder_return": -0.0896613987,
+      "wall_seconds": 10.999
+    },
+    {
+      "max_closures": 10,
+      "episode_length": 25,
+      "zone_builder_return": -0.0896613987,
+      "wall_seconds": 12.729
+    },
+    {
+      "max_closures": 11,
+      "episode_length": 28,
+      "zone_builder_return": -0.1327407563,
+      "wall_seconds": 14.229
+    },
+    {
+      "max_closures": 12,
+      "episode_length": 30,
+      "zone_builder_return": -0.1387382073,
+      "wall_seconds": 14.913
+    },
+    {
+      "max_closures": 14,
+      "episode_length": 35,
+      "zone_builder_return": -0.1545178327,
+      "wall_seconds": 16.824
+    }
+  ]
+}

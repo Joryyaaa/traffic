@@ -1,4 +1,4 @@
-"""Cross-size comparison for the GAT scale-up study (Riyadh, ~150/300/600
+"""Cross-size comparison for the GAT scale-up study (Riyadh, ~150/300/340/600
 segments). Merges each size's per-seed results (same task_<seed>/results.csv
 layout scripts/aggregate_sweep.py already reads) into one table:
 
@@ -16,6 +16,7 @@ Usage (once the Slurm arrays have produced results):
     python scripts/aggregate_gat_scaleup.py \
         --roots runs/gat_scaleup_r445_5seed:176 \
                 runs/gat_scaleup_r630_5seed:290 \
+                runs/gat_scaleup_r660_5seed:338 \
                 runs/gat_scaleup_r850_5seed:599 \
         --expect 1-5
 """
@@ -33,6 +34,7 @@ ZONE_BUILDER_BY_SEGMENTS = {
     89: (0.6863, "r400 reference, results/combined_gat_credit_long/ lineage"),
     176: (0.8111, "r445, Stage 2 (max_closures=10, episode_length=25)"),
     290: (0.6115, "r630, Stage 2 (max_closures=8, episode_length=20, corrected from a negative first candidate)"),
+    338: (0.3586685709, "r660, fresh measurement (max_closures=8, episode_length=20)"),
     599: (0.4636, "r850, Stage 2 (max_closures=14, episode_length=35)"),
 }
 

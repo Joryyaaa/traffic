@@ -1,0 +1,67 @@
+# Riyadh GAT scale-up point near 340 segments: SAME Al Nakheel center as the
+# r400 GAT/COMBINED reference, r=660m instead of r=400m -- 338 segments
+# instead of 89. Same min_zone_size=1, reward, observation, GAT architecture,
+# MaskablePPO algorithm, and 167,000-timestep training recipe. The only
+# intended differences are this network's frozen data and its independently
+# measured action budget.
+#
+# Built from OpenStreetMap with the established scale-up command:
+#   python scripts/fetch_osm_data.py --radius 660 \
+#     --out data/raw/riyadh_r660 --lat 24.7412 --lon 46.6335
+#
+# Budget and zone_builder benchmark are measured on this exact network by:
+#   python scripts/measure_gat_scaleup_budget.py \
+#     --config configs/city_madina_ablation_r660_gat_mzs1.yaml \
+#     --candidates 8:20,9:22,10:25,11:28,12:30,14:35 \
+#     --out results/gat_scaleup_riyadh_r660/budget_measurements.json
+# Selected fresh measurement: max_closures=8, episode_length=20 produced
+# zone_builder=+0.3586685709. Every larger tested candidate was negative.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_r660/streets.geojson
+  origins_path: data/raw/riyadh_r660/residential.geojson
+  destinations_path: data/raw/riyadh_r660/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 8
+  episode_length: 20
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 1
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta
+
+include_adjacency_state: true

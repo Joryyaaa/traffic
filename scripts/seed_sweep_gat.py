@@ -4,6 +4,17 @@ Same protocol as seed_sweep.py (MLP baseline) but wires in
 GATFeaturesExtractor as the features_extractor_class for MaskablePPO.
 Uses the adjacency-aware 7-feature observation (include_adjacency_state).
 
+Checkpointing / resume follows the validated NEOM harness:
+
+  - every --checkpoint-freq timesteps, SB3's CheckpointCallback saves a model
+    into <out>/seed_<N>/checkpoints/
+  - on start, the highest-timestep checkpoint is loaded and only the remaining
+    timesteps are trained with reset_num_timesteps=False
+  - a completed <out>/seed_<N>/model.zip skips training and is loaded only for
+    evaluation
+  - <out>/seed_<N>/progress.json records completed timesteps, cumulative elapsed
+    time, and the latest checkpoint so progress survives a timeout/preemption
+
 Usage:
     python scripts/seed_sweep_gat.py --config configs/city_madina_ablation_r400_gat.yaml \
         --timesteps 30000 --seeds 1-5 --out runs/r400_gat_30k
@@ -12,8 +23,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
+import re
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -22,6 +36,23 @@ import numpy as np  # noqa: E402
 
 from snrl import StreetNetworkEnv, load_config  # noqa: E402
 from snrl.gnn import GATFeaturesExtractor  # noqa: E402
+
+_CKPT_RE = re.compile(r".*_(\d+)_steps\.zip$")
+
+
+def find_latest_checkpoint(ckpt_dir: Path) -> tuple[Path, int] | None:
+    """Return the checkpoint with the highest absolute timestep."""
+    if not ckpt_dir.exists():
+        return None
+    candidates = []
+    for checkpoint in ckpt_dir.glob("*_steps.zip"):
+        match = _CKPT_RE.match(checkpoint.name)
+        if match:
+            candidates.append((int(match.group(1)), checkpoint))
+    if not candidates:
+        return None
+    steps, path = max(candidates, key=lambda item: item[0])
+    return path, steps
 
 
 def evaluate_deterministic(cfg, model, episodes: int) -> list[float]:
@@ -40,12 +71,63 @@ def evaluate_deterministic(cfg, model, episodes: int) -> list[float]:
     return returns
 
 
+class _ProgressLoggerCallback:
+    """Write a durable progress.json sidecar every log_freq timesteps."""
+
+    def __init__(self, progress_path: Path, ckpt_dir: Path, start_time: float,
+                 target_timesteps: int, seed: int, log_freq: int):
+        from stable_baselines3.common.callbacks import BaseCallback
+
+        self._progress_path = progress_path
+        self._ckpt_dir = ckpt_dir
+        self._start_time = start_time
+        self._target_timesteps = target_timesteps
+        self._seed = seed
+        self._log_freq = max(int(log_freq), 1)
+
+        outer = self
+
+        class _Inner(BaseCallback):
+            def _on_step(self_inner) -> bool:
+                if (self_inner.num_timesteps % outer._log_freq == 0
+                        or self_inner.num_timesteps >= outer._target_timesteps):
+                    outer._write(self_inner.num_timesteps)
+                return True
+
+        self.callback = _Inner()
+
+    def _write(self, num_timesteps: int) -> None:
+        latest = find_latest_checkpoint(self._ckpt_dir)
+        data = {
+            "seed": self._seed,
+            "timesteps_completed": int(num_timesteps),
+            "target_timesteps": self._target_timesteps,
+            "elapsed_seconds": round(time.time() - self._start_time, 1),
+            "last_checkpoint": str(latest[0]) if latest else None,
+            "updated": datetime.now(timezone.utc).isoformat(),
+        }
+        self._progress_path.write_text(
+            json.dumps(data, indent=2) + "\n", encoding="utf-8"
+        )
+
+    def flush_final(self, num_timesteps: int) -> None:
+        self._write(num_timesteps)
+
+
 def train_one_seed(cfg, seed: int, timesteps: int, out_dir: Path,
                    gat_hidden_dim: int, n_heads: int,
-                   global_embed_dim: int, features_dim: int):
+                   global_embed_dim: int, features_dim: int,
+                   checkpoint_freq: int = 10_000):
     from sb3_contrib import MaskablePPO
     from sb3_contrib.common.wrappers import ActionMasker
+    from stable_baselines3.common.callbacks import CheckpointCallback
     from stable_baselines3.common.monitor import Monitor
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    ckpt_dir = out_dir / "checkpoints"
+    ckpt_dir.mkdir(parents=True, exist_ok=True)
+    progress_path = out_dir / "progress.json"
+    final_model_path = out_dir / "model.zip"
 
     cfg.seed = seed
     env = StreetNetworkEnv(cfg)
@@ -63,10 +145,59 @@ def train_one_seed(cfg, seed: int, timesteps: int, out_dir: Path,
     )
 
     env = ActionMasker(Monitor(env), lambda e: e.unwrapped.action_masks())
-    model = MaskablePPO("MlpPolicy", env, verbose=0, seed=seed,
-                        policy_kwargs=policy_kwargs)
-    model.learn(total_timesteps=timesteps, progress_bar=True)
-    out_dir.mkdir(parents=True, exist_ok=True)
+    if final_model_path.exists():
+        print(
+            f"[resume] seed {seed}: final model already exists at {final_model_path} "
+            "-- skipping training, loading for evaluation only."
+        )
+        return MaskablePPO.load(str(final_model_path), env=env)
+
+    start_time = time.time()
+    latest = find_latest_checkpoint(ckpt_dir)
+    if latest is not None:
+        ckpt_path, ckpt_steps = latest
+        print(
+            f"[resume] seed {seed}: found checkpoint at {ckpt_steps} timesteps "
+            f"-> {ckpt_path}. Continuing from there, NOT restarting from 0."
+        )
+        model = MaskablePPO.load(str(ckpt_path), env=env)
+        if progress_path.exists():
+            try:
+                previous = json.loads(progress_path.read_text(encoding="utf-8"))
+                start_time = time.time() - float(
+                    previous.get("elapsed_seconds", 0.0)
+                )
+            except (json.JSONDecodeError, OSError, ValueError):
+                pass
+    else:
+        print(f"seed {seed}: no checkpoint found -- starting fresh from timestep 0.")
+        model = MaskablePPO(
+            "MlpPolicy", env, verbose=0, seed=seed, policy_kwargs=policy_kwargs
+        )
+
+    already_done = model.num_timesteps
+    remaining = max(timesteps - already_done, 0)
+    print(
+        f"seed {seed}: {already_done}/{timesteps} timesteps already done, "
+        f"{remaining} remaining."
+    )
+
+    progress = _ProgressLoggerCallback(
+        progress_path, ckpt_dir, start_time, timesteps, seed, checkpoint_freq
+    )
+    checkpoint_callback = CheckpointCallback(
+        save_freq=checkpoint_freq,
+        save_path=str(ckpt_dir),
+        name_prefix=f"seed{seed}",
+    )
+    if remaining > 0:
+        model.learn(
+            total_timesteps=remaining,
+            reset_num_timesteps=False,
+            callback=[checkpoint_callback, progress.callback],
+            progress_bar=True,
+        )
+    progress.flush_final(model.num_timesteps)
     model.save(out_dir / "model")
     return model
 
@@ -83,6 +214,12 @@ def main():
     ap.add_argument("--n-heads", type=int, default=4)
     ap.add_argument("--global-embed-dim", type=int, default=16)
     ap.add_argument("--features-dim", type=int, default=64)
+    ap.add_argument(
+        "--checkpoint-freq",
+        type=int,
+        default=10_000,
+        help="save a resumable checkpoint + progress.json every N timesteps",
+    )
     args = ap.parse_args()
 
     seeds = []
@@ -98,8 +235,16 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     results_path = out_dir / "results.csv"
 
-    with open(results_path, "w", newline="") as f:
-        csv.writer(f).writerow(["seed", "mean_return", "std_return", "n_episodes", "train_seconds"])
+    if not results_path.exists():
+        with open(results_path, "w", newline="") as f:
+            csv.writer(f).writerow(
+                ["seed", "mean_return", "std_return", "n_episodes", "train_seconds"]
+            )
+
+    already_recorded = set()
+    with open(results_path, newline="") as f:
+        for row in csv.DictReader(f):
+            already_recorded.add(int(row["seed"]))
 
     all_means = []
     for seed in seeds:
@@ -112,16 +257,33 @@ def main():
             n_heads=args.n_heads,
             global_embed_dim=args.global_embed_dim,
             features_dim=args.features_dim,
+            checkpoint_freq=args.checkpoint_freq,
         )
         train_seconds = time.time() - t0
+        progress_path = out_dir / f"seed_{seed}" / "progress.json"
+        if progress_path.exists():
+            try:
+                progress_data = json.loads(progress_path.read_text(encoding="utf-8"))
+                train_seconds = float(
+                    progress_data.get("elapsed_seconds", train_seconds)
+                )
+            except (json.JSONDecodeError, OSError, ValueError):
+                pass
 
         returns = evaluate_deterministic(cfg, model, args.episodes)
         mean_r, std_r = float(np.mean(returns)), float(np.std(returns))
         all_means.append(mean_r)
-        print(f"seed {seed}: mean_return={mean_r:.4f}  std={std_r:.4f}  ({train_seconds/60:.1f} min)")
+        print(
+            f"seed {seed}: mean_return={mean_r:.4f}  std={std_r:.4f}  "
+            f"({train_seconds/60:.1f} cumulative train min)"
+        )
 
-        with open(results_path, "a", newline="") as f:
-            csv.writer(f).writerow([seed, mean_r, std_r, args.episodes, round(train_seconds, 1)])
+        if seed not in already_recorded:
+            with open(results_path, "a", newline="") as f:
+                csv.writer(f).writerow(
+                    [seed, mean_r, std_r, args.episodes, round(train_seconds, 1)]
+                )
+            already_recorded.add(seed)
 
     all_means = np.array(all_means)
     n_success = int(np.sum(all_means >= args.success_threshold))
