@@ -1,0 +1,93 @@
+# NEOM GAT subgraph experiment: COMBINED setup (min_zone_size=1 +
+# include_adjacency_state=true), trained from scratch on a real, spatially-
+# clipped subset of the NEOM Sharma/Camp26 network.
+#
+# Derived from configs/city_madina_ablation_r400_gat_mzs1.yaml (the COMBINED
+# reference). ONLY these fields differ from that reference:
+#   - network.streets_path/origins_path/destinations_path -> the NEOM subgraph
+#   - network.origin_weight/destination_weight -> the NEOM data's own column
+#     names (demand_weight / destination_weight -- NEOM's real attribute
+#     schema differs from Riyadh's residents/floor_area, this is a data-
+#     plumbing necessity, not a reward-weight change)
+#   - network.crs -> EPSG:32636 (NEOM UTM 36N; NOT Riyadh's 32638)
+#   - action.max_closures/episode_length -> MEASURED against zone_builder on
+#     THIS subgraph (see results/neom_gat_subgraph/STAGE3_BUDGET_SWEEP.md),
+#     never reused from any Riyadh config
+# Everything else (simulation block, reward weights, GAT architecture
+# defaults, min_zone_size=1, include_adjacency_state=true) is byte-identical
+# to the r400 reference, per instruction.
+#
+# NEOM subgraph: 273 street segments, 17 dormitory origins, 7 construction
+# destinations. Built by scripts/build_neom_gat_subgraph.py (radius=750m
+# around the centroid of the 17 real B0 dormitory origins), spatially
+# clipped from data/neom_scenarios/sharma_camp26_r5km/streets_madina_ready.geojson
+# (2,398 segments) on neom-scenarios-existing-methodology @ a816369.
+# See data/neom_gat_subgraph/sharma_dorm_r750/provenance.json for full detail.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/neom_gat_subgraph/sharma_dorm_r750/streets.geojson
+  origins_path: data/neom_gat_subgraph/sharma_dorm_r750/origins.geojson
+  destinations_path: data/neom_gat_subgraph/sharma_dorm_r750/destinations.geojson
+  origin_weight: demand_weight
+  destination_weight: destination_weight
+  weight_attribute: null
+  crs: "EPSG:32636"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  # MEASURED (Stage 3, scripts/evaluate.py --policies zone_builder on THIS
+  # subgraph -- 14 candidates tested, none reused from any Riyadh config):
+  #   mc= 1,el= 2 -> 0.9370   mc= 1,el= 3 -> 0.9370   mc= 2,el= 4 -> 0.9370
+  #   mc= 2,el= 5 -> 0.9370   mc= 3,el= 8 -> 0.9370   mc= 5,el=12 -> 0.9271
+  #   mc= 4,el=10 -> 0.9271   mc= 6,el=15 -> 0.8961   mc= 8,el=20 -> 0.8961
+  #   mc= 9,el=22 -> 0.8961   mc=10,el=25 -> 0.8961   mc=12,el=30 -> 0.5905
+  #   mc=14,el=35 -> 0.4063   mc=16,el=40 -> 0.2867
+  # All 14 candidates score positive -- no negative/failing candidate found
+  # on this network (unlike Riyadh r630's -0.1145 first guess). The
+  # numerical optimum is at very small budgets (mc<=3), because this
+  # subgraph's real demand pattern (17 dormitories -> 7 nearby construction
+  # sites) saturates the available accessibility/zone reward with a single
+  # well-chosen closure -- but mc=1..3 reduces the problem to a near-trivial
+  # single-segment pick, which defeats the point of this experiment (whether
+  # an RL agent can learn *multi-segment* zone-building under credit
+  # assignment). Selected mc=6/episode_length=15: the smallest budget in the
+  # 0.8961 plateau (identical score through mc=10, before the decline
+  # beyond mc=10) -- a genuine multi-step sequential-closure problem that is
+  # still comfortably positive. See results/neom_gat_subgraph/STAGE3_BUDGET_SWEEP.md.
+  max_closures: 6
+  episode_length: 15
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 1
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta
+
+include_adjacency_state: true
