@@ -1,0 +1,60 @@
+# GAT scale-up point 3 of 3: SAME Al Nakheel center as the r400 GAT/COMBINED
+# reference, r=850m instead of r=400m -- 599 segments instead of 89. Same
+# min_zone_size=1, same reward, same observation, same GAT architecture --
+# the ONLY intended difference from city_madina_ablation_r400_gat_mzs1.yaml
+# is network size and the budget that must scale with it.
+#
+#   python scripts/fetch_osm_data.py --radius 850 --out data/raw/riyadh_r850 --lat 24.7412 --lon 46.6335
+#
+# Budget MEASURED against zone_builder (2026-08-19), first candidate tried:
+#   max_closures=14, episode_length=35 -> zone_builder = +0.4636
+# See results/gat_scaleup_riyadh/STAGE2_DATASETS.md for the full record.
+seed: 42
+
+network:
+  backend: madina
+  streets_path: data/raw/riyadh_r850/streets.geojson
+  origins_path: data/raw/riyadh_r850/residential.geojson
+  destinations_path: data/raw/riyadh_r850/amenities.geojson
+  origin_weight: residents
+  destination_weight: floor_area
+  weight_attribute: null
+  crs: "EPSG:32638"
+  node_snapping_tolerance: 0.5
+
+simulation:
+  search_radius: 800
+  detour_ratio: 1.0
+  decay: true
+  decay_method: exponent
+  beta: 0.003
+  closest_destination: false
+  turn_penalty: false
+  num_cores: 1
+
+action:
+  action_type: toggle
+  closure_mode: penalize
+  closure_penalty: 1000.0
+  max_closures: 14
+  episode_length: 35
+  allow_reopen: false
+  allow_noop: true
+  forbid_disconnection: true
+
+reward:
+  w_accessibility: 1.0
+  w_flow_concentration: 0.5
+  w_equity: 0.3
+  w_detour: 0.2
+  w_intervention: 0.05
+  disconnection_penalty: 5.0
+
+  w_pedestrian_zone: 1.0
+  min_zone_size: 1
+  zone_exponent: 2.0
+  zone_min_flow_fraction: 0.1
+
+  reward_mode: delta
+
+include_adjacency_state: true
