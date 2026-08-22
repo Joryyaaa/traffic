@@ -131,6 +131,7 @@ class EnvConfig:
     action: ActionConfig = field(default_factory=ActionConfig)
     reward: RewardConfig = field(default_factory=RewardConfig)
     seed: int = 42
+    include_adjacency_state: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -145,4 +146,5 @@ def load_config(path: str | Path) -> EnvConfig:
         action=ActionConfig(**raw.get("action", {})),
         reward=RewardConfig(**raw.get("reward", {})),
         seed=raw.get("seed", 42),
+        include_adjacency_state=raw.get("include_adjacency_state", False),
     )
